@@ -4,8 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1687a617-3491-42e9-9512-f6be82ad3ef6" name="Changes" comment="initial commit: Created API class">
+    <list default="true" id="1687a617-3491-42e9-9512-f6be82ad3ef6" name="Changes" comment="not necessary">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/API.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/API.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,7 +61,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1701872368039</updated>
-      <workItem from="1701872369252" duration="16104000" />
+      <workItem from="1701872369252" duration="16815000" />
     </task>
     <task id="LOCAL-00001" summary="First commit">
       <option name="closed" value="true" />
@@ -93,7 +95,23 @@
       <option name="project" value="LOCAL" />
       <updated>1702394963806</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="updated workspace">
+      <option name="closed" value="true" />
+      <created>1702396069079</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1702396069079</updated>
+    </task>
+    <task id="LOCAL-00006" summary="not necessary">
+      <option name="closed" value="true" />
+      <created>1702396153166</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1702396153166</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -130,6 +148,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="First commit" />
     <MESSAGE value="initial commit: Created API class" />
-    <option name="LAST_COMMIT_MESSAGE" value="initial commit: Created API class" />
+    <MESSAGE value="updated workspace" />
+    <MESSAGE value="not necessary" />
+    <option name="LAST_COMMIT_MESSAGE" value="not necessary" />
   </component>
 </project>
