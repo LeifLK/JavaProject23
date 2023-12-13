@@ -9,7 +9,6 @@ public class API {
     private static final String BASE_URL = "https://dronesim.facets-labs.com/api/";
     private static final String TOKEN = "Token 96abe845d26eafd5c6d920a152a52a5185b4bc24";
 
-    //Nur eine gemacht zum testen, dann später get() für alle möglichkeiten (mit ohne id)
     public String getDroneDynamics() throws IOException {
         return ApiRequest("dronedynamics/?format=json");
     }
@@ -38,9 +37,6 @@ public class API {
     }
 
 
-
-
-    //Die funktion die den API request macht
     private String ApiRequest(String endpoint) throws IOException {
         URL url = new URL(BASE_URL + endpoint);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -66,31 +62,6 @@ public class API {
             }
         } finally {
             connection.disconnect();
-        }
-    }
-
-
-    //Test
-    public static void main(String[] args) {
-        API api = new API();
-
-        // Test the method without ID
-        try {
-            String resultWithoutId = api.getDroneDynamics();
-            System.out.println("Result without ID: " + resultWithoutId);
-        } catch (IOException e) {
-            System.err.println("An error occurred while fetching drone dynamics without ID: " + e.getMessage());
-            e.printStackTrace();
-        }
-
-        // Test the method with an ID, for example, ID = 1
-        try {
-            int testId = 59660; // You can change this ID to test different cases
-            String resultWithId = api.getDroneDynamics(testId);
-            System.out.println("Result with ID " + testId + ": " + resultWithId);
-        } catch (IOException e) {
-            System.err.println("An error occurred while fetching drone dynamics with ID: " + e.getMessage());
-            e.printStackTrace();
         }
     }
 }
