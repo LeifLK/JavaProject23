@@ -9,6 +9,7 @@ public class API {
     private static final String BASE_URL = "https://dronesim.facets-labs.com/api/";
     private static final String TOKEN = "Token 96abe845d26eafd5c6d920a152a52a5185b4bc24";
 
+
     public String getDroneDynamics() throws IOException {
         return ApiRequest("dronedynamics/?format=json");
     }
@@ -35,6 +36,7 @@ public class API {
         String endpoint = "dronetypes/" + id + "/?format=json";
         return ApiRequest(endpoint);
     }
+
 
 
     private String ApiRequest(String endpoint) throws IOException {
