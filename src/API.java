@@ -9,7 +9,7 @@ public class API {
     private static final String BASE_URL = "https://dronesim.facets-labs.com/api/";
     private static final String TOKEN = "Token 96abe845d26eafd5c6d920a152a52a5185b4bc24";
 
-    //Nur eine gemacht zum testen, dann später get() für alle möglichkeiten (mit ohne id)
+
     public String getDroneDynamics() throws IOException {
         return ApiRequest("dronedynamics/?format=json");
     }
@@ -39,8 +39,6 @@ public class API {
 
 
 
-
-    //Die funktion die den API request macht
     private String ApiRequest(String endpoint) throws IOException {
         URL url = new URL(BASE_URL + endpoint);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
