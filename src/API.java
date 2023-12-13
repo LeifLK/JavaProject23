@@ -68,29 +68,4 @@ public class API {
             connection.disconnect();
         }
     }
-
-
-    //Test
-    public static void main(String[] args) {
-        API api = new API();
-
-        // Test the method without ID
-        try {
-            String resultWithoutId = api.getDroneDynamics();
-            System.out.println("Result without ID: " + resultWithoutId);
-        } catch (IOException e) {
-            System.err.println("An error occurred while fetching drone dynamics without ID: " + e.getMessage());
-            e.printStackTrace();
-        }
-
-        // Test the method with an ID, for example, ID = 1
-        try {
-            int testId = 59660; // You can change this ID to test different cases
-            String resultWithId = api.getDroneDynamics(testId);
-            System.out.println("Result with ID " + testId + ": " + resultWithId);
-        } catch (IOException e) {
-            System.err.println("An error occurred while fetching drone dynamics with ID: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
 }
