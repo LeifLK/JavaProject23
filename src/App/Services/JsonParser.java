@@ -1,5 +1,8 @@
-package App;
+package App.Services;
 
+import App.DroneDynamicsRespones;
+import App.DroneResponse;
+import App.DroneTypeResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
@@ -25,7 +28,5 @@ public class JsonParser {
 
         return objectMapper.readValue(jsonString, DroneTypeResponse.class);
     }
-
-
 
 }

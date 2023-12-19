@@ -1,4 +1,4 @@
-package App;
+package App.Model;
 
 import java.util.List;
 public class DroneDynamics {
@@ -20,7 +20,6 @@ public class DroneDynamics {
     public String getDrone() {
         return drone;
     }
-
     public String getTimestamp() {
         return timestamp;
     }

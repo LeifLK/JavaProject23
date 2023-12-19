@@ -1,5 +1,6 @@
-package App;
+package App.Model;
 
+import App.DroneTypeResponse;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -41,5 +42,6 @@ public class Drones {
     public String getCarriage_type() {
         return carriage_type;
     }
+
 }
 

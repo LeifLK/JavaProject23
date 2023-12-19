@@ -1,5 +1,7 @@
 package App;
 
+import App.Model.DroneType;
+
 import java.util.List;
 
 public class DroneTypeResponse {
