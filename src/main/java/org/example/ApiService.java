@@ -12,11 +12,10 @@ import org.json.JSONObject;
 public class ApiService {
     private static final String BASE_URL = "https://dronesim.facets-labs.com/api/";
     private static final String TOKEN = "Token 96abe845d26eafd5c6d920a152a52a5185b4bc24";
-    private static final long REQUEST_INTERVAL = 500;
 
 
     public String getDroneDynamics() throws IOException, InterruptedException {
-        return getAllPages("dronedynamics/?format=json&limit=1000");
+        return getAllPages("dronedynamics/?format=json&limit=5000");
     }
 
     public String getDroneDynamics(int id) throws IOException, InterruptedException {
@@ -43,27 +42,22 @@ public class ApiService {
     }
 
 
-    private String getAllPages(String endpoint) throws IOException, InterruptedException {
-        StringBuilder allResponses = new StringBuilder();
-        String nextPageUrl = BASE_URL + endpoint;
+    private String getAllPages(String endpoint) throws IOException {
+        StringBuilder responses = new StringBuilder();
+        String nextPage = BASE_URL + endpoint;
 
-        while (nextPageUrl != null) {
-            String response = ApiRequest(nextPageUrl);
+        while (nextPage != null) {
+            String response = ApiRequest(nextPage);
             JSONObject jsonResponse = new JSONObject(response);
             JSONArray results = jsonResponse.getJSONArray("results");
             for (int i = 0; i < results.length(); i++) {
-                allResponses.append(results.getJSONObject(i).toString());
+                responses.append(results.getJSONObject(i).toString());
             }
 
-            nextPageUrl = jsonResponse.optString("next", null);
-
-
-            if (nextPageUrl != null) {
-                Thread.sleep(REQUEST_INTERVAL);
-            }
+            nextPage = jsonResponse.optString("next", null);
         }
 
-        return allResponses.toString();
+        return responses.toString();
     }
 
 
@@ -72,8 +66,8 @@ public class ApiService {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         connection.setRequestProperty("Authorization", TOKEN);
-        connection.setConnectTimeout(5000);
-        connection.setReadTimeout(5000);
+        connection.setConnectTimeout(4000);
+        connection.setReadTimeout(4000);
 
         try {
             int responseCode = connection.getResponseCode();
@@ -81,7 +75,7 @@ public class ApiService {
                 BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 String inputLine;
                 StringBuilder response = new StringBuilder();
-                while ((inputLine = in.readLine()) != null) {
+                while ((inputLine = in.readLine()) != null) { //den while loop brauche ich vllt nicht weil es nur eine line ist
                     response.append(inputLine);
                 }
                 in.close();

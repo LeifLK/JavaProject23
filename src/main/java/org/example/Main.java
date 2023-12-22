@@ -9,7 +9,7 @@ public class Main {
 
         try {
             // Test fetching all drone dynamics
-            System.out.println("All Drone Dynamics:");
+            System.out.println("All the Drone Dynamics:");
             String droneDynamics = apiService.getDroneDynamics();
             System.out.println(droneDynamics);
 
