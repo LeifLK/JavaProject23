@@ -94,7 +94,7 @@ public class catalog {
 
     public void previousPage() {
         if (index > 0) {
-            mainFrame.reload("Catalog");
+            mainFrame.reloadCatalog();
             index--;
             createJPanel("Just a string representing" + index + " DroneObject");
 
@@ -105,7 +105,7 @@ public class catalog {
     {
         if (!(index >= maxAmountOfDrones))
         {
-            mainFrame.reload("Catalog");
+            mainFrame.reloadCatalog();
             index++;
             createJPanel("Just a string representing" + index + " DroneObject");
 
