@@ -86,9 +86,7 @@ public class myframe extends JFrame implements ActionListener {
         // Create panels for CardLayout
         //JPanel dashboardPanel = createPanel("Dashboard Panel Content");
 
-
-
-        JPanel catalogPanel = createPanel("Catalog Panel Content");
+        JPanel catalogPanel = (JPanel) new JPanel().add(new JLabel("Catalog Panel Content"));
         catalogPanel.setBackground(Color.DARK_GRAY);
         catalogPanel.setForeground(Color.WHITE);
 
@@ -106,9 +104,10 @@ public class myframe extends JFrame implements ActionListener {
 
 
         //JComboBox
+        /*
         String[] time = {"currentTime", "5 mins ago", "10 mins ago"};
         JComboBox comboBox = new JComboBox(time);
-
+        */
         //JSlider
 
         JSlider timeSlider = new JSlider(-10, 10, 0);
@@ -146,11 +145,6 @@ public class myframe extends JFrame implements ActionListener {
 
     }
 
-    private JPanel createPanel(String content) {
-        JPanel panel = new JPanel();
-        panel.add(new JLabel(content));
-        return panel;
-    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -159,11 +153,9 @@ public class myframe extends JFrame implements ActionListener {
             cardLayout.show(panel1, "Dashboard");
         } else if (e.getSource() == button2) {
             cardLayout.show(panel1, "Catalog");
-        } else if (e.getSource() == button3) {
-            //cardLayout.show();
         }
     }
-    public void reload(String id){
+    public void reloadCatalog(){
         cardLayout.show(panel1,"Dashboard");
         cardLayout.show(panel1, "Catalog");
 

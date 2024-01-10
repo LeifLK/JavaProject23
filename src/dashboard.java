@@ -1,6 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 public class dashboard extends JPanel {
