@@ -9,7 +9,7 @@ public class myframe extends JFrame implements ActionListener {
     JButton button0;
     private final JButton button1;
     private final JButton button2;
-    private final JButton button3;
+    final JButton button3;
 
     JFrame program;
     final JLabel label;
