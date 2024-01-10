@@ -1,7 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 public class dashboard extends JPanel {
@@ -15,7 +14,6 @@ public class dashboard extends JPanel {
 
     public dashboard(){
 
-        ImageIcon logo = new ImageIcon("C:\\Users\\andre\\Downloads\\logo.png");
         label2.setBounds(10,10,100,50);
         label2.setHorizontalAlignment(JLabel.CENTER);
         label2.setVerticalAlignment(JLabel.TOP);

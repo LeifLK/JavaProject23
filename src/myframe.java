@@ -6,16 +6,16 @@ import java.awt.event.ActionListener;
 
 public class myframe extends JFrame implements ActionListener {
 
-    private JButton button0;
-    private JButton button1;
-    private JButton button2;
-    private JButton button3;
+    JButton button0;
+    private final JButton button1;
+    private final JButton button2;
+    private final JButton button3;
 
-    private JFrame program;
-    private JLabel label;
-    private JPanel panel1;
-    private JPanel panel2;
-    private CardLayout cardLayout;
+    JFrame program;
+    final JLabel label;
+    final JPanel panel1;
+    final JPanel panel2;
+    final CardLayout cardLayout;
 
     myframe() {
         ImageIcon image = new ImageIcon("C:\\Users\\andre\\Downloads\\drone1.jpeg");
