@@ -86,7 +86,8 @@ public class myframe extends JFrame implements ActionListener {
         // Create panels for CardLayout
         //JPanel dashboardPanel = createPanel("Dashboard Panel Content");
 
-        JPanel catalogPanel = (JPanel) new JPanel().add(new JLabel("Catalog Panel Content"));
+        JPanel catalogPanel = new JPanel();
+        catalogPanel.add(new JLabel("Catalog Panel Content"));
         catalogPanel.setBackground(Color.DARK_GRAY);
         catalogPanel.setForeground(Color.WHITE);
 
