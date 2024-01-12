@@ -6,7 +6,6 @@ import App.Model.Drones;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -15,19 +14,20 @@ public class JsonParser {
 
     // Parse Method for each JSON-file
     //Deserialize JSON-String to class-Object
-    public static Drones parseDronesJson(String jsonString) throws IOException {
+    public static Drones parseDronesJson(String jsonString) throws IOException
+    {
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.readValue(jsonString, Drones.class);
     }
-    public static DroneDynamics parseDroneDynamicsJson(String jsonString) throws IOException {
+    public static DroneDynamics parseDroneDynamicsJson(String jsonString) throws IOException
+    {
         ObjectMapper objectMapper = new ObjectMapper();
-
         return objectMapper.readValue(jsonString, DroneDynamics.class);
     }
 
-    public static DroneType parseDroneTypeJson(String jsonString) throws IOException {
+    public static DroneType parseDroneTypeJson(String jsonString) throws IOException
+    {
         ObjectMapper objectMapper = new ObjectMapper();
-
         return objectMapper.readValue(jsonString, DroneType.class);
     }
 

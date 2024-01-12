@@ -1,7 +1,9 @@
 package App;
 
+import App.Model.DroneDynamics;
 import App.Model.Drones;
 import App.Services.ApiService;
+import App.Services.DataStorage;
 import App.Services.JsonParser;
 
 import java.io.IOException;
@@ -12,29 +14,28 @@ public class Main {
     public static void main(String[] args) {
         try{
 
-            ApiService ap = new ApiService();
-            String Jsonstring = ap.getDrones();
 
-            List<String> jsonStrings = JsonParser.splitJsonString(Jsonstring);
+            DataStorage dataStorage = new DataStorage();
 
-            List<Drones> dronesList = new ArrayList<>();
-            for (String droneJson:jsonStrings) {
-                Drones drones = JsonParser.parseDronesJson(droneJson);
-                dronesList.add(drones);
+            dataStorage.popluateDroneDynamicsList();
+
+
+
+            List<DroneDynamics> droneDynamics = dataStorage.getDroneDynamicsList();
+
+            for (DroneDynamics dronedynamic: droneDynamics) {
+                System.out.println("Timestamp:"+dronedynamic.getTimestamp());
             }
 
-            for (Drones drone : dronesList) {
-                System.out.println(drone.getId());
-                System.out.println(drone.getSerialnumber());
-                System.out.println(drone.getCarriage_type());
-                System.out.println(drone.getDronetype());
-                System.out.println(drone.getCreated());
-                System.out.println("-----------------------------------");
-            }
+
+
         }
-        catch (IOException e){
+        catch (IOException e)
+        {
             e.printStackTrace();
-        } catch (InterruptedException e) {
+        }
+        catch (InterruptedException e)
+        {
             throw new RuntimeException(e);
         }
     }

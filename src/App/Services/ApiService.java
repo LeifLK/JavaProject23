@@ -26,7 +26,7 @@ public class ApiService {
         return getAllPages("dronetypes/?format=json&limit=1000");
     }
 
-    private String getAllPages(String endpoint) throws IOException, InterruptedException {
+    private String getAllPages(String endpoint) throws IOException {
         StringBuilder allResponses = new StringBuilder();
         String nextPageUrl = BASE_URL + endpoint;
 
