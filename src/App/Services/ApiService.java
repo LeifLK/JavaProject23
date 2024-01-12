@@ -25,6 +25,9 @@ public class ApiService {
     public String getDroneTypes() throws IOException, InterruptedException {
         return getAllPages("dronetypes/?format=json&limit=1000");
     }
+    public String getDroneType(String url) throws IOException{
+        return ApiRequest(url);
+    }
 
     private String getAllPages(String endpoint) throws IOException {
         StringBuilder allResponses = new StringBuilder();

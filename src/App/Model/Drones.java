@@ -1,13 +1,17 @@
 package App.Model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Drones {
 
     private int id;
-    private String dronetype;
+    private DroneType droneType;
     private String created;
     private String serialnumber;
     private int carriage_weight;
     private String carriage_type;
+    @JsonProperty("dronetype")
+    private String dronetypeUrl;
 
     public Drones() {
     }
@@ -16,8 +20,8 @@ public class Drones {
         return id;
     }
 
-    public String getDronetype() {
-        return dronetype;
+    public DroneType getDronetype() {
+        return droneType;
     }
 
     public String getCreated() {
@@ -36,5 +40,14 @@ public class Drones {
         return carriage_type;
     }
 
+    public String getDronetypeUrl(){return dronetypeUrl;}
+
+    public void setDronetypeUrl(){
+        this.dronetypeUrl = dronetypeUrl;
+    }
+
+    public void setDroneType(DroneType droneType) {
+        this.droneType = droneType;
+    }
 }
 

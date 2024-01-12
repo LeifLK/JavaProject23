@@ -35,9 +35,16 @@ public class DataStorage
         for (String jsonObject: jsonObjects)
         {
             Drones drone = JsonParser.parseDronesJson(jsonObject);
+
+
+            String droneTypeUrl = drone.getDronetypeUrl();
+            String droneTypeJsonString = apiService.getDroneType(droneTypeUrl);
+            DroneType droneType = JsonParser.parseDroneTypeJson(droneTypeJsonString);
+
+            drone.setDroneType(droneType);
+
             dronesList.add(drone);
         }
-
     }
 
     public void popluateDroneTypeList() throws IOException, InterruptedException

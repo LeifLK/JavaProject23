@@ -3,6 +3,7 @@ package App.Services;
 import App.Model.DroneDynamics;
 import App.Model.DroneType;
 import App.Model.Drones;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
@@ -17,6 +18,7 @@ public class JsonParser {
     public static Drones parseDronesJson(String jsonString) throws IOException
     {
         ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,false);
         return objectMapper.readValue(jsonString, Drones.class);
     }
     public static DroneDynamics parseDroneDynamicsJson(String jsonString) throws IOException

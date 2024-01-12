@@ -1,6 +1,7 @@
 package App;
 
 import App.Model.DroneDynamics;
+import App.Model.DroneType;
 import App.Model.Drones;
 import App.Services.ApiService;
 import App.Services.DataStorage;
@@ -17,15 +18,19 @@ public class Main {
 
             DataStorage dataStorage = new DataStorage();
 
-            dataStorage.popluateDroneDynamicsList();
+            dataStorage.popluateDroneList();
 
+            List<Drones> dronesList = dataStorage.getDronesList();
 
-
-            List<DroneDynamics> droneDynamics = dataStorage.getDroneDynamicsList();
-
-            for (DroneDynamics dronedynamic: droneDynamics) {
-                System.out.println("Timestamp:"+dronedynamic.getTimestamp());
+            for (Drones drone:dronesList) {
+                System.out.println(drone.getId());
+                System.out.println(drone.getDronetype().getManufacturer());
+                System.out.println(drone.getSerialnumber());
+                System.out.println(drone.getCarriage_weight());
+                System.out.println(drone.getCreated());
+                System.out.println("----------------------");
             }
+
 
 
 
