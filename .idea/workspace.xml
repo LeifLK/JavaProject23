@@ -4,13 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1687a617-3491-42e9-9512-f6be82ad3ef6" name="Changes" comment="Included multiple Classes &#10;Moved to Classes to package App&#10;Created Class DataStorage.java&#10;to store Data in Lists">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/App/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App/Services/ApiService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/App/Services/ApiService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App/Services/DataStorage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/App/Services/DataStorage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App/Services/JsonParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/App/Services/JsonParser.java" afterDir="false" />
-    </list>
+    <list default="true" id="1687a617-3491-42e9-9512-f6be82ad3ef6" name="Changes" comment="Included multiple Classes &#10;Moved to Classes to package App&#10;Created Class DataStorage.java&#10;to store Data in Lists" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -107,7 +101,7 @@
       <workItem from="1702566060392" duration="17946000" />
       <workItem from="1702995834831" duration="39264000" />
       <workItem from="1704731541304" duration="638000" />
-      <workItem from="1705061763463" duration="8146000" />
+      <workItem from="1705061763463" duration="8466000" />
     </task>
     <task id="LOCAL-00001" summary="First commit">
       <option name="closed" value="true" />
@@ -181,7 +175,15 @@
       <option name="project" value="LOCAL" />
       <updated>1705061914897</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Included multiple Classes &#10;Moved to Classes to package App&#10;Created Class DataStorage.java&#10;to store Data in Lists">
+      <option name="closed" value="true" />
+      <created>1705073119015</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1705073119015</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
