@@ -1,12 +1,5 @@
 package App.Model;
 
-import App.DroneTypeResponse;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.util.List;
-
-
 public class Drones {
 
     private int id;

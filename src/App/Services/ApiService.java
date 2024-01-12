@@ -12,36 +12,19 @@ import org.json.JSONObject;
 public class ApiService {
     private static final String BASE_URL = "https://dronesim.facets-labs.com/api/";
     private static final String TOKEN = "Token 96abe845d26eafd5c6d920a152a52a5185b4bc24";
-    private static final long REQUEST_INTERVAL = 500;
 
 
     public String getDroneDynamics() throws IOException, InterruptedException {
-        return getAllPages("dronedynamics/?format=json&limit=1000");
-    }
-
-    public String getDroneDynamics(int id) throws IOException, InterruptedException {
-        String endpoint = BASE_URL + "dronedynamics/" + id + "/?format=json";
-        return ApiRequest(endpoint);
+        return getAllPages("dronedynamics/?format=json&limit=5000");
     }
 
     public String getDrones() throws IOException, InterruptedException {
         return getAllPages("drones/?format=json&limit=1000");
     }
 
-    public String getDrones(int id) throws IOException, InterruptedException {
-        String endpoint = BASE_URL + "drones/" + id + "/?format=json";
-        return ApiRequest(endpoint);
-    }
-
     public String getDroneTypes() throws IOException, InterruptedException {
         return getAllPages("dronetypes/?format=json&limit=1000");
     }
-
-    public String getDroneTypes(int id) throws IOException, InterruptedException {
-        String endpoint = BASE_URL + "dronetypes/" + id + "/?format=json";
-        return ApiRequest(endpoint);
-    }
-
 
     private String getAllPages(String endpoint) throws IOException, InterruptedException {
         StringBuilder allResponses = new StringBuilder();
@@ -56,11 +39,6 @@ public class ApiService {
             }
 
             nextPageUrl = jsonResponse.optString("next", null);
-
-
-            if (nextPageUrl != null) {
-                Thread.sleep(REQUEST_INTERVAL);
-            }
         }
 
         return allResponses.toString();

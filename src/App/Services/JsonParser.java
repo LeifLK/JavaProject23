@@ -1,32 +1,38 @@
 package App.Services;
 
-import App.DroneDynamicsRespones;
-import App.DroneResponse;
-import App.DroneTypeResponse;
+import App.Model.DroneDynamics;
+import App.Model.DroneType;
+import App.Model.Drones;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 
 
 public class JsonParser {
 
     // Parse Method for each JSON-file
     //Deserialize JSON-String to class-Object
-    public static DroneResponse parseDronesJson(String jsonString) throws IOException {
+    public static Drones parseDronesJson(String jsonString) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
-
-        return objectMapper.readValue(jsonString, DroneResponse.class);
+        return objectMapper.readValue(jsonString, Drones.class);
     }
-    public static DroneDynamicsRespones parseDroneDynamicsJson(String jsonString) throws IOException {
+    public static DroneDynamics parseDroneDynamicsJson(String jsonString) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
 
-        return objectMapper.readValue(jsonString, DroneDynamicsRespones.class);
+        return objectMapper.readValue(jsonString, DroneDynamics.class);
     }
 
-    public static DroneTypeResponse parseDroneTypeJson(String jsonString) throws IOException {
+    public static DroneType parseDroneTypeJson(String jsonString) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
 
-        return objectMapper.readValue(jsonString, DroneTypeResponse.class);
+        return objectMapper.readValue(jsonString, DroneType.class);
+    }
+
+    public static List<String> splitJsonString(String jsonString){
+        return JsonUtils.splitJsonObjects(jsonString);
     }
 
 }
