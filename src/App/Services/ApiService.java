@@ -21,6 +21,9 @@ public class ApiService {
     public String getDrones() throws IOException, InterruptedException {
         return getAllPages("drones/?format=json&limit=1000");
     }
+    public String getDrone(String url) throws IOException{
+        return ApiRequest(url);
+    }
 
     public String getDroneTypes() throws IOException, InterruptedException {
         return getAllPages("dronetypes/?format=json&limit=1000");
@@ -53,8 +56,8 @@ public class ApiService {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         connection.setRequestProperty("Authorization", TOKEN);
-        connection.setConnectTimeout(5000);
-        connection.setReadTimeout(5000);
+        connection.setConnectTimeout(10000);
+        connection.setReadTimeout(10000);
 
         try {
             int responseCode = connection.getResponseCode();

@@ -15,23 +15,16 @@ public class Main {
     public static void main(String[] args) {
         try{
 
-
             DataStorage dataStorage = new DataStorage();
 
-            dataStorage.popluateDroneList();
 
-            List<Drones> dronesList = dataStorage.getDronesList();
+            dataStorage.populateDroneDynamicsList();
 
-            for (Drones drone:dronesList) {
-                System.out.println(drone.getId());
-                System.out.println(drone.getDronetype().getManufacturer());
-                System.out.println(drone.getSerialnumber());
-                System.out.println(drone.getCarriage_weight());
-                System.out.println(drone.getCreated());
-                System.out.println("----------------------");
+            List<DroneDynamics> droneDynamicsList = dataStorage.getDroneDynamicsList();
+
+            for (DroneDynamics dronedynamics: droneDynamicsList) {
+                System.out.println(dronedynamics.getDrone());
             }
-
-
 
 
         }

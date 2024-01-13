@@ -23,7 +23,7 @@ public class DataStorage
         this.droneDynamicsList = new ArrayList<>();
         this.apiService = new ApiService();
     }
-   public void popluateDroneList() throws IOException, InterruptedException
+   public void populateDroneList() throws IOException, InterruptedException
    {
         //Get the JSON data from the API
         String droneJsonString = apiService.getDrones();
@@ -36,18 +36,33 @@ public class DataStorage
         {
             Drones drone = JsonParser.parseDronesJson(jsonObject);
 
-
+            // Getting the dronetypeurl
             String droneTypeUrl = drone.getDronetypeUrl();
+            // Getting the Jsonstring fromt said dronetypeurl
             String droneTypeJsonString = apiService.getDroneType(droneTypeUrl);
+            // Parsing the Jsonstring to droneType object
             DroneType droneType = JsonParser.parseDroneTypeJson(droneTypeJsonString);
-
             drone.setDroneType(droneType);
-
             dronesList.add(drone);
         }
     }
-
-    public void popluateDroneTypeList() throws IOException, InterruptedException
+    public void populateDroneDynamicsList() throws IOException, InterruptedException
+    {
+        String droneDynamicsJsonString = apiService.getDroneDynamics();
+        List<String> jsonObjects = JsonParser.splitJsonString(droneDynamicsJsonString);
+        this.droneDynamicsList = new ArrayList<>();
+        for (String jsonObject:jsonObjects)
+        {
+            DroneDynamics droneDynamics = JsonParser.parseDroneDynamicsJson(jsonObject);
+            String droneUrl = droneDynamics.getDroneUrl();
+            System.out.println(droneUrl);
+            String droneJsonString = apiService.getDrone(droneUrl);
+            Drones drones = JsonParser.parseDronesJson(droneJsonString);
+            droneDynamics.setDrone(drones);
+            droneDynamicsList.add(droneDynamics);
+        }
+    }
+    public void populateDroneTypeList() throws IOException, InterruptedException
     {
         String droneTypeJsonString = apiService.getDroneTypes();
         List<String> jsonObjects = JsonParser.splitJsonString(droneTypeJsonString);
@@ -58,17 +73,7 @@ public class DataStorage
             droneTypeList.add(droneType);
         }
     }
-    public void popluateDroneDynamicsList() throws IOException, InterruptedException
-    {
-        String droneDynamicsJsonString = apiService.getDroneDynamics();
-        List<String> jsonObjects = JsonParser.splitJsonString(droneDynamicsJsonString);
-        this.droneDynamicsList = new ArrayList<>();
-        for (String jsonObject:jsonObjects)
-        {
-            DroneDynamics droneDynamics = JsonParser.parseDroneDynamicsJson(jsonObject);
-            droneDynamicsList.add(droneDynamics);
-        }
-    }
+
 
     public List<Drones> getDronesList() {
         return dronesList;

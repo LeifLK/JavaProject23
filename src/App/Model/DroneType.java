@@ -1,6 +1,5 @@
 package App.Model;
 
-import java.util.List;
 
 public class DroneType {
 

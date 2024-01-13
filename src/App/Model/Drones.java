@@ -13,9 +13,9 @@ public class Drones {
     @JsonProperty("dronetype")
     private String dronetypeUrl;
 
-    public Drones() {
-    }
+    public Drones(){
 
+    }
     public int getId() {
         return id;
     }
@@ -42,12 +42,9 @@ public class Drones {
 
     public String getDronetypeUrl(){return dronetypeUrl;}
 
-    public void setDronetypeUrl(){
-        this.dronetypeUrl = dronetypeUrl;
-    }
-
     public void setDroneType(DroneType droneType) {
         this.droneType = droneType;
     }
+
 }
 
