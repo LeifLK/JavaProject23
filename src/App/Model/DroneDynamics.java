@@ -4,10 +4,10 @@ package App.Model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class DroneDynamics implements Comparable<DroneDynamics> {
     @JsonProperty("droneUrl")
     private String droneUrl;
@@ -54,24 +54,17 @@ public class DroneDynamics implements Comparable<DroneDynamics> {
 
     public void setDrone(Drones Drones) {this.Drones = Drones;}
 
-    @Override
+   @Override
     public int compareTo(DroneDynamics other)
     {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-        try
-        {
-            Date thisDate = dateFormat.parse(this.timestamp);
-            Date otherDate = dateFormat.parse(other.timestamp);
-
-            return thisDate.compareTo(otherDate);
-        } catch (ParseException e)
-        {
-            e.printStackTrace();
-            return 0;
-        }
+        DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSXXX");
+        //Parsing String TimeStamp to LocalDateTime Format for comparison
+        LocalDateTime thisDateTime = LocalDateTime.parse(this.timestamp,inputFormatter);
+        LocalDateTime otherDateTime = LocalDateTime.parse(other.timestamp,inputFormatter);
 
 
+        return thisDateTime.compareTo(otherDateTime);
     }
+
 }
 

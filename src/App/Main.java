@@ -1,14 +1,8 @@
 package App;
 
 import App.Model.DroneDynamics;
-import App.Model.DroneType;
-import App.Model.Drones;
-import App.Services.ApiService;
 import App.Services.DataStorage;
-import App.Services.JsonParser;
-
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
@@ -22,14 +16,15 @@ public class Main {
             dataStorage.populateDroneDynamicsList();
 
 
-            List<DroneDynamics> droneDynamicsList = dataStorage.getDroneDynamicsList();
-            for (DroneDynamics dronedynamics: droneDynamicsList) {
-                System.out.println("ID: " + dronedynamics.getDrone().getId());
-                System.out.println("Manufacturer: "+dronedynamics.getDrone().getDronetype().getManufacturer());
-                System.out.println("Serialnumber: "+dronedynamics.getDrone().getSerialnumber());
-                System.out.println("TimeStamp: "+dronedynamics.getTimestamp());
-                System.out.println("-----------------------------");
-            }
+            List<DroneDynamics> drone71DynamicsList = dataStorage.getDynamicsForDrone(71);
+
+
+
+            //dataStorage.setDroneDynamicsList(droneDynamicsList);
+
+            dataStorage.printNextSubset(25,1,drone71DynamicsList);
+            dataStorage.printNextSubset(25,2,drone71DynamicsList);
+
 
 
         }

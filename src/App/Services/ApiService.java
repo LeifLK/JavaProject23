@@ -10,12 +10,16 @@ import org.json.JSONObject;
 
 
 public class ApiService {
+    private String cachedDroneDynamics = null;
     private static final String BASE_URL = "https://dronesim.facets-labs.com/api/";
     private static final String TOKEN = "Token 96abe845d26eafd5c6d920a152a52a5185b4bc24";
 
 
     public String getDroneDynamics() throws IOException, InterruptedException {
-        return getAllPages("dronedynamics/?format=json&limit=5000");
+        if (cachedDroneDynamics == null){
+            cachedDroneDynamics = getAllPages("dronedynamics/?format=json&limit=5000");
+        }
+        return cachedDroneDynamics;
     }
 
     public String getDrones() throws IOException, InterruptedException {

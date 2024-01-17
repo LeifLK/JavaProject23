@@ -4,12 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1687a617-3491-42e9-9512-f6be82ad3ef6" name="Changes" comment="Trying to parse Drone as an attribute from DroneDynamics">
+    <list default="true" id="1687a617-3491-42e9-9512-f6be82ad3ef6" name="Changes" comment="DroneDynamicsList is now sorted by Time">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/App/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/App/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/App/Model/DroneDynamics.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/App/Model/DroneDynamics.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App/Services/ApiService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/App/Services/ApiService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/App/Services/DataStorage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/App/Services/DataStorage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App/Services/JsonParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/App/Services/JsonParser.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -108,7 +108,7 @@
       <workItem from="1702995834831" duration="39264000" />
       <workItem from="1704731541304" duration="638000" />
       <workItem from="1705061763463" duration="43915000" />
-      <workItem from="1705494301897" duration="4565000" />
+      <workItem from="1705494301897" duration="17524000" />
     </task>
     <task id="LOCAL-00001" summary="First commit">
       <option name="closed" value="true" />
@@ -214,7 +214,15 @@
       <option name="project" value="LOCAL" />
       <updated>1705178376292</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="DroneDynamicsList is now sorted by Time">
+      <option name="closed" value="true" />
+      <created>1705500058787</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1705500058787</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -258,7 +266,8 @@
     <MESSAGE value="Deleted unnecessary classes" />
     <MESSAGE value="Deleted unnecessary classes&#10;The DroneType attribute in Drones is no longer&#10;an url but an object.&#10;Can now access drones and dronetypes through one List&#10;added a method to ApiService" />
     <MESSAGE value="Trying to parse Drone as an attribute from DroneDynamics" />
-    <option name="LAST_COMMIT_MESSAGE" value="Trying to parse Drone as an attribute from DroneDynamics" />
+    <MESSAGE value="DroneDynamicsList is now sorted by Time" />
+    <option name="LAST_COMMIT_MESSAGE" value="DroneDynamicsList is now sorted by Time" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
