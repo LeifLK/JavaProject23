@@ -7,6 +7,8 @@ import App.Model.Drones;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class DataStorage
@@ -67,7 +69,6 @@ public class DataStorage
     }
     public void populateDroneDynamicsList() throws IOException, InterruptedException
     {
-        System.out.println(dronesList.get(0).getId());
         String droneDynamicsJsonString = apiService.getDroneDynamics();
         List<String> jsonObjects = JsonParser.splitJsonString(droneDynamicsJsonString);
         this.droneDynamicsList = new ArrayList<>();
@@ -91,6 +92,7 @@ public class DataStorage
             DroneType droneType = JsonParser.parseDroneTypeJson(jsonObject);
             droneTypeList.add(droneType);
         }
+        Collections.sort(droneDynamicsList);
     }
 
 

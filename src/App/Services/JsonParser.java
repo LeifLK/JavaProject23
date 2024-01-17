@@ -31,8 +31,6 @@ public class JsonParser {
 
     public static DroneType parseDroneTypeJson(String jsonString) throws IOException
     {
-        System.out.println("DronesJsonString:");
-        System.out.println(jsonString);
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.readValue(jsonString, DroneType.class);
     }

@@ -24,8 +24,11 @@ public class Main {
 
             List<DroneDynamics> droneDynamicsList = dataStorage.getDroneDynamicsList();
             for (DroneDynamics dronedynamics: droneDynamicsList) {
-                System.out.println("Serialnumber: " + dronedynamics.getDrone().getSerialnumber());
-                System.out.println("Last Seen: " +dronedynamics.getLast_seen());
+                System.out.println("ID: " + dronedynamics.getDrone().getId());
+                System.out.println("Manufacturer: "+dronedynamics.getDrone().getDronetype().getManufacturer());
+                System.out.println("Serialnumber: "+dronedynamics.getDrone().getSerialnumber());
+                System.out.println("TimeStamp: "+dronedynamics.getTimestamp());
+                System.out.println("-----------------------------");
             }
 
 
