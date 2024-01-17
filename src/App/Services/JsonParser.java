@@ -23,6 +23,7 @@ public class JsonParser {
     }
     public static DroneDynamics parseDroneDynamicsJson(String jsonString) throws IOException
     {
+        jsonString = jsonString.replace("\"drone\"", "\"droneUrl\"");
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,false);
         return objectMapper.readValue(jsonString, DroneDynamics.class);
@@ -30,6 +31,8 @@ public class JsonParser {
 
     public static DroneType parseDroneTypeJson(String jsonString) throws IOException
     {
+        System.out.println("DronesJsonString:");
+        System.out.println(jsonString);
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.readValue(jsonString, DroneType.class);
     }

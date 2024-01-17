@@ -15,7 +15,6 @@ public class DataStorage
     private List<DroneType> droneTypeList;
     private List<DroneDynamics> droneDynamicsList;
     private ApiService apiService;
-
     public DataStorage()
     {
         this.dronesList = new ArrayList<>();
@@ -46,8 +45,29 @@ public class DataStorage
             dronesList.add(drone);
         }
     }
+    private int findID(String Url)
+    {
+        int IDindex = "http://dronesim.facets-labs.com/api/drones/".length();
+        if (IDindex > 0)
+        {
+            String IDString = Url.substring(IDindex, IDindex+2);
+            int id = Integer.parseInt(IDString);
+            return id;
+        }
+        return -1;
+    }
+    private Drones findDroneInList(int ID)
+    {
+        for (int i = 0; i < dronesList.size(); i++)
+        {
+            if (dronesList.get(i).getId() == ID)
+                return dronesList.get(i);
+        }
+        return null;
+    }
     public void populateDroneDynamicsList() throws IOException, InterruptedException
     {
+        System.out.println(dronesList.get(0).getId());
         String droneDynamicsJsonString = apiService.getDroneDynamics();
         List<String> jsonObjects = JsonParser.splitJsonString(droneDynamicsJsonString);
         this.droneDynamicsList = new ArrayList<>();
@@ -55,10 +75,9 @@ public class DataStorage
         {
             DroneDynamics droneDynamics = JsonParser.parseDroneDynamicsJson(jsonObject);
             String droneUrl = droneDynamics.getDroneUrl();
-            System.out.println(droneUrl);
-            String droneJsonString = apiService.getDrone(droneUrl);
-            Drones drones = JsonParser.parseDronesJson(droneJsonString);
-            droneDynamics.setDrone(drones);
+            int toFindID = findID(droneUrl);
+            Drones drone = findDroneInList(toFindID);
+            droneDynamics.setDrone(drone);
             droneDynamicsList.add(droneDynamics);
         }
     }

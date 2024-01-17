@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 public class DroneDynamics {
-    @JsonProperty("drone")
+    @JsonProperty("droneUrl")
     private String droneUrl;
     @JsonIgnore
     private Drones Drones;
@@ -64,7 +64,7 @@ public class DroneDynamics {
         return status;
     }
 
-    public String getDroneUrl() {return droneUrl;}
+    public String getDroneUrl() {/*System.out.println(droneUrl)*/; return droneUrl;}
 
     public void setDrone(Drones Drones) {this.Drones = Drones;}
 

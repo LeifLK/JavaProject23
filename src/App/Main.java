@@ -17,13 +17,15 @@ public class Main {
 
             DataStorage dataStorage = new DataStorage();
 
-
+            dataStorage.populateDroneList();
+            dataStorage.populateDroneTypeList();
             dataStorage.populateDroneDynamicsList();
 
-            List<DroneDynamics> droneDynamicsList = dataStorage.getDroneDynamicsList();
 
+            List<DroneDynamics> droneDynamicsList = dataStorage.getDroneDynamicsList();
             for (DroneDynamics dronedynamics: droneDynamicsList) {
-                System.out.println(dronedynamics.getDrone());
+                System.out.println("Serialnumber: " + dronedynamics.getDrone().getSerialnumber());
+                System.out.println("Last Seen: " +dronedynamics.getLast_seen());
             }
 
 

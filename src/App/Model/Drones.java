@@ -1,5 +1,8 @@
 package App.Model;
 
+import App.Services.ApiService;
+import App.Services.DataStorage;
+import App.Services.JsonParser;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Drones {
