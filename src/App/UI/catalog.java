@@ -42,7 +42,7 @@ public class catalog {
         catalog.removeAll();
         catalog.setLayout(new GridBagLayout());
 
-        JLabel titleLabel = new JLabel(dataObject);
+        //JLabel titleLabel = new JLabel(dataObject);
         JLabel manufacturerLabel = new JLabel("Manufacturer:");
         JLabel typeLabel = new JLabel("Type:");
         JLabel attribute1Label = new JLabel("Attribute1");
@@ -73,7 +73,7 @@ public class catalog {
         c2.gridy = 1;
         c2.anchor = GridBagConstraints.SOUTHWEST;
 
-        catalog.add(titleLabel, c1);
+        //catalog.add(titleLabel, c1);
         /*if (imgLabel != null)
             catalog.add(imgLabel, c1);
         */
