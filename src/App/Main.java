@@ -36,8 +36,12 @@ public class Main {
 */
             List<DroneDynamics> drone71DynamicsList = dataStorage.getDynamicsForDrone(71);
 
-            JFrame myframe = new myframe();
-            myframe.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+            LandingPage landingPage = new LandingPage();
+            landingPage.show();
+
+            /*JFrame myframe = new myframe();
+            myframe.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);*/
+
 
 
             //dataStorage.setDroneDynamicsList(droneDynamicsList);
