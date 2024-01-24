@@ -1,0 +1,1 @@
+API key ist jetzt versteckt. Muss unter Run -> Edit Configurations hinzugefügt werden. API_TOKEN=***
