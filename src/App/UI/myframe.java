@@ -102,7 +102,7 @@ public class myframe extends JFrame implements ActionListener {
 
         panel1.add("Catalog", catalog.getJPanel());
         panel1.add("Dashboard", dashboard.getJPanel());
-        catalog.setframe(this);
+        catalog.setFrame(this);
 
 
 
