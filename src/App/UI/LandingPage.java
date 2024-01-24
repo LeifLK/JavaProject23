@@ -6,8 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
-import static App.UI.catalog.dataStorage;
-
 public class LandingPage {
     private JFrame frame;
     private JLabel backgroundLabel;
@@ -19,7 +17,7 @@ public class LandingPage {
     private JLabel connectionLabel;
     private JLabel connectionStatusCircle;
 
-    private API apiService;
+    public API apiService;
 
     public LandingPage() {
         apiService = new API(); //  instance of ApiService
@@ -94,7 +92,7 @@ public class LandingPage {
                 frame.dispose(); // Close the current JFrame (LandingPage)
 
                 // Then start the application by instantiating and displaying the myframe class
-                myframe myFrame = new myframe(dataStorage);
+                myframe myFrame = new myframe();
                 myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 myFrame.setVisible(true);
             }

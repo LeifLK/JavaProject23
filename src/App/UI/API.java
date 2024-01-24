@@ -1,3 +1,5 @@
+package App.UI;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -39,7 +41,7 @@ public class API {
 
 
 
-    private String ApiRequest(String endpoint) throws IOException {
+    public String ApiRequest(String endpoint) throws IOException {
         URL url = new URL(BASE_URL + endpoint);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");

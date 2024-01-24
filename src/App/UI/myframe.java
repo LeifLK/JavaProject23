@@ -1,7 +1,5 @@
 package App.UI;
 
-import App.Services.DataStorage;
-
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
@@ -96,7 +94,7 @@ public class myframe extends JFrame implements ActionListener {
         catalogPanel.setForeground(Color.WHITE);
 
         dashboard dashboard = new dashboard();
-        catalog catalog = new catalog();
+        Catalog catalog = new Catalog();
 
         // Add panels to panel1 with unique names
         //panel1.add(dashboardPanel, "DashboardPanel");

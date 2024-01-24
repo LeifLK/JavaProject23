@@ -2,7 +2,6 @@ package App.UI;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.xml.crypto.Data;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
@@ -10,7 +9,7 @@ import java.io.File;
 import java.io.IOException;
 
 import App.Services.DataStorage;
-public class catalog {
+public class Catalog {
     public static JLabel resizeImage(String imagePath) {
         try {
             BufferedImage image = ImageIO.read(new File(imagePath));
@@ -124,7 +123,7 @@ public class catalog {
 
     static int maxAmountOfDrones = 0;
     static DataStorage dataStorage;
-    public catalog() {
+    public Catalog() {
         //Get Objects from API/JSON Converter
         //Get max Amount of Drones from API/JSON Converter
 
