@@ -12,9 +12,6 @@ import App.Services.DataStorage;
 
 
 public class History extends JPanel{
-
-    private JPanel history = new JPanel();
-    private DrawingPanel drawingPanel;
     static DataStorage dataStorage;
     List<List<DroneDynamics>> droneDynamicsPerDrone = new ArrayList<>();
     public History() {
@@ -32,7 +29,7 @@ public class History extends JPanel{
     }
 }
 class DrawingPanel extends JPanel {
-    List<Color> differentColors = new ArrayList();
+    List<Color> differentColors = new ArrayList<>();
     int colorIndex = 0;
     Map<Coordinate, Integer> droneCoordinates = new HashMap<>();
 
@@ -55,9 +52,9 @@ class DrawingPanel extends JPanel {
 
     public void addDrone(DroneDynamics droneDynamics)
     {
-        Integer coordinate_factor = 1000000000;
+        int coordinate_factor = 1000000000;
         int relativeLatitude = modifyLatitude(Double.parseDouble(droneDynamics.getLatitude()), coordinate_factor);
-        int relativeLongitude = modifyLatitude(Double.parseDouble(droneDynamics.getLongitude()), coordinate_factor);;
+        int relativeLongitude = modifyLongitude(Double.parseDouble(droneDynamics.getLongitude()), coordinate_factor);
         Coordinate coordinate = new Coordinate(relativeLatitude, relativeLongitude);
 
         if (droneCoordinates.size() == 0)
@@ -115,6 +112,6 @@ class Coordinate {
     {
         String xHash = String.valueOf(x.hashCode());
         String yHash = String.valueOf(y.hashCode());
-        return Integer.valueOf(xHash + yHash);
+        return Integer.parseInt(xHash + yHash);
     }
 }
