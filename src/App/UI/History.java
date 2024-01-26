@@ -50,6 +50,8 @@ public class History extends JPanel{
         for (List<DroneDynamics> droneDynamic: droneDynamicsPerDrone) {
             drawnDrone.addDrone(droneDynamic.get(valueInTicks));
         }
+        JLabel timeLabel = new JLabel(droneDynamicsPerDrone.get(0).get(valueInTicks).getTimestamp());
+        this.add(timeLabel, BorderLayout.PAGE_START);
         this.add(drawnDrone);
         this.validate();
     }
