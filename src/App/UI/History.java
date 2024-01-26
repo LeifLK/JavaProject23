@@ -2,7 +2,9 @@ package App.UI;
 
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
+import java.lang.reflect.Array;
 import java.util.*;
 import java.util.List;
 
@@ -19,13 +21,37 @@ public class History extends JPanel{
         this.setLayout(new BorderLayout());
         dataStorage = App.Main.getDataStorage();
         List<Drones> drones = dataStorage.getDronesList();
-        DrawingPanel drawnDrone = new DrawingPanel();
+
         for (Drones drone: drones)
         {
             droneDynamicsPerDrone.add(dataStorage.getDynamicsForDrone(drone.getId()));
-            drawnDrone.addDrone(droneDynamicsPerDrone.getLast().get(0));
+
+        }
+        int maxSizeOfDroneDynamics = droneDynamicsPerDrone.getLast().size() -1;
+        timeSlider = new JSlider(0, maxSizeOfDroneDynamics, 0);
+        timeSlider.setPreferredSize(new Dimension(50, 100));
+        timeSlider.setMaximumSize(new Dimension(50, 100));
+        timeSlider.setPaintTicks(true);
+        timeSlider.setMajorTickSpacing(1);
+        timeSlider.setPaintLabels(true);
+        timeSlider.addChangeListener(e -> drawAllDronesAtTime(timeSlider.getValue()));
+        drawAllDronesAtTime(maxSizeOfDroneDynamics);
+        this.add(timeSlider, BorderLayout.SOUTH);
+    }
+    JSlider timeSlider;
+
+    //Fix if single drone is selected
+    public void drawAllDronesAtTime(int valueInTicks)
+    {
+        this.removeAll();
+        this.add(timeSlider, BorderLayout.SOUTH);
+        DrawingPanel drawnDrone = new DrawingPanel();
+        //in foreach drone loop
+        for (List<DroneDynamics> droneDynamic: droneDynamicsPerDrone) {
+            drawnDrone.addDrone(droneDynamic.get(valueInTicks));
         }
         this.add(drawnDrone);
+        this.validate();
     }
 }
 class DrawingPanel extends JPanel {
