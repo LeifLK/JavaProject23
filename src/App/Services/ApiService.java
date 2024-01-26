@@ -12,7 +12,7 @@ import org.json.JSONObject;
 public class ApiService {
     private String cachedDroneDynamics = null;
     private static final String BASE_URL = "https://dronesim.facets-labs.com/api/";
-    private static final String TOKEN = "Token 96abe845d26eafd5c6d920a152a52a5185b4bc24";
+    private static final String TOKEN = "Token " + System.getenv("API_TOKEN");
 
 
     public String getDroneDynamics() throws IOException, InterruptedException {
@@ -22,11 +22,17 @@ public class ApiService {
         return cachedDroneDynamics;
     }
 
+    public String getDroneDynamic(int id) throws IOException, InterruptedException {
+        String endpoint = BASE_URL + "dronedynamics/" + id + "/?format=json";
+        return ApiRequest(endpoint);
+    }
+
     public String getDrones() throws IOException, InterruptedException {
         return getAllPages("drones/?format=json&limit=1000");
     }
-    public String getDrone(String url) throws IOException{
-        return ApiRequest(url);
+    public String getDrone(int id) throws IOException, InterruptedException {
+        String endpoint = BASE_URL + "drones/" + id + "/?format=json";
+        return ApiRequest(endpoint);
     }
 
     public String getDroneTypes() throws IOException, InterruptedException {
