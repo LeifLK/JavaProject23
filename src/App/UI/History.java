@@ -43,11 +43,11 @@ class DrawingPanel extends JPanel {
     }
     private int modifyLatitude(double latitude, int coordinate_factor)
     {
-        return (int) ((latitude * coordinate_factor) % 690) + 10;
+        return (int) ((latitude * coordinate_factor) % 650) + 50;
     }
     private int modifyLongitude(double longitude, int coordinate_factor)
     {
-        return (int) ((longitude * coordinate_factor) % 790) + 10;
+        return (int) ((longitude * coordinate_factor) % 700) + 100;
     }
 
     public void addDrone(DroneDynamics droneDynamics)
@@ -55,7 +55,7 @@ class DrawingPanel extends JPanel {
         int coordinate_factor = 1000000000;
         int relativeLatitude = modifyLatitude(Double.parseDouble(droneDynamics.getLatitude()), coordinate_factor);
         int relativeLongitude = modifyLongitude(Double.parseDouble(droneDynamics.getLongitude()), coordinate_factor);
-        Coordinate coordinate = new Coordinate(relativeLatitude, relativeLongitude);
+        Coordinate coordinate = new Coordinate(relativeLongitude, relativeLatitude);
 
         if (droneCoordinates.size() == 0)
         {
