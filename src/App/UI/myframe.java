@@ -19,6 +19,8 @@ public class myframe extends JFrame implements ActionListener {
     final JPanel panel2;
     final CardLayout cardLayout;
 
+    public History history;
+
     public myframe() {
         ImageIcon image = new ImageIcon("C:\\Users\\andre\\Downloads\\drone1.jpeg");
         Border border = BorderFactory.createLineBorder(Color.WHITE);
@@ -67,7 +69,7 @@ public class myframe extends JFrame implements ActionListener {
         button3.setForeground(Color.BLACK);
         button3.setBackground(Color.CYAN);
         button3.setFocusable(false);
-        button3.addActionListener(e -> System.out.println("Button3 used"));
+        button3.addActionListener(this);
 
 
         // JPanel
@@ -95,13 +97,14 @@ public class myframe extends JFrame implements ActionListener {
 
         dashboard dashboard = new dashboard();
         Catalog catalog = new Catalog();
-
+        history = new History();
         // Add panels to panel1 with unique names
         //panel1.add(dashboardPanel, "DashboardPanel");
         //panel1.add("catalog", catalogpanel);
 
         panel1.add("Catalog", catalog.getJPanel());
         panel1.add("Dashboard", dashboard.getJPanel());
+        panel1.add("History", history);
         catalog.setFrame(this);
 
 
@@ -156,17 +159,21 @@ public class myframe extends JFrame implements ActionListener {
             cardLayout.show(panel1, "Dashboard");
         } else if (e.getSource() == button2) {
             cardLayout.show(panel1, "Catalog");
+        } else if (e.getSource() == button3) {
+            //history.startHistory();
+            cardLayout.show(panel1, "History");
+            repaintHistory();
         }
     }
     public void reloadCatalog(){
         cardLayout.show(panel1,"Dashboard");
         cardLayout.show(panel1, "Catalog");
-
     }
-
-
-
+    public void repaintHistory()
+    {
+        history.repaint();
     }
+}
 
 
 

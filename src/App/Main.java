@@ -7,8 +7,6 @@ import java.util.List;
 
 import App.UI.*;
 
-import javax.swing.*;
-
 public class Main {
     private static DataStorage dataStorage = new DataStorage();
 
