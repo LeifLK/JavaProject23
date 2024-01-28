@@ -2,10 +2,9 @@ package App;
 
 import App.Model.DroneDynamics;
 import App.Services.DataStorage;
-import java.io.IOException;
-import java.util.List;
+import App.UI.LandingPage;
 
-import App.UI.*;
+import java.util.List;
 
 public class Main {
     private static DataStorage dataStorage = new DataStorage();
@@ -16,7 +15,12 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        try{
+
+
+        // api request test logger !!!!!!!!!!!!!!!!
+        //ApiService apiService = new ApiService();
+        //String s = apiService.ApiRequest("https://dronesim.facets-labs.com/api/dronedynamicsbla/?format=json&limit=5000");
+        //String p = apiService.getAllPages("https://dronesim.facets-labs.com/api/dronedynamicsbla/?format=json&limit=5000");
 
             //dataStorage = new DataStorage();
 
@@ -47,16 +51,5 @@ public class Main {
             //dataStorage.printNextSubset(25,1,drone71DynamicsList);
             //dataStorage.printNextSubset(25,2,drone71DynamicsList);
 
-
-
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-        catch (InterruptedException e)
-        {
-            throw new RuntimeException(e);
-        }
     }
 }
