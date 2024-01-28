@@ -18,9 +18,6 @@ public class myframe extends JFrame implements ActionListener {
     final JPanel panel1;
     final JPanel panel2;
     final CardLayout cardLayout;
-
-    public History history;
-
     public myframe() {
         ImageIcon image = new ImageIcon("C:\\Users\\andre\\Downloads\\drone1.jpeg");
         Border border = BorderFactory.createLineBorder(Color.WHITE);
@@ -46,7 +43,7 @@ public class myframe extends JFrame implements ActionListener {
         button0.setForeground(Color.BLACK);
         button0.setBackground(Color.CYAN);
         button0.setFocusable(false);
-        button0.addActionListener(e -> System.out.println("Button0 used"));
+        button0.addActionListener(this);
 
         button1 = new JButton();
         button1.setBounds(10, 10, 70, 30);
@@ -95,13 +92,15 @@ public class myframe extends JFrame implements ActionListener {
         catalogPanel.setBackground(Color.DARK_GRAY);
         catalogPanel.setForeground(Color.WHITE);
 
+        Overview overview = new Overview();
         dashboard dashboard = new dashboard();
         Catalog catalog = new Catalog();
-        history = new History();
+        History history = new History();
         // Add panels to panel1 with unique names
         //panel1.add(dashboardPanel, "DashboardPanel");
         //panel1.add("catalog", catalogpanel);
 
+        panel1.add("Overview", overview.getJPanel());
         panel1.add("Catalog", catalog.getJPanel());
         panel1.add("Dashboard", dashboard.getJPanel());
         panel1.add("History", history);
@@ -155,23 +154,21 @@ public class myframe extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        if (e.getSource() == button1) {
+        if(e.getSource() == button0){
+            cardLayout.show(panel1, "Overview");
+        }
+        else if (e.getSource() == button1) {
             cardLayout.show(panel1, "Dashboard");
         } else if (e.getSource() == button2) {
             cardLayout.show(panel1, "Catalog");
         } else if (e.getSource() == button3) {
             //history.startHistory();
             cardLayout.show(panel1, "History");
-            repaintHistory();
         }
     }
     public void reloadCatalog(){
         cardLayout.show(panel1,"Dashboard");
         cardLayout.show(panel1, "Catalog");
-    }
-    public void repaintHistory()
-    {
-        history.repaint();
     }
 }
 
