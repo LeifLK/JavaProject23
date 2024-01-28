@@ -2,6 +2,7 @@ package App.UI;
 
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
@@ -11,131 +12,160 @@ import App.Model.Drones;
 import App.Services.DataStorage;
 
 
-public class History extends JPanel{
+public class History extends JPanel {
     static DataStorage dataStorage;
     List<List<DroneDynamics>> droneDynamicsPerDrone = new ArrayList<>();
+
+    JPanel timeSliderPanel = new JPanel();
+    int maxDroneDynamics;
+
     public History() {
         //initComponents();
+        //this.setLayout(new BorderLayout());
         this.setLayout(new BorderLayout());
+        this.setPreferredSize(new Dimension(400, 400));
+        this.setMaximumSize(new Dimension(400, 400));
         dataStorage = App.Main.getDataStorage();
         List<Drones> drones = dataStorage.getDronesList();
 
-        for (Drones drone: drones)
-        {
+        for (Drones drone : drones) {
             droneDynamicsPerDrone.add(dataStorage.getDynamicsForDrone(drone.getId()));
 
         }
-        int maxSizeOfDroneDynamics = droneDynamicsPerDrone.getLast().size() -1;
-        timeSlider = new JSlider(0, maxSizeOfDroneDynamics, 0);
-        timeSlider.setPreferredSize(new Dimension(50, 100));
-        timeSlider.setMaximumSize(new Dimension(50, 100));
-        timeSlider.setPaintTicks(true);
-        timeSlider.setMajorTickSpacing(1);
-        timeSlider.setPaintLabels(true);
-        timeSlider.addChangeListener(e -> drawAllDronesAtTime(timeSlider.getValue()));
-        drawAllDronesAtTime(maxSizeOfDroneDynamics);
-        this.add(timeSlider, BorderLayout.SOUTH);
+        maxDroneDynamics = droneDynamicsPerDrone.getLast().size() - 1;
+
+        drawAllDronesAtTime(maxDroneDynamics);
+        JLabel timeLabel = new JLabel(droneDynamicsPerDrone.get(0).get(maxDroneDynamics).getTimestamp());
+        this.add(timeLabel, BorderLayout.PAGE_START);
+        this.add(initTimeSliderPanel(maxDroneDynamics, maxDroneDynamics), BorderLayout.SOUTH);
     }
-    JSlider timeSlider;
+
+    private JPanel initTimeSliderPanel(int max, int currentTick) {
+        JSlider timeSlider = new JSlider(0, max, currentTick);
+        timeSlider.setMaximumSize(new Dimension(250, 100));
+        timeSlider.setPaintTicks(true);
+        timeSlider.setMajorTickSpacing(10);
+        timeSlider.setPreferredSize(new Dimension(250, 100));
+        timeSlider.addChangeListener(e -> drawAllDronesAtTime(timeSlider.getValue()));
+
+        timeSliderPanel.setLayout(new BoxLayout(timeSliderPanel, BoxLayout.PAGE_AXIS));
+        timeSliderPanel.add(timeSlider);
+
+        return timeSliderPanel;
+    }
 
     //Fix if single drone is selected
-    public void drawAllDronesAtTime(int valueInTicks)
-    {
+    public void drawAllDronesAtTime(int valueInTicks) {
         this.removeAll();
-        this.add(timeSlider, BorderLayout.SOUTH);
-        DrawingPanel drawnDrone = new DrawingPanel();
-        //in foreach drone loop
-        for (List<DroneDynamics> droneDynamic: droneDynamicsPerDrone) {
-            drawnDrone.addDrone(droneDynamic.get(valueInTicks));
+        List<DroneDynamics> dronesToDraw = new ArrayList<>();
+
+        for (List<DroneDynamics> droneDynamic : droneDynamicsPerDrone) {
+            dronesToDraw.add(droneDynamic.get(valueInTicks));
         }
+        DrawingPanel drawnDronePanel = new DrawingPanel(dronesToDraw);
+
         JLabel timeLabel = new JLabel(droneDynamicsPerDrone.get(0).get(valueInTicks).getTimestamp());
         this.add(timeLabel, BorderLayout.PAGE_START);
-        this.add(drawnDrone);
+        this.add(drawnDronePanel);
+        this.add(timeSliderPanel, BorderLayout.SOUTH);
         this.validate();
     }
 }
+
 class DrawingPanel extends JPanel {
-    List<Color> differentColors = new ArrayList<>();
-    int colorIndex = 0;
-    Map<Coordinate, Integer> droneCoordinates = new HashMap<>();
+    List<Position> dronePositions = new ArrayList<>();
 
-    DrawingPanel() {
-        setPreferredSize(new Dimension(700, 800));
-        differentColors.add(Color.decode("#FF0000"));
-        differentColors.add(Color.decode("#E60000"));
-        differentColors.add(Color.decode("#CC0000"));
-        differentColors.add(Color.decode("#b30000"));
-        differentColors.add(Color.decode("#990000"));
-    }
-    private int modifyLatitude(double latitude, int coordinate_factor)
-    {
-        return (int) ((latitude * coordinate_factor) % 650) + 50;
-    }
-    private int modifyLongitude(double longitude, int coordinate_factor)
-    {
-        return (int) ((longitude * coordinate_factor) % 700) + 100;
+    DrawingPanel(List<DroneDynamics> dronesToDraw) {
+        this.setLayout(new GridBagLayout());
+        for (DroneDynamics droneDynamic : dronesToDraw) {
+            addDroneDynamic(droneDynamic);
+        }
+        setPreferredSize(new Dimension(600, 700));
+        for (Position position : dronePositions) {
+            GridBagConstraints gbConstraints = new GridBagConstraints();
+            gbConstraints.gridx = position.y;
+            gbConstraints.gridy = position.x;
+            position.addButton();
+            this.add(position, gbConstraints);
+        }
+        this.validate();
     }
 
-    public void addDrone(DroneDynamics droneDynamics)
-    {
+    private int modifyLatitude(double latitude, int coordinate_factor) {
+        return (int) (((latitude * coordinate_factor) % 650) + 50) / 10;
+    }
+
+    private int modifyLongitude(double longitude, int coordinate_factor) {
+        return (int) (((longitude * coordinate_factor) % 600) + 100) / 10;
+    }
+
+    public void addDroneDynamic(DroneDynamics droneDynamics) {
         int coordinate_factor = 1000000000;
         int relativeLatitude = modifyLatitude(Double.parseDouble(droneDynamics.getLatitude()), coordinate_factor);
         int relativeLongitude = modifyLongitude(Double.parseDouble(droneDynamics.getLongitude()), coordinate_factor);
-        Coordinate coordinate = new Coordinate(relativeLongitude, relativeLatitude);
 
-        if (droneCoordinates.size() == 0)
-        {
-            droneCoordinates.put(coordinate, 1);
+        Position position = new Position(relativeLongitude, relativeLatitude);
+        if (dronePositions.contains(position)) {
+            int index = dronePositions.indexOf(position);
+            dronePositions.get(index).amountAtCurrentPosition += 1;
+            dronePositions.get(index).addDrone(droneDynamics.getDrone());
+        } else {
+            position.addDrone(droneDynamics.getDrone());
+            dronePositions.add(position);
         }
-        if (droneCoordinates.containsKey(coordinate)) {
-            droneCoordinates.put(coordinate, droneCoordinates.get(coordinate) + 1);
-        }
-        else
-            droneCoordinates.put(coordinate, 1);
-    }
-    @Override
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        for (Coordinate coordinate : droneCoordinates.keySet())
-        {
-            //System.out.println(droneCoordinates.get(i).x);
-            //System.out.println(droneCoordinates.get(i).y);
-            paint(g, coordinate.x, coordinate.y, droneCoordinates.get(coordinate));
-        }
-    }
-    public void paint(Graphics g, int x, int y, int count)
-    {
-        //g.drawRect(x, y, 100, 100);
-        g.setColor(differentColors.get(colorIndex));
-        colorIndex++;
-        if (colorIndex >= differentColors.size())
-            colorIndex=0;
-
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
-        //-5 and +2 for visual offset
-        g.drawString(String.valueOf(count), x-5, y+2);
-        g.fillRect(x, y, 5, 5);
     }
 }
-class Coordinate {
+
+class Position extends JPanel {
     Integer x;
     Integer y;
-    public Coordinate(int x, int y)
-    {
+    int amountAtCurrentPosition = 1;
+
+    List<Drones> dronesAtPosition = new ArrayList<>();
+
+    public Position(int x, int y) {
         this.x = x;
         this.y = y;
+        setPreferredSize(new Dimension(40, 40));
     }
+
+    public void addDrone(Drones drone) {
+        dronesAtPosition.add(drone);
+
+    }
+
+    private void positionClicked() {
+        if (amountAtCurrentPosition > 1) {
+            PopupMenu popup = new PopupMenu();
+            for (Drones drone : dronesAtPosition) {
+                MenuItem item = new MenuItem();
+                item.setLabel("ID: " + drone.getId());
+                item.addActionListener(e -> System.out.println("Clickedy Clackedy"));
+                popup.add(item);
+            }
+            this.getParent().add(popup);
+            popup.show(this, 10, 10);
+        }
+        //TODO: change view to Dashboard of drone
+    }
+
+    public void addButton() {
+        JButton jbutton = new JButton(String.valueOf(amountAtCurrentPosition));
+        jbutton.setBorder(new LineBorder(Color.BLACK));
+        jbutton.addActionListener(e -> this.positionClicked());
+        this.add(jbutton);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Coordinate other = (Coordinate) o;
+        Position other = (Position) o;
         return (x.intValue() == other.x.intValue() && y.intValue() == other.y.intValue());
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         String xHash = String.valueOf(x.hashCode());
         String yHash = String.valueOf(y.hashCode());
         return Integer.parseInt(xHash + yHash);
