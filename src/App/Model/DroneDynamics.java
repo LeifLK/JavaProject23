@@ -20,15 +20,25 @@ public class DroneDynamics implements Comparable<DroneDynamics> {
     private String droneUrl;
     @JsonIgnore
     private Drones Drones;
-    private String timestamp;
+    @JsonProperty("timestamp")
+    private String timeStamp;
+    @JsonProperty("speed")
     private int speed;
-    private String align_roll;
-    private String align_pitch;
+    @JsonProperty("align_roll")
+    private String alignRoll;
+    @JsonProperty("align_pitch")
+    private String alignPitch;
+    @JsonProperty("align_yaw")
     private String align_yaw;
+    @JsonProperty("longitude")
     private String longitude;
+    @JsonProperty("latitude")
     private String latitude;
-    private int battery_status;
-    private String last_seen;
+    @JsonProperty("battery_status")
+    private int batteryStatus;
+    @JsonProperty("last_seen")
+    private String lastSeen;
+    @JsonProperty("status")
     private String status;
 
 
@@ -52,8 +62,8 @@ public class DroneDynamics implements Comparable<DroneDynamics> {
      *
      * @return The timestamp as a string.
      */
-    public String getTimestamp() {
-        return timestamp;
+    public String getTimeStamp() {
+        return timeStamp;
     }
 
     /**
@@ -70,8 +80,8 @@ public class DroneDynamics implements Comparable<DroneDynamics> {
      *
      * @return The roll alignment as a string.
      */
-    public String getAlign_roll() {
-        return align_roll;
+    public String getAlignRoll() {
+        return alignRoll;
     }
 
     /**
@@ -79,8 +89,8 @@ public class DroneDynamics implements Comparable<DroneDynamics> {
      *
      * @return The pitch alignment as a string.
      */
-    public String getAlign_pitch() {
-        return align_pitch;
+    public String getAlignPitch() {
+        return alignPitch;
     }
 
     /**
@@ -115,8 +125,8 @@ public class DroneDynamics implements Comparable<DroneDynamics> {
      *
      * @return The battery status as an integer.
      */
-    public int getBattery_status() {
-        return battery_status;
+    public int getBatteryStatus() {
+        return batteryStatus;
     }
 
     /**
@@ -124,8 +134,8 @@ public class DroneDynamics implements Comparable<DroneDynamics> {
      *
      * @return The last seen timestamp as a string.
      */
-    public String getLast_seen() {
-        return last_seen;
+    public String getLastSeen() {
+        return lastSeen;
     }
 
     /**
@@ -165,8 +175,8 @@ public class DroneDynamics implements Comparable<DroneDynamics> {
     public int compareTo(DroneDynamics other) {
         DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSXXX");
         //Parsing String TimeStamp to LocalDateTime Format for comparison
-        LocalDateTime thisDateTime = LocalDateTime.parse(this.timestamp,inputFormatter);
-        LocalDateTime otherDateTime = LocalDateTime.parse(other.timestamp,inputFormatter);
+        LocalDateTime thisDateTime = LocalDateTime.parse(this.timeStamp,inputFormatter);
+        LocalDateTime otherDateTime = LocalDateTime.parse(other.timeStamp,inputFormatter);
 
         return thisDateTime.compareTo(otherDateTime);
     }

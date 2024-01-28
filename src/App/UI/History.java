@@ -41,7 +41,7 @@ public class History extends JPanel {
         maxDroneDynamics = droneDynamicsPerDrone.getLast().size() - 1;
 
         drawAllDronesAtTime(maxDroneDynamics);
-        JLabel timeLabel = new JLabel(droneDynamicsPerDrone.get(0).get(maxDroneDynamics).getTimestamp());
+        JLabel timeLabel = new JLabel(droneDynamicsPerDrone.get(0).get(maxDroneDynamics).getTimeStamp());
         this.add(timeLabel, BorderLayout.PAGE_START);
         this.add(initTimeSliderPanel(maxDroneDynamics, maxDroneDynamics), BorderLayout.SOUTH);
     }
@@ -70,7 +70,7 @@ public class History extends JPanel {
         }
         DrawingPanel drawnDronePanel = new DrawingPanel(dronesToDraw);
 
-        JLabel timeLabel = new JLabel(droneDynamicsPerDrone.get(0).get(valueInTicks).getTimestamp());
+        JLabel timeLabel = new JLabel(droneDynamicsPerDrone.get(0).get(valueInTicks).getTimeStamp());
         this.add(timeLabel, BorderLayout.PAGE_START);
         this.add(drawnDronePanel);
         this.add(timeSliderPanel, BorderLayout.SOUTH);

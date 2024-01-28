@@ -164,7 +164,7 @@ public class DataStorage {
             DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSXXX");
             DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("MMM. d, yyyy, h:mm a");
             for (DroneDynamics droneDynamics : subset) {
-                String formattedTimestamp = formatTimestamp(droneDynamics.getTimestamp(), inputFormatter, outputFormatter);
+                String formattedTimestamp = formatTimestamp(droneDynamics.getTimeStamp(), inputFormatter, outputFormatter);
 
                 // Print or process each droneDynamics object
                 System.out.println("TimeStamp: " + formattedTimestamp);

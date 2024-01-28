@@ -1,17 +1,12 @@
 package App.UI;
 
-import javax.swing.*;
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Vector;
-import javax.swing.JLabel;
-
 import App.Main;
 import App.Model.DroneDynamics;
 import App.Model.Drones;
 import App.Services.DataStorage;
-import org.jfree.chart.*;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.renderer.category.BarRenderer;
@@ -19,6 +14,12 @@ import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
 
 
 public class dashboard extends JPanel {
@@ -74,7 +75,7 @@ public class dashboard extends JPanel {
         int lowestDroneId = 71;
         typename = createLabel("Typename: " + dataStorage.getDronesList().get(currentDroneId - lowestDroneId).getDronetype().getTypename(), 0, 20);
         serialnumber = createLabel("Serialnumber: " + dataStorage.getDronesList().get(currentDroneId - lowestDroneId).getSerialnumber(), 0, 40);
-        alignRoll = createLabel("AlignRoll:  " + dataStorage.getDroneDynamicsList().get(currentDroneId - lowestDroneId).getAlign_roll(), 0, 60);
+        alignRoll = createLabel("AlignRoll:  " + dataStorage.getDroneDynamicsList().get(currentDroneId - lowestDroneId).getAlignRoll(), 0, 60);
         alignPitch.setText("AlignPitch: " + dataStorage.getDronesList().get(currentDroneId - lowestDroneId).getSerialnumber());
         alignYaw.setText("AlignYaw: " + dataStorage.getDronesList().get(currentDroneId - lowestDroneId).getSerialnumber());
 
@@ -239,7 +240,7 @@ public class dashboard extends JPanel {
 
         List<DroneDynamics> dataList = dataStorage.getDynamicsForDrone(DroneId);
 
-        int battery = dataList.getLast().getBattery_status();
+        int battery = dataList.getLast().getBatteryStatus();
         dataset.setValue("charged Battery %", battery);
         dataset.setValue("drained Battery %", 100);
 
@@ -277,7 +278,7 @@ public class dashboard extends JPanel {
             double speed = dataList.get(dataList.size() - 1 - i).getSpeed();
             if (speed > 0) {
 
-                String category = dataList.get(dataList.size() - 1 - i).getTimestamp();
+                String category = dataList.get(dataList.size() - 1 - i).getTimeStamp();
                 dataset.addValue(speed, "Speed", category);
                 total += speed;
 
