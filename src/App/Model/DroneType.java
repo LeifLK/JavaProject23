@@ -1,5 +1,7 @@
 package App.Model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Represents the type of a drone, containing various attributes like manufacturer, type name, and specifications.
  * It serves as a data model in the application, holding the details about a specific type of drone.
@@ -9,14 +11,22 @@ package App.Model;
 public class DroneType {
 
 
+    @JsonProperty("id")
     private int id;
+    @JsonProperty("manufacturer")
     private String manufacturer;
+    @JsonProperty("typename")
     private String typename;
+    @JsonProperty("weight")
     private int weight;
-    private int max_speed;
-    private int battery_capacity;
-    private int control_range;
-    private int max_carriage;
+    @JsonProperty("max_speed")
+    private int maxSpeed;
+    @JsonProperty("battery_capacity")
+    private int batteryCapacity;
+    @JsonProperty("control_range")
+    private int controlRange;
+    @JsonProperty("max_carriage")
+    private int maxCarriage;
 
     /**
      * Default constructor for creating an instance of DroneType.
@@ -65,8 +75,8 @@ public class DroneType {
      *
      * @return The maximum speed of the drone in km/h.
      */
-    public int getMax_speed() {
-        return max_speed;
+    public int getMaxSpeed() {
+        return maxSpeed;
     }
 
     /**
@@ -74,8 +84,8 @@ public class DroneType {
      *
      * @return The battery capacity of the drone in mAh.
      */
-    public int getBattery_capacity() {
-        return battery_capacity;
+    public int getBatteryCapacity() {
+        return batteryCapacity;
     }
 
     /**
@@ -83,8 +93,8 @@ public class DroneType {
      *
      * @return The control range of the drone in meter.
      */
-    public int getControl_range() {
-        return control_range;
+    public int getControlRange() {
+        return controlRange;
     }
 
     /**
@@ -92,8 +102,8 @@ public class DroneType {
      *
      * @return The maximum carriage weight the drone can carry in grams.
      */
-    public int getMax_carriage() {
-        return max_carriage;
+    public int getMaxCarriage() {
+        return maxCarriage;
     }
 }
 

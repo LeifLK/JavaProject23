@@ -18,6 +18,7 @@ public class myframe extends JFrame implements ActionListener {
     final JPanel panel1;
     final JPanel panel2;
     final CardLayout cardLayout;
+    final dashboard dashboard;
     public myframe() {
         ImageIcon image = new ImageIcon("C:\\Users\\andre\\Downloads\\drone1.jpeg");
         Border border = BorderFactory.createLineBorder(Color.WHITE);
@@ -93,7 +94,7 @@ public class myframe extends JFrame implements ActionListener {
         catalogPanel.setForeground(Color.WHITE);
 
         Overview overview = new Overview();
-        dashboard dashboard = new dashboard();
+        dashboard = new dashboard();
         Catalog catalog = new Catalog();
         History history = new History();
         // Add panels to panel1 with unique names
@@ -105,7 +106,7 @@ public class myframe extends JFrame implements ActionListener {
         panel1.add("Dashboard", dashboard.getJPanel());
         panel1.add("History", history);
         catalog.setFrame(this);
-
+        history.setFrame(this);
 
 
         //JComboBox
@@ -166,9 +167,16 @@ public class myframe extends JFrame implements ActionListener {
             cardLayout.show(panel1, "History");
         }
     }
+    //TODO: Remove
     public void reloadCatalog(){
         cardLayout.show(panel1,"Dashboard");
         cardLayout.show(panel1, "Catalog");
+    }
+    public void loadDashboardAt(int droneID)
+    {
+        cardLayout.show(panel1, "Dashboard");
+        dashboard.currentDroneId = droneID;
+        dashboard.createDashboard();
     }
 }
 

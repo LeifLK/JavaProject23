@@ -19,6 +19,12 @@ public class History extends JPanel {
     JPanel timeSliderPanel = new JPanel();
     int maxDroneDynamics;
 
+    public myframe mainframe;
+
+    public void setFrame(myframe myframe) {
+        mainframe = myframe;
+    }
+
     public History() {
         //initComponents();
         //this.setLayout(new BorderLayout());
@@ -50,11 +56,11 @@ public class History extends JPanel {
 
         timeSliderPanel.setLayout(new BoxLayout(timeSliderPanel, BoxLayout.PAGE_AXIS));
         timeSliderPanel.add(timeSlider);
-
+        timeSlider.setToolTipText("Select Timeslot");
         return timeSliderPanel;
     }
 
-    //Fix if single drone is selected
+    //TODO: Fix if single drone is selected
     public void drawAllDronesAtTime(int valueInTicks) {
         this.removeAll();
         List<DroneDynamics> dronesToDraw = new ArrayList<>();
@@ -68,6 +74,11 @@ public class History extends JPanel {
         this.add(timeLabel, BorderLayout.PAGE_START);
         this.add(drawnDronePanel);
         this.add(timeSliderPanel, BorderLayout.SOUTH);
+        for (Component component : drawnDronePanel.getComponents()) {
+            if (component instanceof Position pos) {
+                pos.setHistory(this);
+            }
+        }
         this.validate();
     }
 }
@@ -120,6 +131,11 @@ class Position extends JPanel {
     Integer x;
     Integer y;
     int amountAtCurrentPosition = 1;
+    History history;
+
+    void setHistory(History history) {
+        this.history = history;
+    }
 
     List<Drones> dronesAtPosition = new ArrayList<>();
 
@@ -131,7 +147,19 @@ class Position extends JPanel {
 
     public void addDrone(Drones drone) {
         dronesAtPosition.add(drone);
+    }
 
+    private void setTooltips(JButton button) {
+        if (dronesAtPosition.size() == 1) {
+            button.setToolTipText("Show here located Drone (ID: " + dronesAtPosition.getFirst().getId() + ")");
+        } else {
+            StringBuilder dronesStr = new StringBuilder();
+            for (Drones d : dronesAtPosition) {
+                dronesStr.append(" ");
+                dronesStr.append(d.getId()).append(";");
+            }
+            button.setToolTipText("Show here located Drones (IDs:" + dronesStr + ")");
+        }
     }
 
     private void positionClicked() {
@@ -140,19 +168,21 @@ class Position extends JPanel {
             for (Drones drone : dronesAtPosition) {
                 MenuItem item = new MenuItem();
                 item.setLabel("ID: " + drone.getId());
-                item.addActionListener(e -> System.out.println("Clickedy Clackedy"));
+                if (history != null)
+                    item.addActionListener(e -> history.mainframe.loadDashboardAt(drone.getId()));
                 popup.add(item);
             }
             this.getParent().add(popup);
             popup.show(this, 10, 10);
-        }
-        //TODO: change view to Dashboard of drone
+        } else
+            history.mainframe.loadDashboardAt(dronesAtPosition.get(0).getId());
     }
 
     public void addButton() {
         JButton jbutton = new JButton(String.valueOf(amountAtCurrentPosition));
         jbutton.setBorder(new LineBorder(Color.BLACK));
         jbutton.addActionListener(e -> this.positionClicked());
+        setTooltips(jbutton);
         this.add(jbutton);
     }
 

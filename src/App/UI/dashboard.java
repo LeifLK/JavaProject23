@@ -53,15 +53,10 @@ public class dashboard extends JPanel {
         Component[] components = container.getComponents();
         for (Component component : components) {
             if (component instanceof Container) {
-                // If the component is a container, call the method recursively
                 deleteAllChildren((Container) component);
             }
-
-            // Remove the component from its parent
             container.remove(component);
         }
-
-        // Repaint the container after removing all children
         container.revalidate();
         container.repaint();
     }
@@ -210,7 +205,7 @@ public class dashboard extends JPanel {
 
 
         double speed = dataList.getLast().getSpeed();
-        double max_speed = dataList.getLast().getDrone().getDronetype().getMax_speed();
+        double max_speed = dataList.getLast().getDrone().getDronetype().getMaxSpeed();
         String category2 = "Max Speed";
         String category = "Current Speed";
         dataset.addValue(speed, "Speed", category);

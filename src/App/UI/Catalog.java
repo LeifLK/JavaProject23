@@ -22,6 +22,7 @@ public class Catalog {
 
         JLabel attributeIdentifierLabel = new JLabel(identifier);
         JLabel valueLabel = new JLabel(value);
+        attributeIdentifierLabel.setHorizontalAlignment(SwingConstants.LEFT);
         catalog.add(attributeIdentifierLabel, constraints);
         valueLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         catalog.add(valueLabel, constraints);
@@ -35,8 +36,8 @@ public class Catalog {
 
         GridBagConstraints gbConstraints = new GridBagConstraints();
         gbConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gbConstraints.ipadx = 10;
-        gbConstraints.ipady = 10;
+        gbConstraints.ipadx = 40;
+        gbConstraints.ipady = 20;
         gbConstraints.gridy = 1;
         gbConstraints.anchor = GridBagConstraints.SOUTHWEST;
 
@@ -46,10 +47,10 @@ public class Catalog {
         //Add Empty field for nicer visuals
         addJLabel("" ,"", gbConstraints);
         addJLabel("ID:", String.valueOf(currentDroneType.getId()), gbConstraints);
-        addJLabel("Battery Capacity:", String.valueOf(currentDroneType.getBattery_capacity()), gbConstraints);
-        addJLabel("Control Range:",  String.valueOf(currentDroneType.getControl_range()), gbConstraints);
-        addJLabel("Max Carriage:", String.valueOf(currentDroneType.getMax_carriage()), gbConstraints);
-        addJLabel("Max Speed:", String.valueOf(currentDroneType.getMax_speed()), gbConstraints);
+        addJLabel("Battery Capacity:", String.valueOf(currentDroneType.getBatteryCapacity()), gbConstraints);
+        addJLabel("Control Range:",  String.valueOf(currentDroneType.getControlRange()), gbConstraints);
+        addJLabel("Max Carriage:", String.valueOf(currentDroneType.getMaxCarriage()), gbConstraints);
+        addJLabel("Max Speed:", String.valueOf(currentDroneType.getMaxSpeed()), gbConstraints);
         addJLabel("Weight:", String.valueOf(currentDroneType.getWeight()), gbConstraints);
 
         //Back&Forward Buttons
@@ -60,7 +61,7 @@ public class Catalog {
         JButton forwardButton = new JButton("Forward");
         catalog.add(forwardButton, gbConstraints);
         forwardButton.addActionListener(e -> nextPage());
-        catalog.setSize(700, 800);
+        catalog.setPreferredSize(new Dimension(700, 800));
         catalog.setVisible(true);
     }
 
