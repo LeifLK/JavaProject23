@@ -10,11 +10,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class Drones {
 
+    @JsonProperty("id")
     private int id;
     private DroneType droneType;
+    @JsonProperty("created")
     private String created;
+    @JsonProperty("serialnumber")
     private String serialNumber;
+    @JsonProperty("carriage_weight")
     private int carriageWeight;
+    @JsonProperty("carriage_type")
     private String carriageType;
     @JsonProperty("dronetype")
     private String droneTypeUrl;
