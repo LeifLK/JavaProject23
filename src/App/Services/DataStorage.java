@@ -22,40 +22,53 @@ import java.util.List;
  * @author Amin
  */
 public class DataStorage {
-    private static final Logger LOGGER = LogManager.getLogger(JsonUtils.class);
+    private static final Logger LOGGER = LogManager.getLogger(DataStorage.class);
+    private static final String DRONES_FILE_PATH = "dronesList.ser";
+    private static final String DRONE_TYPES_FILE_PATH = "droneTypesList.ser";
+    private static final String DRONE_DYNAMICS_FILE_PATH = "droneDynamicsList.ser";
+
     private List<Drones> dronesList;
     private List<DroneType> droneTypeList;
     private List<DroneDynamics> droneDynamicsList;
     private ApiService apiService;
+    private FileService fileService;
 
     /**
      * Constructs a new instance of DataStorage.
      * Initializes lists to store drones, drone types, and drone dynamics.
      */
     public DataStorage() {
-        this.dronesList = new ArrayList<>();
-        this.droneTypeList = new ArrayList<>();
-        this.droneDynamicsList = new ArrayList<>();
+        this.fileService = new FileService();
         this.apiService = new ApiService();
+        this.dronesList = fileService.loadListFromFile(DRONES_FILE_PATH);
+        this.droneTypeList = fileService.loadListFromFile(DRONE_TYPES_FILE_PATH);
+        this.droneDynamicsList = fileService.loadListFromFile(DRONE_DYNAMICS_FILE_PATH);
     }
 
     /**
-     * Populates the drone list by fetching data from the API.
-     * If the drone list is already populated, the method returns early.
-     * Otherwise, it fetches drone data, parses it, and populates the list.
+     * Populates the drone list by fetching data from the API or loading it from a local file.
+     * The method first checks if the drone list is already populated and returns early if it is.
+     * If the drone list is not populated, it attempts to load the list from a local file.
+     * If the local file does not exist or is empty, the method fetches drone data from the API,
+     * parses the JSON data, populates the drone list, and saves the populated list to the local file for future use.
      */
     public void populateDroneList() {
         if (!dronesList.isEmpty()) {
             LOGGER.info("Drone list is already populated. Size: {}", dronesList.size());
             return;
         }
+        this.dronesList = fileService.loadListFromFile(DRONES_FILE_PATH);
+        if (!dronesList.isEmpty()) {
+            LOGGER.info("Loaded drone list from local cache. Size: {}", dronesList.size());
+            return;
+        }
+        LOGGER.info("No local drone data found. Fetching from API...");
         String droneJsonString = apiService.getDrones();
         if (droneJsonString.isEmpty()) {
             LOGGER.warn("No drone data was fetched from the API.");
             return;
         }
         List<String> jsonObjects = JsonParser.splitJsonString(droneJsonString);
-        this.dronesList = new ArrayList<>();
         for (String jsonObject : jsonObjects) {
             Drones drone = JsonParser.parseDronesJson(jsonObject);
             if (drone == null) {
@@ -72,8 +85,12 @@ public class DataStorage {
             drone.setDroneType(droneType);
             dronesList.add(drone);
         }
-        Collections.sort(droneDynamicsList);
+        if (!dronesList.isEmpty()) {
+            fileService.saveListToFile(DRONES_FILE_PATH, dronesList);
+            LOGGER.info("Drone list fetched from API and saved locally.");
+        }
     }
+
 
     private int findID(String Url) {
         int IDindex = "http://dronesim.facets-labs.com/api/drones/".length();
@@ -94,16 +111,33 @@ public class DataStorage {
     }
 
     /**
-     * Populates the drone dynamics list by fetching data from the API.
-     * If the list is empty, it fetches data, parses it, and populates the list.
-     * If the list is already populated, logs the current size and does not refetch the data.
+     * Populates the drone dynamics list by fetching data from the API or loading it from a local file.
+     * <p>
+     * If the local file is empty or does not exist, the method fetches drone dynamics data from the API.
+     * It then parses the JSON response, associates each DroneDynamics instance with its corresponding Drones instance,
+     * populates the drone dynamics list with the parsed and associated data, and saves the list to the local file for future use.
+     * If the drone dynamics list is successfully fetched and parsed, the method logs the size of the populated list.
+     * <p>
+     * If the local file already contains drone dynamics data, the method logs that it has loaded the data from the local cache
+     * and returns early, preventing unnecessary API calls.
+     * <p>
+     * The method also handles potential parsing errors, logging any issues encountered during the parsing of individual drone dynamics JSON objects.
+     * It also manages the association of DroneDynamics instances with their corresponding Drones instances based on URLs and IDs.
      */
     public void populateDroneDynamicsList() {
+        // Attempt to load the drone dynamics list from the file
+        this.droneDynamicsList = fileService.loadListFromFile(DRONE_DYNAMICS_FILE_PATH);
+
         if (droneDynamicsList.isEmpty()) {
-            LOGGER.info("Data is being fetched from the API...");
+            LOGGER.info("No local drone dynamics data found. Fetching from API...");
             String droneDynamicsJsonString = apiService.getDroneDynamics();
+
+            if (droneDynamicsJsonString.isEmpty()) {
+                LOGGER.warn("No drone dynamics data was fetched from the API.");
+                return;
+            }
+
             List<String> jsonObjects = JsonParser.splitJsonString(droneDynamicsJsonString);
-            this.droneDynamicsList = new ArrayList<>();
             for (String jsonObject : jsonObjects) {
                 DroneDynamics droneDynamics = JsonParser.parseDroneDynamicsJson(jsonObject);
                 if (droneDynamics == null) {
@@ -116,32 +150,56 @@ public class DataStorage {
                 droneDynamics.setDrone(drone);
                 droneDynamicsList.add(droneDynamics);
             }
+
+            // Save the fetched and processed list to the file
+            fileService.saveListToFile(DRONE_DYNAMICS_FILE_PATH, droneDynamicsList);
+            LOGGER.info("Drone dynamics list fetched from API and saved locally.");
         } else {
-            LOGGER.info("List was already filled, size: {}", droneDynamicsList.size());
+            LOGGER.info("Loaded drone dynamics list from local cache. Size: {}", droneDynamicsList.size());
         }
     }
 
+
     /**
-     * Populates the drone type list by fetching data from the API.
-     * If the list is empty, it fetches data, parses it, and populates the list.
-     * If the list is already populated, logs the current size and does not refetch the data.
+     * Populates the drone type list by fetching data from the API or loading it from a local file.
+     * <p>
+     * If the local file is empty or does not exist, the method fetches drone type data from the API.
+     * It then parses the JSON response, populates the drone type list with the parsed data, and saves the list to the local file for future use.
+     * If the drone type list is successfully fetched and parsed, the method logs the size of the populated list.
+     * <p>
+     * If the local file already contains drone type data, the method logs that it has loaded the data from the local cache
+     * and returns early, preventing unnecessary API calls.
+     * <p>
+     * The method also handles potential parsing errors, logging any issues encountered during the parsing of individual drone type JSON objects.
      */
     public void populateDroneTypeList() {
-        if (!droneTypeList.isEmpty()) {
-            LOGGER.info("Drone type list is already populated. Size: {}", droneTypeList.size());
-            return;
-        }
-        LOGGER.info("Fetching drone type data from the API...");
-        String droneTypeJsonString = apiService.getDroneTypes();
-        List<String> jsonObjects = JsonParser.splitJsonString(droneTypeJsonString);
-        this.droneTypeList = new ArrayList<>();
-        for (String jsonObject : jsonObjects) {
-            DroneType droneType = JsonParser.parseDroneTypeJson(jsonObject);
-            if (droneType == null) {
-                LOGGER.error("Failed to parse DroneType JSON: {}", jsonObject);
-                continue;
+        // Attempt to load the drone type list from the file
+        this.droneTypeList = fileService.loadListFromFile(DRONE_TYPES_FILE_PATH);
+
+        if (droneTypeList.isEmpty()) {
+            LOGGER.info("No local drone type data found. Fetching from API...");
+            String droneTypeJsonString = apiService.getDroneTypes();
+
+            if (droneTypeJsonString.isEmpty()) {
+                LOGGER.warn("No drone type data was fetched from the API.");
+                return;
             }
-            droneTypeList.add(droneType);
+
+            List<String> jsonObjects = JsonParser.splitJsonString(droneTypeJsonString);
+            for (String jsonObject : jsonObjects) {
+                DroneType droneType = JsonParser.parseDroneTypeJson(jsonObject);
+                if (droneType == null) {
+                    LOGGER.error("Failed to parse DroneType JSON: {}", jsonObject);
+                    continue;
+                }
+                droneTypeList.add(droneType);
+            }
+
+            // Save the fetched and processed list to the file
+            fileService.saveListToFile(DRONE_TYPES_FILE_PATH, droneTypeList);
+            LOGGER.info("Drone type list fetched from API and saved locally.");
+        } else {
+            LOGGER.info("Loaded drone type list from local cache. Size: {}", droneTypeList.size());
         }
     }
 

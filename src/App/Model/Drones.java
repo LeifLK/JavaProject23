@@ -2,14 +2,18 @@ package App.Model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 /**
  * Represents a drone, containing various attributes like serial number, carriage weight, and the type of drone.
  * This class serves as a data model in the application, holding the details about a specific drone.
  *
  * @author Amin
  */
-public class Drones {
-
+public class Drones implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     @JsonProperty("id")
     private int id;
     private DroneType droneType;
@@ -27,7 +31,7 @@ public class Drones {
     /**
      * Default constructor for creating an instance of Drones.
      */
-    public Drones(){
+    public Drones() {
     }
 
     /**
