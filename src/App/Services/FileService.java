@@ -21,8 +21,7 @@ public class FileService {
      *
      * @param filePath the path of the file from which the list is to be loaded
      * @param <T>      the type of the objects in the list
-     * @return a list of objects of type T if the file exists and is not empty, otherwise returns an empty list
-     * @throws ClassCastException if the read object cannot be cast to a list of T
+     * @return a list of objects of type T if the file exists and is not empty, otherwise returns an empty list.
      */
     public <T> List<T> loadListFromFile(String filePath) {
         File file = new File(filePath);
