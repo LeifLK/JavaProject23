@@ -29,12 +29,7 @@ public class Overview extends JPanel {
 
         JButton showDronesButton = new JButton("Show Drones");
         showDronesButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
-        showDronesButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                // method to update drone information
-                updateDroneTable();
-            }
-        });
+        showDronesButton.addActionListener(e -> updateDroneTable());
 
         // Add components to the overview panel
         JPanel centerPanel = new JPanel(new BorderLayout());
@@ -51,7 +46,7 @@ public class Overview extends JPanel {
         droneTable.setEnabled(false);
         JTableHeader tableHeader = droneTable.getTableHeader();
         tableHeader.setReorderingAllowed(false);
-        droneTable.setAutoResizeMode((int) JTable.CENTER_ALIGNMENT);
+        droneTable.setAutoResizeMode(0);
         droneTable.getColumnModel().getColumn(0).setPreferredWidth(30);   // ID
         droneTable.getColumnModel().getColumn(1).setPreferredWidth(120);  // Manufacturer
         droneTable.getColumnModel().getColumn(2).setPreferredWidth(150);  // Typename
