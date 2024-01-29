@@ -70,7 +70,7 @@ public class Overview extends JPanel {
                 String serialNumber = currentDrone.getSerialnumber();
                 String created = currentDrone.getCreated();
                 String status = dataStorage.getDynamicsForDrone(id).getLast().getStatus();
-                String lastUpdate = dataStorage.getDynamicsForDrone(id).getLast().getLast_seen();
+                String lastUpdate = dataStorage.getDynamicsForDrone(id).getLast().getLastSeen();
 
                 droneTableModel.addRow(new Object[]{id, manufacturer, typename, serialNumber, created, status, lastUpdate});
             }
