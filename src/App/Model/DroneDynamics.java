@@ -4,7 +4,8 @@ package App.Model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -15,7 +16,9 @@ import java.time.format.DateTimeFormatter;
  *
  * @author Amin
  */
-public class DroneDynamics implements Comparable<DroneDynamics> {
+public class DroneDynamics implements Comparable<DroneDynamics>, Serializable {
+    @Serial
+    private static final long serialVersionUID = 3L;
     @JsonProperty("droneUrl")
     private String droneUrl;
     @JsonIgnore
@@ -171,12 +174,12 @@ public class DroneDynamics implements Comparable<DroneDynamics> {
      * @param other The other {@code DroneDynamics} object to compare with.
      * @return A negative integer, zero, or a positive integer as this object is less than, equal to, or greater than the specified object.
      */
-   @Override
+    @Override
     public int compareTo(DroneDynamics other) {
         DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSXXX");
         //Parsing String TimeStamp to LocalDateTime Format for comparison
-        LocalDateTime thisDateTime = LocalDateTime.parse(this.timeStamp,inputFormatter);
-        LocalDateTime otherDateTime = LocalDateTime.parse(other.timeStamp,inputFormatter);
+        LocalDateTime thisDateTime = LocalDateTime.parse(this.timeStamp, inputFormatter);
+        LocalDateTime otherDateTime = LocalDateTime.parse(other.timeStamp, inputFormatter);
 
         return thisDateTime.compareTo(otherDateTime);
     }

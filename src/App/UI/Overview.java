@@ -6,8 +6,6 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import static App.UI.Catalog.dataStorage;
 
@@ -29,12 +27,7 @@ public class Overview extends JPanel {
 
         JButton showDronesButton = new JButton("Show Drones");
         showDronesButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
-        showDronesButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                // method to update drone information
-                updateDroneTable();
-            }
-        });
+        showDronesButton.addActionListener(e -> updateDroneTable());
 
         // Add components to the overview panel
         JPanel centerPanel = new JPanel(new BorderLayout());
@@ -51,7 +44,7 @@ public class Overview extends JPanel {
         droneTable.setEnabled(false);
         JTableHeader tableHeader = droneTable.getTableHeader();
         tableHeader.setReorderingAllowed(false);
-        droneTable.setAutoResizeMode((int) JTable.CENTER_ALIGNMENT);
+        droneTable.setAutoResizeMode(0);
         droneTable.getColumnModel().getColumn(0).setPreferredWidth(30);   // ID
         droneTable.getColumnModel().getColumn(1).setPreferredWidth(120);  // Manufacturer
         droneTable.getColumnModel().getColumn(2).setPreferredWidth(150);  // Typename
@@ -70,7 +63,7 @@ public class Overview extends JPanel {
                 String serialNumber = currentDrone.getSerialnumber();
                 String created = currentDrone.getCreated();
                 String status = dataStorage.getDynamicsForDrone(id).getLast().getStatus();
-                String lastUpdate = dataStorage.getDynamicsForDrone(id).getLast().getLast_seen();
+                String lastUpdate = dataStorage.getDynamicsForDrone(id).getLast().getLastSeen();
 
                 droneTableModel.addRow(new Object[]{id, manufacturer, typename, serialNumber, created, status, lastUpdate});
             }

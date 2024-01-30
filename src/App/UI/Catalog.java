@@ -2,97 +2,140 @@ package App.UI;
 
 import javax.swing.*;
 import java.awt.*;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
+import java.lang.reflect.Method;
 
 import App.Model.DroneType;
 import App.Services.DataStorage;
-public class Catalog {
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-    public JPanel catalog = new JPanel();
-    public JPanel getJPanel(){
-        return catalog;
+public class Catalog extends JPanel {
+    public JPanel getJPanel() {
+        return this;
     }
 
     myframe mainFrame;
-    public void setFrame(myframe myframe){
+
+    public void setFrame(myframe myframe) {
         mainFrame = myframe;
     }
 
-    private void addJLabel(String identifier, String value, GridBagConstraints constraints)
-    {
+    List<Attribute> attributeList = new ArrayList<>();
 
-        JLabel attributeIdentifierLabel = new JLabel(identifier);
-        JLabel valueLabel = new JLabel(value);
-        attributeIdentifierLabel.setHorizontalAlignment(SwingConstants.LEFT);
-        catalog.add(attributeIdentifierLabel, constraints);
-        valueLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-        catalog.add(valueLabel, constraints);
-        constraints.gridy++;
+    public void refreshAttributes(DroneType currentDroneType) {
+        for (Attribute attribute : attributeList) {
+            attribute.refresh(currentDroneType);
+        }
     }
-
-    public void createJPanel(int index) {
+    public void initCatalog() {
         //Clear and Reset Panel
-        catalog.removeAll();
-        catalog.setLayout(new GridBagLayout());
+        this.removeAll();
+        this.setLayout(new GridBagLayout());
 
         GridBagConstraints gbConstraints = new GridBagConstraints();
         gbConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gbConstraints.ipadx = 40;
+        gbConstraints.ipadx = 80;
         gbConstraints.ipady = 20;
         gbConstraints.gridy = 1;
         gbConstraints.anchor = GridBagConstraints.SOUTHWEST;
 
         DroneType currentDroneType = dataStorage.getDroneTypeList().get(index);
-        addJLabel("Manufacturer:", currentDroneType.getManufacturer(), gbConstraints);
-        addJLabel("Typename:", currentDroneType.getTypename(), gbConstraints);
-        //Add Empty field for nicer visuals
-        addJLabel("" ,"", gbConstraints);
-        addJLabel("ID:", String.valueOf(currentDroneType.getId()), gbConstraints);
-        addJLabel("Battery Capacity:", String.valueOf(currentDroneType.getBatteryCapacity()), gbConstraints);
-        addJLabel("Control Range:",  String.valueOf(currentDroneType.getControlRange()), gbConstraints);
-        addJLabel("Max Carriage:", String.valueOf(currentDroneType.getMaxCarriage()), gbConstraints);
-        addJLabel("Max Speed:", String.valueOf(currentDroneType.getMaxSpeed()), gbConstraints);
-        addJLabel("Weight:", String.valueOf(currentDroneType.getWeight()), gbConstraints);
+        attributeList.add(new Attribute("Manufacturer:", currentDroneType, "getManufacturer"));
+        attributeList.add(new Attribute("Typename:", currentDroneType, "getTypename"));
+        attributeList.add(new Attribute("ID:", currentDroneType, "getId"));
+        attributeList.add(new Attribute("Battery Capacity:", currentDroneType, "getBatteryCapacity"));
+        attributeList.add(new Attribute("Control Range:", currentDroneType, "getControlRange"));
+        attributeList.add(new Attribute("Max Carriage:", currentDroneType, "getMaxCarriage"));
+        attributeList.add(new Attribute("Max Speed:", currentDroneType, "getMaxSpeed"));
+        attributeList.add(new Attribute("Weight:", currentDroneType, "getWeight"));
+
+        for (Attribute attribute : attributeList) {
+            this.add(attribute, gbConstraints);
+            gbConstraints.gridy++;
+        }
 
         //Back&Forward Buttons
         gbConstraints.gridy++;
         JButton backwardsButton = new JButton("Back");
-        catalog.add(backwardsButton, gbConstraints);
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+        panel.add(backwardsButton, BorderLayout.WEST);
         backwardsButton.addActionListener(e -> previousPage());
+
         JButton forwardButton = new JButton("Forward");
-        catalog.add(forwardButton, gbConstraints);
+        panel.add(forwardButton, BorderLayout.CENTER);
         forwardButton.addActionListener(e -> nextPage());
-        catalog.setPreferredSize(new Dimension(700, 800));
-        catalog.setVisible(true);
+        this.add(panel, gbConstraints);
+        this.validate();
     }
 
-    public void previousPage()
-    {
+    public void previousPage() {
         if (index > 0) {
-            mainFrame.reloadCatalog();
             index--;
-            createJPanel(index);
-
-
+            refreshAttributes(dataStorage.getDroneTypeList().get(index));
         }
     }
-    public void nextPage()
-    {
-        if (index < maxAmountOfDrones -1)
-        {
-            mainFrame.reloadCatalog();
+
+    public void nextPage() {
+        if (index < maxAmountOfDrones - 1) {
             index++;
-            createJPanel(index);
-
+            refreshAttributes(dataStorage.getDroneTypeList().get(index));
         }
     }
+
     static int index = 0;
 
     static int maxAmountOfDrones = 0;
     static DataStorage dataStorage;
+
     public Catalog() {
         dataStorage = App.Main.getDataStorage();
         maxAmountOfDrones = dataStorage.getDroneTypeList().size();
-        createJPanel(index);
+        initCatalog();
     }
 }
 
+class Attribute extends JPanel {
+    JLabel attributeIdentifierLabel;
+    Method attributeGetter;
+    JLabel attributeValueLabel;
+    DroneType droneTypeToRepresent;
+    private static final Logger LOGGER = LogManager.getLogger(Catalog.class);
+
+    Attribute(String attributeIdentifier, DroneType droneType, String getMethodIdentifier) {
+        this.setLayout(new BorderLayout());
+
+        try {
+            Object value = DroneType.class.getMethod(getMethodIdentifier).invoke(droneType);
+            droneTypeToRepresent = droneType;
+            attributeGetter = DroneType.class.getMethod(getMethodIdentifier);
+            attributeIdentifierLabel = new JLabel(attributeIdentifier);
+            attributeValueLabel = new JLabel(String.valueOf(value));
+            this.add(attributeIdentifierLabel, BorderLayout.WEST);
+            this.add(attributeValueLabel, BorderLayout.EAST);
+            this.validate();
+        } catch (InvocationTargetException e) {
+            LOGGER.warn("Failed to load Attributes from DroneType");
+        } catch (IllegalAccessException e) {
+            LOGGER.warn("Not allowed to load Attributes from DroneType");
+        } catch (NoSuchMethodException e) {
+            LOGGER.warn("Method used to get DroneType Attributes not found");
+        }
+    }
+
+    void refresh(DroneType newDroneType) {
+        try {
+            droneTypeToRepresent = newDroneType;
+            Object value = attributeGetter.invoke(droneTypeToRepresent);
+            attributeValueLabel.setText(String.valueOf(value));
+            this.validate();
+        } catch (InvocationTargetException invocationTargetException) {
+            System.out.println("InvocationTargetException in refresh for DroneType");
+        } catch (IllegalAccessException illegalAccessException) {
+            System.out.println("IllegalAccessException in refresh for DroneType");
+        }
+    }
+}

@@ -1,17 +1,18 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="DEBUG">
-    <Appenders>
-        <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
-        </Console>
-        <File name="File" fileName="/Users/leif/IdeaProjects/JavaProject23/logs/app.log">
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
-        </File>
-    </Appenders>
-    <Loggers>
-        <Root level="debug">
-            <AppenderRef ref="Console"/>
-            <AppenderRef ref="File"/>
-        </Root>
-    </Loggers>
-</Configuration>
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd" >
+<log4j:configuration debug="false" xmlns:log4j="">
+
+    <appender name="default.console" class="org.apache.log4j.ConsoleAppender">
+        <param name="target" value="System.out" />
+    </appender>
+
+    <appender name="default.file" class="org.apache.log4j.FileAppender">
+        <param name="file" value="/log/logfile.log" />
+        <param name="append" value="true" />
+    </appender>
+
+    <appender name="another.file" class="org.apache.log4j.FileAppender">
+        <param name="file" value="/log/another-logfile.log" />
+        <param name="append" value="false" />
+    </appender>
+</log4j:configuration>

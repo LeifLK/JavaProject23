@@ -5,6 +5,8 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 
 public class myframe extends JFrame implements ActionListener {
 
@@ -19,6 +21,7 @@ public class myframe extends JFrame implements ActionListener {
     final JPanel panel2;
     final CardLayout cardLayout;
     final dashboard dashboard;
+
     public myframe() {
         ImageIcon image = new ImageIcon("C:\\Users\\andre\\Downloads\\drone1.jpeg");
         Border border = BorderFactory.createLineBorder(Color.WHITE);
@@ -97,9 +100,8 @@ public class myframe extends JFrame implements ActionListener {
         dashboard = new dashboard();
         Catalog catalog = new Catalog();
         History history = new History();
+        history.addComponentListener(createComponentListener());
         // Add panels to panel1 with unique names
-        //panel1.add(dashboardPanel, "DashboardPanel");
-        //panel1.add("catalog", catalogpanel);
 
         panel1.add("Overview", overview.getJPanel());
         panel1.add("Catalog", catalog.getJPanel());
@@ -108,24 +110,7 @@ public class myframe extends JFrame implements ActionListener {
         catalog.setFrame(this);
         history.setFrame(this);
 
-
-        //JComboBox
-        /*
-        String[] time = {"currentTime", "5 mins ago", "10 mins ago"};
-        JComboBox comboBox = new JComboBox(time);
-        */
-        //JSlider
-
-        JSlider timeSlider = new JSlider(-10, 10, 0);
-        timeSlider.setPreferredSize(new Dimension(100, 100));
-        timeSlider.setPaintTicks(true);
-        timeSlider.setMajorTickSpacing(5);
-        timeSlider.setPaintLabels(true);
-        //timeSlider.addChangeListener(e-> currentTime.setText(timeSlider.getvalue()));
-
-
         // JFrame
-
         program = new JFrame(); // create a frame
         program.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); // what happens when we press the X Button
         program.setSize(800, 800); // Size of frame
@@ -136,7 +121,6 @@ public class myframe extends JFrame implements ActionListener {
         panel2.add(button1);
         panel2.add(button2);
         panel2.add(button3);
-        program.add(timeSlider);
         program.add(panel1);
         program.add(panel2);
         program.setResizable(false); // resizability of frame
@@ -151,14 +135,37 @@ public class myframe extends JFrame implements ActionListener {
 
     }
 
+    public ComponentListener createComponentListener() {
+        return new ComponentListener() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+
+            }
+
+            @Override
+            public void componentMoved(ComponentEvent e) {
+
+            }
+
+            @Override
+            public void componentShown(ComponentEvent e) {
+                if (e.getComponent() instanceof History)
+                    ((History) e.getComponent()).resetDroneSelection();
+            }
+
+            @Override
+            public void componentHidden(ComponentEvent e) {
+
+            }
+        };
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        if(e.getSource() == button0){
+        if (e.getSource() == button0) {
             cardLayout.show(panel1, "Overview");
-        }
-        else if (e.getSource() == button1) {
+        } else if (e.getSource() == button1) {
             cardLayout.show(panel1, "Dashboard");
         } else if (e.getSource() == button2) {
             cardLayout.show(panel1, "Catalog");
@@ -167,13 +174,8 @@ public class myframe extends JFrame implements ActionListener {
             cardLayout.show(panel1, "History");
         }
     }
-    //TODO: Remove
-    public void reloadCatalog(){
-        cardLayout.show(panel1,"Dashboard");
-        cardLayout.show(panel1, "Catalog");
-    }
-    public void loadDashboardAt(int droneID)
-    {
+
+    public void loadDashboardAt(int droneID) {
         cardLayout.show(panel1, "Dashboard");
         dashboard.currentDroneId = droneID;
         dashboard.createDashboard();
