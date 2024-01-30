@@ -1,12 +1,17 @@
 package App.UI;
 
+import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
+import javax.swing.JLabel;
+
 import App.Main;
 import App.Model.DroneDynamics;
 import App.Model.Drones;
 import App.Services.DataStorage;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
+import org.jfree.chart.*;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.renderer.category.BarRenderer;
@@ -15,29 +20,16 @@ import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
 
-import javax.swing.*;
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Vector;
-
-
 public class dashboard extends JPanel {
 
-    private JPanel dashboard = new JPanel();
-    private JPanel title_ComboBox = new JPanel();
-    private JPanel drone_info = new JPanel();
-    private JPanel info = new JPanel();
-    private JPanel bar_chart = new JPanel();
-    private JPanel pie_chart = new JPanel();
-    private JPanel line_chart = new JPanel();
-    private JLabel Title = new JLabel("Dashboard");
-    private JLabel typename = new JLabel("Type:");
-    private JLabel serialnumber = new JLabel("Serialnumber");
-    private JLabel alignRoll = new JLabel("roll:");
-    private JLabel alignPitch = new JLabel("pitch:");
-    private JLabel alignYaw = new JLabel("yaw:");
-
+    private final JPanel dashboard = new JPanel();
+    private final JPanel titleComboBox = new JPanel();
+    private final JPanel droneInfo = new JPanel();
+    private final JPanel info = new JPanel();
+    private final JPanel bar_chart = new JPanel();
+    private final JPanel pie_chart = new JPanel();
+    private final JPanel line_chart = new JPanel();
+    private final JLabel title = new JLabel("Dashboard");
     private JComboBox<String> comboBox;
     int currentDroneId = Main.getDataStorage().getDronesList().getFirst().getId();
 
@@ -45,49 +37,50 @@ public class dashboard extends JPanel {
         dashboard.validate();
         return dashboard;
     }
-
     public dashboard() {
         createDashboard();
     }
-
     private static void deleteAllChildren(Container container) {
         Component[] components = container.getComponents();
         for (Component component : components) {
             if (component instanceof Container) {
                 deleteAllChildren((Container) component);
             }
+
             container.remove(component);
         }
+
         container.revalidate();
         container.repaint();
     }
-
     public void createDashboard() {
 
         deleteAllChildren(dashboard);
         DataStorage dataStorage = Main.getDataStorage();
+
         //JLabels
-        Title.setBounds(0, 0, 300, 50);
-        Title.setHorizontalAlignment(JLabel.CENTER);
-        Title.setVerticalAlignment(JLabel.TOP);
-        Title.setFont(new Font(null, Font.PLAIN, 25));
+        title.setBounds(0, 0, 300, 50);
+        title.setHorizontalAlignment(JLabel.CENTER);
+        title.setVerticalAlignment(JLabel.TOP);
+        title.setFont(new Font(null, Font.PLAIN, 25));
 
         int lowestDroneId = 71;
-        typename = createLabel("Typename: " + dataStorage.getDronesList().get(currentDroneId - lowestDroneId).getDronetype().getTypename(), 0, 20);
-        serialnumber = createLabel("Serialnumber: " + dataStorage.getDronesList().get(currentDroneId - lowestDroneId).getSerialnumber(), 0, 40);
-        alignRoll = createLabel("AlignRoll:  " + dataStorage.getDroneDynamicsList().get(currentDroneId - lowestDroneId).getAlignRoll(), 0, 60);
-        alignPitch.setText("AlignPitch: " + dataStorage.getDronesList().get(currentDroneId - lowestDroneId).getSerialnumber());
-        alignYaw.setText("AlignYaw: " + dataStorage.getDronesList().get(currentDroneId - lowestDroneId).getSerialnumber());
+        JLabel manufacturer = createLabel("Manufacturer: " + dataStorage.getDronesList().get(currentDroneId - lowestDroneId).getDronetype().getManufacturer(), 0, 0);
+        JLabel typename = createLabel("Typename: " + dataStorage.getDronesList().get(currentDroneId - lowestDroneId).getDronetype().getTypename(), 0, 15);
+        JLabel serialnumber = createLabel("Serialnumber: " + dataStorage.getDronesList().get(currentDroneId - lowestDroneId).getSerialnumber(), 0, 30);
+        JLabel carriageWeight = createLabel("Carriage Weight:  " + dataStorage.getDronesList().get(currentDroneId - lowestDroneId).getCarriageWeight(), 0, 45);
+        JLabel carriageType = createLabel("Carriage Type: " + dataStorage.getDronesList().get(currentDroneId - lowestDroneId).getCarriageType(), 0, 60);
+        JLabel createdDate = createLabel("Created: " + dataStorage.getDronesList().get(currentDroneId - lowestDroneId).getCreated(), 0, 75);
+        JLabel averageSpeedLabel = createLabel("AverageSpeed in km/h: " + computeAverageSpeed(currentDroneId), 0, 90);
 
+        //JPanels
+        titleComboBox.setBounds(0, 0, 345, 80);
+        titleComboBox.setLayout(new BorderLayout());
+        titleComboBox.setBackground(Color.LIGHT_GRAY);
 
-        title_ComboBox.setBounds(0, 0, 345, 80);
-        title_ComboBox.setLayout(new BorderLayout());
-        title_ComboBox.setBackground(Color.LIGHT_GRAY);
-
-        drone_info.setBounds(0, 80, 345, 310);
-        drone_info.setLayout(new GridLayout(5, 1));
-        drone_info.setBackground(Color.LIGHT_GRAY);
-
+        droneInfo.setBounds(0, 80, 345, 310);
+        droneInfo.setLayout(new GridLayout(7, 1));
+        droneInfo.setBackground(Color.LIGHT_GRAY);
 
         info.setBounds(0, 0, 345, 390);
         info.setLayout(null);
@@ -115,9 +108,8 @@ public class dashboard extends JPanel {
         comboBox.setSize(90, 30);
         comboBox.setAlignmentX(250);
         comboBox.setAlignmentY(0);
-        comboBox.setSelectedIndex(currentDroneId-lowestDroneId);
+        comboBox.setSelectedIndex(currentDroneId - lowestDroneId);
         comboBox.addActionListener(e -> reloadPanel(comboBox.getSelectedItem()));
-
 
         //JFreeChart
         JFreeChart barChart = createBarChart(currentDroneId);
@@ -132,19 +124,20 @@ public class dashboard extends JPanel {
         ChartPanel linePanel = new ChartPanel(lineChart);
         linePanel.setPreferredSize(new Dimension(315, 350));
 
-
         // Dashboard
         dashboard.setSize(700, 800);
-        title_ComboBox.add(comboBox).setLocation(250, 10);
-        title_ComboBox.add(Title, BorderLayout.CENTER);
-        title_ComboBox.setLayout(new BorderLayout());
-        info.add(title_ComboBox);
-        drone_info.add(typename);
-        drone_info.add(serialnumber);
-        drone_info.add(alignRoll);
-        drone_info.add(alignPitch);
-        drone_info.add(alignYaw);
-        info.add(drone_info);
+        titleComboBox.add(comboBox).setLocation(250, 10);
+        titleComboBox.add(title, BorderLayout.CENTER);
+        titleComboBox.setLayout(new BorderLayout());
+        info.add(titleComboBox);
+        droneInfo.add(manufacturer);
+        droneInfo.add(typename);
+        droneInfo.add(serialnumber);
+        droneInfo.add(carriageWeight);
+        droneInfo.add(carriageType);
+        droneInfo.add(createdDate);
+        droneInfo.add(averageSpeedLabel);
+        info.add(droneInfo);
         dashboard.add(info);
         bar_chart.add(barPanel);
         dashboard.add(bar_chart);
@@ -157,9 +150,7 @@ public class dashboard extends JPanel {
         dashboard.setForeground(Color.BLUE);
         dashboard.setVisible(true);
         dashboard.validate();
-
     }
-
     public void reloadPanel(Object value) {
         if (value != null) {
             String valueStr = (String) value;
@@ -251,16 +242,12 @@ public class dashboard extends JPanel {
     private static JFreeChart createLineChart(int DroneId) {
         CategoryDataset linedataset = createDatasetforLine(DroneId);
 
-        JFreeChart lineChart = ChartFactory.createLineChart(
+        return ChartFactory.createLineChart(
                 "Speed Chart",
                 "Time",
                 "Speed km/h",
                 linedataset
         );
-        //lineChart.addLegend("Average speed: " + averageSpeed);
-
-        return lineChart;
-
 
     }
 
@@ -268,27 +255,36 @@ public class dashboard extends JPanel {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
         DataStorage dataStorage = Main.getDataStorage();
-
-        double total = 0;
-
         List<DroneDynamics> dataList = dataStorage.getDynamicsForDrone(DroneId);
-
 
         for (int i = 0; i < 100; i++) {
             double speed = dataList.get(dataList.size() - 1 - i).getSpeed();
             if (speed > 0) {
-
                 String category = dataList.get(dataList.size() - 1 - i).getTimeStamp();
                 dataset.addValue(speed, "Speed", category);
-                total += speed;
-
             }
-
         }
-        double averageSpeed = total / 100;
         return dataset;
-
     }
+    private double computeAverageSpeed(int DroneId) {
 
+        DataStorage dataStorage = Main.getDataStorage();
+        double total = 0;
+        int counter = 0;
+        List<DroneDynamics> dataList = dataStorage.getDynamicsForDrone(DroneId);
+
+        for (int i = 0; i < 100 && i < dataList.size(); i++) {
+            double speed = dataList.get(dataList.size() - 1 - i).getSpeed();
+            if (speed > 0) {
+                total += speed;
+                counter++;
+            }
+        }
+        if (counter > 0) {
+            return total / counter;
+        } else {
+            return 0;
+        }
+    }
 }
 
