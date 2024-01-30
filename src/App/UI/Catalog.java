@@ -17,12 +17,6 @@ public class Catalog extends JPanel {
         return this;
     }
 
-    myframe mainFrame;
-
-    public void setFrame(myframe myframe) {
-        mainFrame = myframe;
-    }
-
     List<Attribute> attributeList = new ArrayList<>();
 
     public void refreshAttributes(DroneType currentDroneType) {
@@ -98,7 +92,7 @@ public class Catalog extends JPanel {
     }
 }
 
-class Attribute extends JPanel {
+ class Attribute extends JPanel {
     JLabel attributeIdentifierLabel;
     Method attributeGetter;
     JLabel attributeValueLabel;

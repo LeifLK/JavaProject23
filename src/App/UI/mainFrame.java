@@ -1,5 +1,10 @@
 package App.UI;
 
+import App.Model.Drones;
+import App.Services.DataStorage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
@@ -10,35 +15,19 @@ import java.net.URL;
 
 public class mainFrame extends JFrame implements ActionListener {
 
+    private static final Logger LOGGER = LogManager.getLogger(mainFrame.class);
     private final JButton overviewButton;
     private final JButton dashboardButton;
     private final JButton catalogButton;
     private final JButton historyButton;
 
     JFrame program;
-    final JLabel label;
     final JPanel rightPanel;
     final JPanel buttonPanelLeft;
     final CardLayout cardLayout;
     final dashboard dashboard;
 
-    public mainFrame() throws MalformedURLException {
-        ImageIcon image = new ImageIcon("C:\\Users\\andre\\Downloads\\drone1.jpeg");
-        Border border = BorderFactory.createLineBorder(Color.WHITE);
-
-        //JLabel
-        label = new JLabel(image);  // create label
-        label.setText("Welcome to the Drone Manager"); // set Text
-        label.setIcon(image); // set Icon with our image
-        label.setIconTextGap(25); // Gap between Icon and text
-        label.setHorizontalTextPosition(JLabel.LEFT); // Horizontal Position of Text
-        label.setVerticalTextPosition(JLabel.CENTER); // Vertical Position of Text
-        label.setForeground(Color.WHITE);  // Color of Text
-        label.setFont(new Font("MV Boli", Font.PLAIN, 20)); // Form and Size of Text
-        label.setVerticalAlignment(JLabel.TOP); // set vertical position of icon and text inside label
-        label.setHorizontalAlignment(JLabel.CENTER); // set horizontal position of icon and text inside label
-        label.setBorder(border);
-
+    public mainFrame() {
 
         //JButton
         overviewButton = new JButton();
@@ -98,20 +87,19 @@ public class mainFrame extends JFrame implements ActionListener {
         dashboard = new dashboard();
         Catalog catalog = new Catalog();
         History history = new History();
+        history.setMainFrame(this);
 
         rightPanel.add("Overview", overview.getJPanel());
         rightPanel.add("Catalog", catalog.getJPanel());
         rightPanel.add("Dashboard", dashboard.getJPanel());
         rightPanel.add("History", history);
-        catalog.setFrame(this);
-        history.setFrame(this);
 
         // JFrame
         program = new JFrame();
         program.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         program.setSize(800, 800);
         program.setTitle("Drone Manager");
-        rightPanel.add(label);
+        //rightPanel.add(label);
         buttonPanelLeft.add(overviewButton);
         buttonPanelLeft.add(dashboardButton);
         buttonPanelLeft.add(catalogButton);
@@ -123,11 +111,16 @@ public class mainFrame extends JFrame implements ActionListener {
         program.setVisible(true);
 
 
-        //Logo
-        ImageIcon logo = new ImageIcon(new URL("https://i.imgur.com/4LylQgE.png")); // set logo of our frame
-        program.setIconImage(logo.getImage());
-        program.getContentPane().setBackground(Color.BLACK);
-
+        try {
+            //Logo
+            ImageIcon logo = new ImageIcon(new URL("https://i.imgur.com/4LylQgE.png")); // set logo of our frame
+            program.setIconImage(logo.getImage());
+            program.getContentPane().setBackground(Color.BLACK);
+        }
+        catch (MalformedURLException e)
+        {
+            LOGGER.warn("ImageIcon URL is malformed");
+        }
     }
 
     @Override
@@ -140,21 +133,13 @@ public class mainFrame extends JFrame implements ActionListener {
         } else if (e.getSource() == catalogButton) {
             cardLayout.show(rightPanel, "Catalog");
         } else if (e.getSource() == historyButton) {
-            //history.startHistory();
             cardLayout.show(rightPanel, "History");
         }
     }
 
-    //TODO: Remove
-    public void reloadCatalog() {
+    public void showDashboard(Drones drone) {
         cardLayout.show(rightPanel, "Dashboard");
-        cardLayout.show(rightPanel, "Catalog");
-    }
-
-    public void loadDashboardAt(int droneID) {
-        cardLayout.show(rightPanel, "Dashboard");
-        dashboard.currentDroneId = droneID;
-        dashboard.createDashboard();
+        dashboard.reloadPanel(drone);
     }
 }
 

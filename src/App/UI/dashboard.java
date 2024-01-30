@@ -30,7 +30,7 @@ public class dashboard extends JPanel {
     private final JPanel pie_chart = new JPanel();
     private final JPanel line_chart = new JPanel();
     private final JLabel title = new JLabel("Dashboard");
-    private JComboBox<String> comboBox;
+    private JComboBox comboBox;
     int currentDroneId = Main.getDataStorage().getDronesList().getFirst().getId();
 
     public JPanel getJPanel() {
@@ -97,17 +97,16 @@ public class dashboard extends JPanel {
         line_chart.setBackground(Color.LIGHT_GRAY);
 
         //JComboBox
-        List<String> droneIds = new ArrayList<>();
-        for (Drones drone : dataStorage.getDronesList()) {
-            droneIds.add("DroneId: " + drone.getId());
-        }
-
-        Vector<String> vector = new Vector<>(droneIds);
-        comboBox = new JComboBox<>(vector);
+        comboBox = new JComboBox<>();
         comboBox.setBackground(Color.CYAN);
         comboBox.setSize(90, 30);
         comboBox.setAlignmentX(250);
         comboBox.setAlignmentY(0);
+        //Find Renderer in History.java
+        comboBox.setRenderer(new droneDynamicsCellRenderer());
+        for (Drones drone : dataStorage.getDronesList()) {
+            comboBox.addItem(drone);
+        }
         comboBox.setSelectedIndex(currentDroneId - lowestDroneId);
         comboBox.addActionListener(e -> reloadPanel(comboBox.getSelectedItem()));
 
@@ -153,12 +152,9 @@ public class dashboard extends JPanel {
     }
     public void reloadPanel(Object value) {
         if (value != null) {
-            String valueStr = (String) value;
-            currentDroneId = Integer.parseInt(valueStr.replace("DroneId: ", ""));
+            currentDroneId = ((Drones) value).getId();//Integer.parseInt(valueStr.replace("DroneId: ", ""));
             createDashboard();
-
         }
-
     }
 
     public static JLabel createLabel(String text, int x, int y) {
@@ -287,4 +283,3 @@ public class dashboard extends JPanel {
         }
     }
 }
-
