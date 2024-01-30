@@ -21,6 +21,7 @@ public class myframe extends JFrame implements ActionListener {
     final JPanel panel2;
     final CardLayout cardLayout;
     final dashboard dashboard;
+
     public myframe() {
         ImageIcon image = new ImageIcon("C:\\Users\\andre\\Downloads\\drone1.jpeg");
         Border border = BorderFactory.createLineBorder(Color.WHITE);
@@ -134,8 +135,7 @@ public class myframe extends JFrame implements ActionListener {
 
     }
 
-    public ComponentListener createComponentListener()
-    {
+    public ComponentListener createComponentListener() {
         return new ComponentListener() {
             @Override
             public void componentResized(ComponentEvent e) {
@@ -159,13 +159,13 @@ public class myframe extends JFrame implements ActionListener {
             }
         };
     }
+
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        if(e.getSource() == button0){
+        if (e.getSource() == button0) {
             cardLayout.show(panel1, "Overview");
-        }
-        else if (e.getSource() == button1) {
+        } else if (e.getSource() == button1) {
             cardLayout.show(panel1, "Dashboard");
         } else if (e.getSource() == button2) {
             cardLayout.show(panel1, "Catalog");
@@ -174,13 +174,14 @@ public class myframe extends JFrame implements ActionListener {
             cardLayout.show(panel1, "History");
         }
     }
+
     //TODO: Remove
-    public void reloadCatalog(){
-        cardLayout.show(panel1,"Dashboard");
+    public void reloadCatalog() {
+        cardLayout.show(panel1, "Dashboard");
         cardLayout.show(panel1, "Catalog");
     }
-    public void loadDashboardAt(int droneID)
-    {
+
+    public void loadDashboardAt(int droneID) {
         cardLayout.show(panel1, "Dashboard");
         dashboard.currentDroneId = droneID;
         dashboard.createDashboard();
