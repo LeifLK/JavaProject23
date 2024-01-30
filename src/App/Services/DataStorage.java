@@ -53,44 +53,45 @@ public class DataStorage {
      * parses the JSON data, populates the drone list, and saves the populated list to the local file for future use.
      */
     public void populateDroneList() {
-        if (!dronesList.isEmpty()) {
-            LOGGER.info("Drone list is already populated. Size: {}", dronesList.size());
-            return;
-        }
         this.dronesList = fileService.loadListFromFile(DRONES_FILE_PATH);
-        if (!dronesList.isEmpty()) {
+
+        if (dronesList.isEmpty()) {
+            LOGGER.info("No local drone data found. Fetching from API...");
+            String droneJsonString = apiService.getDrones();
+
+            if (droneJsonString.isEmpty()) {
+                LOGGER.warn("No drone data was fetched from the API.");
+                return;
+            }
+
+            List<String> jsonObjects = JsonParser.splitJsonString(droneJsonString);
+            for (String jsonObject : jsonObjects) {
+                Drones drone = JsonParser.parseDronesJson(jsonObject);
+                if (drone == null) {
+                    LOGGER.error("Failed to parse drone JSON: {}", jsonObject);
+                    continue;
+                }
+
+                String droneTypeUrl = drone.getDroneTypeUrl();
+                String droneTypeJsonString = apiService.getDroneType(droneTypeUrl);
+                DroneType droneType = JsonParser.parseDroneTypeJson(droneTypeJsonString);
+                if (droneType == null) {
+                    LOGGER.error("Failed to parse drone type JSON: {}", droneTypeJsonString);
+                    continue;
+                }
+
+                drone.setDroneType(droneType);
+                dronesList.add(drone);
+            }
+
+            if (!dronesList.isEmpty()) {
+                fileService.saveListToFile(DRONES_FILE_PATH, dronesList);
+                LOGGER.info("Drone list fetched from API and saved locally.");
+            }
+        } else {
             LOGGER.info("Loaded drone list from local cache. Size: {}", dronesList.size());
-            return;
-        }
-        LOGGER.info("No local drone data found. Fetching from API...");
-        String droneJsonString = apiService.getDrones();
-        if (droneJsonString.isEmpty()) {
-            LOGGER.warn("No drone data was fetched from the API.");
-            return;
-        }
-        List<String> jsonObjects = JsonParser.splitJsonString(droneJsonString);
-        for (String jsonObject : jsonObjects) {
-            Drones drone = JsonParser.parseDronesJson(jsonObject);
-            if (drone == null) {
-                LOGGER.error("Failed to parse drone JSON: {}", jsonObject);
-                continue;
-            }
-            String droneTypeUrl = drone.getDroneTypeUrl();
-            String droneTypeJsonString = apiService.getDroneType(droneTypeUrl);
-            DroneType droneType = JsonParser.parseDroneTypeJson(droneTypeJsonString);
-            if (droneType == null) {
-                LOGGER.error("Failed to parse drone type JSON: {}", droneTypeJsonString);
-                continue;
-            }
-            drone.setDroneType(droneType);
-            dronesList.add(drone);
-        }
-        if (!dronesList.isEmpty()) {
-            fileService.saveListToFile(DRONES_FILE_PATH, dronesList);
-            LOGGER.info("Drone list fetched from API and saved locally.");
         }
     }
-
 
     private int findID(String Url) {
         int IDindex = "http://dronesim.facets-labs.com/api/drones/".length();
@@ -125,18 +126,15 @@ public class DataStorage {
      * It also manages the association of DroneDynamics instances with their corresponding Drones instances based on URLs and IDs.
      */
     public void populateDroneDynamicsList() {
-        // Attempt to load the drone dynamics list from the file
         this.droneDynamicsList = fileService.loadListFromFile(DRONE_DYNAMICS_FILE_PATH);
 
         if (droneDynamicsList.isEmpty()) {
             LOGGER.info("No local drone dynamics data found. Fetching from API...");
             String droneDynamicsJsonString = apiService.getDroneDynamics();
-
             if (droneDynamicsJsonString.isEmpty()) {
                 LOGGER.warn("No drone dynamics data was fetched from the API.");
                 return;
             }
-
             List<String> jsonObjects = JsonParser.splitJsonString(droneDynamicsJsonString);
             for (String jsonObject : jsonObjects) {
                 DroneDynamics droneDynamics = JsonParser.parseDroneDynamicsJson(jsonObject);
@@ -151,7 +149,6 @@ public class DataStorage {
                 droneDynamicsList.add(droneDynamics);
             }
 
-            // Save the fetched and processed list to the file
             fileService.saveListToFile(DRONE_DYNAMICS_FILE_PATH, droneDynamicsList);
             LOGGER.info("Drone dynamics list fetched from API and saved locally.");
         } else {
@@ -173,7 +170,6 @@ public class DataStorage {
      * The method also handles potential parsing errors, logging any issues encountered during the parsing of individual drone type JSON objects.
      */
     public void populateDroneTypeList() {
-        // Attempt to load the drone type list from the file
         this.droneTypeList = fileService.loadListFromFile(DRONE_TYPES_FILE_PATH);
 
         if (droneTypeList.isEmpty()) {
@@ -184,7 +180,6 @@ public class DataStorage {
                 LOGGER.warn("No drone type data was fetched from the API.");
                 return;
             }
-
             List<String> jsonObjects = JsonParser.splitJsonString(droneTypeJsonString);
             for (String jsonObject : jsonObjects) {
                 DroneType droneType = JsonParser.parseDroneTypeJson(jsonObject);
@@ -195,7 +190,6 @@ public class DataStorage {
                 droneTypeList.add(droneType);
             }
 
-            // Save the fetched and processed list to the file
             fileService.saveListToFile(DRONE_TYPES_FILE_PATH, droneTypeList);
             LOGGER.info("Drone type list fetched from API and saved locally.");
         } else {
