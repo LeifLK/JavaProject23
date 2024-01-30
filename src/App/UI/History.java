@@ -24,6 +24,7 @@ public class History extends JPanel {
     private JComboBox<Object> comboBox;
     void setComboxBoxToEmpty() {
         comboBox.setSelectedIndex(0);
+        this.validate();
     }
     public History() {
         this.setLayout(new BorderLayout());
@@ -115,22 +116,21 @@ public class History extends JPanel {
         comboBox.setSelectedIndex(0);
         comboBox.addActionListener(e -> {
             refreshDrawingPanel(timeSlider.getValue(), comboBox.getSelectedItem());
-            System.out.println("Clicked on ComboboxItem");
             refreshTimeLabel(timeSlider.getValue());
         });
         comboBox.setRenderer(new droneDynamicsCellRenderer());
         comboBoxPanel.add(comboBox);
     }
     private void refreshDrawingPanel(int timeInTicks, Object drone) {
+        this.remove(drawnDronePanel);
         if (!(drone instanceof Drones)) {
             initDroneDrawingPanel(timeInTicks, null);
-            //this.add(drawnDronePanel, BorderLayout.CENTER);
-            this.validate();
-            return;
         }
-        this.remove(drawnDronePanel);
-        initDroneDrawingPanel(timeInTicks, (Drones) drone);
-        //this.add(drawnDronePanel, BorderLayout.CENTER);
+        else
+        {
+            initDroneDrawingPanel(timeInTicks, (Drones) drone);
+        }
+
         this.validate();
     }
     private void refreshTimeLabel(int timeInTicks) {
