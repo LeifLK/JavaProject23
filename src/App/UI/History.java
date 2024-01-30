@@ -110,7 +110,7 @@ public class History extends JPanel {
         timeLabel.setText(droneDynamicsPerDrone.get(0).get(timeInTicks).getTimeStamp());
         this.validate();
     }
-
+    private final JFormattedTextField timeInput = new JFormattedTextField();
     private final JPanel comboBoxPanel = new JPanel();
 
     private void initTimeSliderPanel(int max, int currentTick) {
@@ -142,7 +142,6 @@ public class History extends JPanel {
         gbc.gridx++;
         gbc.weightx = 0.05;
 
-        JFormattedTextField timeInput = new JFormattedTextField();
         timeInput.setValue(max);
         timeInput.addPropertyChangeListener("value", e -> inputTick((Integer) timeInput.getValue()));
         timeSliderPanel.setPreferredSize(new Dimension(400, 120));
@@ -165,8 +164,8 @@ public class History extends JPanel {
             refreshDrawingPanel(timeSlider.getValue(), comboBox.getSelectedItem());
             refreshTimeLabel(timeSlider.getValue());
         }
+        timeInput.setValue(timeSlider.getValue());
     }
-    //TODO: Fix if single drone is selected
     public void initDroneDrawingPanel(int valueInTicks) {
         List<DroneDynamics> dronesToDraw = new ArrayList<>();
 
@@ -300,20 +299,19 @@ class Position extends JPanel {
 
     private void setTooltips(JButton button) {
         if (dronesAtPosition.size() == 1) {
-            button.setToolTipText("Show here located Drone (ID: " + dronesAtPosition.getFirst().getId() + ") and its dynamics");
+            button.setToolTipText("Show here located Drone's dynamics (ID: " + dronesAtPosition.getFirst().getId() + ")");
         } else {
             StringBuilder dronesStr = new StringBuilder();
             for (Drones d : dronesAtPosition) {
                 dronesStr.append(" ");
                 dronesStr.append(d.getId()).append(";");
             }
-            button.setToolTipText("Show here located Drones (IDs:" + dronesStr + ") and its dynamics");
+            button.setToolTipText("Show here located Drone's dynamics (ID: \"" + dronesStr + ")");
         }
     }
     //Please Ignore
     private PopupMenu droneDynamicToPopupMenu(DroneDynamics droneDynamic)
     {
-
         List<String> droneInfoIdentifiers = new ArrayList<>();
         droneInfoIdentifiers.add("DroneUrl: ");
         droneInfoIdentifiers.add("Timestamp: ");
