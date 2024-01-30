@@ -2,9 +2,6 @@ package App;
 
 import App.Services.DataStorage;
 import App.UI.LandingPage;
-import org.apache.logging.log4j.LogBuilder;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.net.MalformedURLException;
 import java.util.concurrent.TimeUnit;

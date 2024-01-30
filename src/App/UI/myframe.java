@@ -175,12 +175,6 @@ public class myframe extends JFrame implements ActionListener {
         }
     }
 
-    //TODO: Remove
-    public void reloadCatalog() {
-        cardLayout.show(panel1, "Dashboard");
-        cardLayout.show(panel1, "Catalog");
-    }
-
     public void loadDashboardAt(int droneID) {
         cardLayout.show(panel1, "Dashboard");
         dashboard.currentDroneId = droneID;

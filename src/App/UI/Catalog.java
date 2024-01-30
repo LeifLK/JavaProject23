@@ -11,7 +11,6 @@ import App.Model.DroneType;
 import App.Services.DataStorage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.core.tools.picocli.CommandLine;
 
 public class Catalog extends JPanel {
     public JPanel getJPanel() {
