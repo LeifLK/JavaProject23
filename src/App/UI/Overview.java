@@ -1,12 +1,10 @@
 package App.UI;
 
 import App.Model.Drones;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
-
 import static App.UI.Catalog.dataStorage;
 
 //The Overview class represents a panel displaying an overview of drones.
