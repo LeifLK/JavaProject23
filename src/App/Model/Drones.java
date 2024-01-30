@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Represents a drone, containing various attributes like serial number, carriage weight, and the type of drone.
@@ -107,5 +108,23 @@ public class Drones implements Serializable {
         this.droneType = droneType;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Drones other = (Drones) obj;
+        return id == other.id &&
+                Objects.equals(droneType, other.droneType) &&
+                Objects.equals(created, other.created) &&
+                Objects.equals(serialNumber, other.serialNumber) &&
+                carriageWeight == other.carriageWeight &&
+                Objects.equals(carriageType, other.carriageType) &&
+                Objects.equals(droneTypeUrl, other.droneTypeUrl);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, droneType, created, serialNumber, carriageWeight, carriageType, droneTypeUrl);
+    }
 }
 

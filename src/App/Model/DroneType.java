@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Represents the type of a drone, containing various attributes like manufacturer, type name, and specifications.
@@ -107,6 +108,26 @@ public class DroneType implements Serializable {
      */
     public int getMaxCarriage() {
         return maxCarriage;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        DroneType other = (DroneType) obj;
+        return id == other.id &&
+                weight == other.weight &&
+                maxSpeed == other.maxSpeed &&
+                batteryCapacity == other.batteryCapacity &&
+                controlRange == other.controlRange &&
+                maxCarriage == other.maxCarriage &&
+                Objects.equals(manufacturer, other.manufacturer) &&
+                Objects.equals(typename, other.typename);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, manufacturer, typename, weight, maxSpeed, batteryCapacity, controlRange, maxCarriage);
     }
 }
 

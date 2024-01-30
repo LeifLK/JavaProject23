@@ -7,7 +7,7 @@ import java.net.MalformedURLException;
 import java.util.concurrent.TimeUnit;
 
 public class Main {
-    private static final DataStorage dataStorage = new DataStorage();
+    private static DataStorage dataStorage = new DataStorage();
 
     public static DataStorage getDataStorage() {
         return dataStorage;
@@ -23,9 +23,7 @@ public class Main {
         //dataStorage = new DataStorage();
         //Time Test
         long startTime = System.nanoTime();
-        dataStorage.populateDroneList();
-        dataStorage.populateDroneTypeList();
-        dataStorage.populateDroneDynamicsList();
+        dataStorage = DataStorage.loadNewDataStorage(true);
         long endTime = System.nanoTime();
         long totalTime = endTime - startTime;
         totalTime = TimeUnit.SECONDS.convert(totalTime, TimeUnit.MICROSECONDS);
@@ -45,6 +43,14 @@ public class Main {
             throw new RuntimeException(e);
         }
 
+        DataStorage dataStorage2 = new DataStorage();
+        dataStorage2 = DataStorage.loadNewDataStorage(false);
+        boolean areDataStoragesSimilar = dataStorage.compare(dataStorage2);
+        System.out.println("Are the two data storages similar? " + areDataStoragesSimilar);
+    }
+
+
+
             /*JFrame myframe = new myframe();
             myframe.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);*/
 
@@ -55,4 +61,3 @@ public class Main {
         //dataStorage.printNextSubset(25,2,drone71DynamicsList);
 
     }
-}

@@ -12,6 +12,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 
 /**
@@ -46,13 +47,39 @@ public class DataStorage {
     }
 
     /**
+     * Creates a new instance of DataStorage with fresh data fetched from the API.
+     * This method does not write to .ser files, it just populates the new instance with the latest data.
+     *
+     * @return A new instance of DataStorage with fresh data.
+     */
+    public static DataStorage loadNewDataStorage(boolean saveToFile) {
+        LOGGER.info("Loading new data storage with fresh data from the API.");
+
+        // Create a new instance of DataStorage
+        DataStorage newDataStorage = new DataStorage();
+
+        // Fetching new data for drones, drone types, and drone dynamics
+        newDataStorage.populateDroneList(saveToFile);
+        newDataStorage.populateDroneTypeList(saveToFile);
+        newDataStorage.populateDroneDynamicsList(saveToFile);
+
+        if (saveToFile) {
+            LOGGER.info("New DataStorage instance loaded with fresh data and saved to files.");
+        } else {
+            LOGGER.info("New DataStorage instance loaded with fresh data, not saved to files.");
+        }
+        return newDataStorage;
+    }
+
+
+    /**
      * Populates the drone list by fetching data from the API or loading it from a local file.
      * The method first checks if the drone list is already populated and returns early if it is.
      * If the drone list is not populated, it attempts to load the list from a local file.
      * If the local file does not exist or is empty, the method fetches drone data from the API,
      * parses the JSON data, populates the drone list, and saves the populated list to the local file for future use.
      */
-    public void populateDroneList() {
+    public void populateDroneList(boolean saveToFile) {
         this.dronesList = fileService.loadListFromFile(DRONES_FILE_PATH);
 
         if (dronesList.isEmpty()) {
@@ -84,7 +111,7 @@ public class DataStorage {
                 dronesList.add(drone);
             }
 
-            if (!dronesList.isEmpty()) {
+            if (!dronesList.isEmpty() && saveToFile) {
                 fileService.saveListToFile(DRONES_FILE_PATH, dronesList);
                 LOGGER.info("Drone list fetched from API and saved locally.");
             }
@@ -125,7 +152,7 @@ public class DataStorage {
      * The method also handles potential parsing errors, logging any issues encountered during the parsing of individual drone dynamics JSON objects.
      * It also manages the association of DroneDynamics instances with their corresponding Drones instances based on URLs and IDs.
      */
-    public void populateDroneDynamicsList() {
+    public void populateDroneDynamicsList(boolean saveToFile) {
         this.droneDynamicsList = fileService.loadListFromFile(DRONE_DYNAMICS_FILE_PATH);
 
         if (droneDynamicsList.isEmpty()) {
@@ -149,13 +176,14 @@ public class DataStorage {
                 droneDynamicsList.add(droneDynamics);
             }
 
-            fileService.saveListToFile(DRONE_DYNAMICS_FILE_PATH, droneDynamicsList);
-            LOGGER.info("Drone dynamics list fetched from API and saved locally.");
+            if (!droneDynamicsList.isEmpty() && saveToFile) {
+                fileService.saveListToFile(DRONE_DYNAMICS_FILE_PATH, droneDynamicsList);
+                LOGGER.info("Drone dynamics list fetched from API and saved locally.");
+            }
         } else {
             LOGGER.info("Loaded drone dynamics list from local cache. Size: {}", droneDynamicsList.size());
         }
     }
-
 
     /**
      * Populates the drone type list by fetching data from the API or loading it from a local file.
@@ -169,7 +197,7 @@ public class DataStorage {
      * <p>
      * The method also handles potential parsing errors, logging any issues encountered during the parsing of individual drone type JSON objects.
      */
-    public void populateDroneTypeList() {
+    public void populateDroneTypeList(boolean saveToFile) {
         this.droneTypeList = fileService.loadListFromFile(DRONE_TYPES_FILE_PATH);
 
         if (droneTypeList.isEmpty()) {
@@ -190,13 +218,55 @@ public class DataStorage {
                 droneTypeList.add(droneType);
             }
 
-            fileService.saveListToFile(DRONE_TYPES_FILE_PATH, droneTypeList);
-            LOGGER.info("Drone type list fetched from API and saved locally.");
+            if (!droneTypeList.isEmpty() && saveToFile) {
+                fileService.saveListToFile(DRONE_TYPES_FILE_PATH, droneTypeList);
+                LOGGER.info("Drone type list fetched from API and saved locally.");
+            }
         } else {
             LOGGER.info("Loaded drone type list from local cache. Size: {}", droneTypeList.size());
         }
     }
 
+    /**
+     * Quickly compares this DataStorage instance with another to determine if they are likely to be equal.
+     * This is a less accurate method that only compares the sizes of the lists and the last elements in the lists.
+     * @param other The other DataStorage instance to compare with.
+     * @return true if the sizes of the lists and the last elements are equal, false otherwise.
+     */
+    public boolean compare(DataStorage other) {
+        if (other == null) {
+            return false;
+        }
+        return compareListSizeAndLastElement(this.dronesList, other.dronesList) &&
+                compareListSizeAndLastElement(this.droneTypeList, other.droneTypeList) &&
+                compareListSizeAndLastElement(this.droneDynamicsList, other.droneDynamicsList);
+    }
+
+    private <T> boolean compareListSizeAndLastElement(List<T> list1, List<T> list2) {
+        if (list1.size() != list2.size()) {
+            return false;
+        }
+        if (list1.isEmpty() && list2.isEmpty()) {
+            return true;
+        }
+        // Comparing the last elements
+        return list1.get(list1.size() - 1).equals(list2.get(list2.size() - 1));
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        DataStorage other = (DataStorage) obj;
+        return dronesList.equals(other.dronesList) &&
+                droneTypeList.equals(other.droneTypeList) &&
+                droneDynamicsList.equals(other.droneDynamicsList);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(dronesList, droneTypeList, droneDynamicsList);
+    }
 
     /**
      * Prints a subset of drone dynamics from a list, based on the specified page size and page number.

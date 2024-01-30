@@ -8,6 +8,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 /**
  * Represents the dynamic information of a drone, including its current status,
@@ -183,5 +184,30 @@ public class DroneDynamics implements Comparable<DroneDynamics>, Serializable {
 
         return thisDateTime.compareTo(otherDateTime);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        DroneDynamics other = (DroneDynamics) obj;
+        return speed == other.speed &&
+                batteryStatus == other.batteryStatus &&
+                Objects.equals(droneUrl, other.droneUrl) &&
+                Objects.equals(Drones, other.Drones) &&
+                Objects.equals(timeStamp, other.timeStamp) &&
+                Objects.equals(alignRoll, other.alignRoll) &&
+                Objects.equals(alignPitch, other.alignPitch) &&
+                Objects.equals(align_yaw, other.align_yaw) &&
+                Objects.equals(longitude, other.longitude) &&
+                Objects.equals(latitude, other.latitude) &&
+                Objects.equals(lastSeen, other.lastSeen) &&
+                Objects.equals(status, other.status);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(droneUrl, Drones, timeStamp, speed, alignRoll, alignPitch, align_yaw, longitude, latitude, batteryStatus, lastSeen, status);
+    }
 }
+
 
