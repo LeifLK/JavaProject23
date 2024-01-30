@@ -23,32 +23,13 @@ public class Catalog extends JPanel {
         mainFrame = myframe;
     }
 
-    private void addAttributes(String identifier, String value, GridBagConstraints constraints) {
-        JLabel attributeIdentifierLabel = new JLabel(identifier);
-        JLabel valueLabel = new JLabel(value);
-        attributeIdentifierLabel.setHorizontalAlignment(SwingConstants.LEFT);
-        this.add(attributeIdentifierLabel, constraints);
-        valueLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-        this.add(valueLabel, constraints);
-        constraints.gridy++;
-    }
-
-    /*JLabel manufacturerLabel = new JLabel();
-    JLabel typeNameLabel = new JLabel();
-    JLabel idLabel = new JLabel();
-    JLabel batteryCapacityLabel = new JLabel();
-    JLabel controlRangeLabel = new JLabel();
-    JLabel maxCarriageLabel = new JLabel();
-    JLabel maxSpeedLabel = new JLabel();
-    JLabel Weight = new JLabel();*/
     List<Attribute> attributeList = new ArrayList<>();
 
     public void refreshAttributes(DroneType currentDroneType) {
         for (Attribute attribute : attributeList) {
             attribute.refresh(currentDroneType);
         }
-    }//Refresh has IllegalAccessException, InvocationTargetException
-
+    }
     public void initCatalog() {
         //Clear and Reset Panel
         this.removeAll();
