@@ -86,10 +86,10 @@ public class Catalog extends JPanel implements UIPanel {
         }
     }
 
-    static int index = 0;
+    int index = 0;
 
-    static int maxAmountOfDrones = 0;
-    static DataStorage dataStorage;
+    int maxAmountOfDrones;
+    DataStorage dataStorage;
 
     public Catalog() {
         dataStorage = App.Main.getDataStorage();
