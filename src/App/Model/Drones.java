@@ -108,6 +108,14 @@ public class Drones implements Serializable {
         this.droneType = droneType;
     }
 
+    /**
+     * Compares this drone to the specified object. The result is true if
+     * the argument is not null and is a Drones object that has the same id, droneType,
+     * created date, serialNumber, carriageWeight, carriageType, and droneTypeUrl as this object.
+     *
+     * @param obj the object to compare this {@code Drones} against
+     * @return true if the given object represents a {@code Drones} equivalent to this drone, false otherwise
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -122,6 +130,12 @@ public class Drones implements Serializable {
                 Objects.equals(droneTypeUrl, other.droneTypeUrl);
     }
 
+    /**
+     * Generates a hash code for the Drones instance.
+     * The hash code is generated based on the hash codes of the individual fields of the class.
+     *
+     * @return the hash code value for this Drones instance.
+     */
     @Override
     public int hashCode() {
         return Objects.hash(id, droneType, created, serialNumber, carriageWeight, carriageType, droneTypeUrl);
