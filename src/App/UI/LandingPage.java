@@ -63,7 +63,7 @@ public class LandingPage {
                 frame.dispose(); // Close the current JFrame (LandingPage)
 
                 // Then start the application by instantiating and displaying the "myframe" class
-                myframe myFrame = new myframe();
+                mainFrame myFrame = new mainFrame();
                 myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 myFrame.setVisible(true);
             }
