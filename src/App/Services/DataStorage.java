@@ -42,32 +42,37 @@ public class DataStorage implements Runnable {
         this.fileService = new FileService();
         this.apiService = new ApiService();
         boolean toSave = false;
-        if (fileService.fileExists(DRONES_FILE_PATH)) {
-            populateDroneListFromFile();
-            LOGGER.info("Loading drone data from File");
+        try {
+            if (fileService.fileExists(DRONES_FILE_PATH)) {
+                populateDroneListFromFile();
+                LOGGER.info("Loading drone data from File");
+            } else {
+                populateDroneListFromAPI();
+                toSave = true;
+            }
+            if (fileService.fileExists(DRONE_TYPES_FILE_PATH)) {
+                populateDroneTypeListFromFile();
+                LOGGER.info("Loading drone type from File");
+            } else {
+                populateDroneTypeListFromAPI();
+                toSave = true;
+            }
+            if (fileService.fileExists(DRONE_DYNAMICS_FILE_PATH)) {
+                populateDroneDynamicsListFromFile();
+                LOGGER.info("Loading drone dynamics from File");
+            } else {
+                populateDroneDynamicsListFromAPI();
+                toSave = true;
+            }
+            if (dronesList.isEmpty() || droneTypeList.isEmpty() || droneDynamicsList.isEmpty())
+                throw new DataStorageNotAbleToPopulate("DataStorage not fully loaded, neither from File nor API");
+            if (toSave)
+                saveDataStorage();
         }
-        else {
-            populateDroneListFromAPI();
-            toSave = true;
+        catch (DataStorageNotAbleToPopulate error)
+        {
+            LOGGER.warn("DataStorage is Empty");
         }
-        if (fileService.fileExists(DRONE_TYPES_FILE_PATH)) {
-            populateDroneTypeListFromFile();
-            LOGGER.info("Loading drone type from File");
-        }
-        else {
-            populateDroneTypeListFromAPI();
-            toSave = true;
-        }
-        if (fileService.fileExists(DRONE_DYNAMICS_FILE_PATH)) {
-            populateDroneDynamicsListFromFile();
-            LOGGER.info("Loading drone dynamics from File");
-        }
-        else {
-            populateDroneDynamicsListFromAPI();
-            toSave = true;
-        }
-        if (toSave)
-            saveDataStorage();
     }
 
     public void saveDataStorage() {
