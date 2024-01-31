@@ -11,7 +11,7 @@ import App.Model.DroneDynamics;
 import App.Model.Drones;
 import App.Services.DataStorage;
 
-public class History extends JPanel {
+public class History extends JPanel implements UIPanel {
     private final List<List<DroneDynamics>> droneDynamicsPerDrone = new ArrayList<>();
 
     private final JPanel timeSliderPanel = new JPanel();
@@ -22,13 +22,19 @@ public class History extends JPanel {
     private JPanel drawnDronePanel;
     private JSlider timeSlider;
     private JComboBox<Object> comboBox;
+    private DataStorage dataStorage;
     void setComboxBoxToEmpty() {
         comboBox.setSelectedIndex(0);
         this.validate();
     }
     public History() {
+        initialize();
+    }
+
+    public void initialize()
+    {
         this.setLayout(new BorderLayout());
-        DataStorage dataStorage = App.Main.getDataStorage();
+        dataStorage = App.Main.getDataStorage();
         List<Drones> drones = dataStorage.getDronesList();
         for (Drones drone : drones) {
             droneDynamicsPerDrone.add(dataStorage.getDynamicsForDrone(drone.getId()));
@@ -40,6 +46,11 @@ public class History extends JPanel {
         initDroneDrawingPanel(maxDroneDynamics, null);
         this.add(timeSliderPanel, BorderLayout.SOUTH);
         this.validate();
+    }
+
+    @Override
+    public void refreshData(DataStorage newDataStorage) {
+        this.dataStorage = newDataStorage;
     }
 
     public void setMainFrame(mainFrame mainFrame) {

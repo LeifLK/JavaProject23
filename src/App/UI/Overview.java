@@ -1,6 +1,9 @@
 package App.UI;
 
+import App.Main;
 import App.Model.Drones;
+import App.Services.DataStorage;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
@@ -9,11 +12,11 @@ import static App.UI.Catalog.dataStorage;
 
 //The Overview class represents a panel displaying an overview of drones.
 
-public class Overview extends JPanel {
+public class Overview extends JPanel implements UIPanel{
 
     private JTable droneTable;
     private DefaultTableModel droneTableModel;
-
+    private DataStorage dataStorage;
     private JPanel overview = new JPanel();
 
     public JPanel getJPanel() {
@@ -22,15 +25,21 @@ public class Overview extends JPanel {
     }
 
     public Overview() {
-        initializeDroneTable();
+        this.initialize();
         addComponentsToPanel();
     }
 
-    private void initializeDroneTable() {
+    public void initialize() {
+        dataStorage = Main.getDataStorage();
         String[] columns = {"ID", "Manufacturer", "Typename", "Serialnumber", "Created", "Status", "Last Seen"};
         droneTableModel = new DefaultTableModel(columns, 0);
         droneTable = new JTable(droneTableModel);
         configureTableAppearance();
+    }
+
+    @Override
+    public void refreshData(DataStorage newDataStorage) {
+        dataStorage = newDataStorage;
     }
 
     private void addComponentsToPanel() {

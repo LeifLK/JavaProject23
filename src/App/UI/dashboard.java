@@ -2,9 +2,7 @@ package App.UI;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 import javax.swing.JLabel;
 
 import App.Main;
@@ -20,7 +18,7 @@ import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
 
-public class dashboard extends JPanel {
+public class dashboard extends JPanel implements UIPanel{
 
     private final JPanel dashboard = new JPanel();
     private final JPanel titleComboBox = new JPanel();
@@ -31,6 +29,7 @@ public class dashboard extends JPanel {
     private final JPanel line_chart = new JPanel();
     private final JLabel title = new JLabel("Dashboard");
     private JComboBox comboBox;
+    private DataStorage dataStorage;
     int currentDroneId = Main.getDataStorage().getDronesList().getFirst().getId();
 
     public JPanel getJPanel() {
@@ -38,7 +37,7 @@ public class dashboard extends JPanel {
         return dashboard;
     }
     public dashboard() {
-        createDashboard();
+        initialize();
     }
     private static void deleteAllChildren(Container container) {
         Component[] components = container.getComponents();
@@ -53,10 +52,10 @@ public class dashboard extends JPanel {
         container.revalidate();
         container.repaint();
     }
-    public void createDashboard() {
+    public void initialize() {
 
         deleteAllChildren(dashboard);
-        DataStorage dataStorage = Main.getDataStorage();
+        dataStorage = Main.getDataStorage();
 
         //JLabels
         title.setBounds(0, 0, 300, 50);
@@ -103,7 +102,7 @@ public class dashboard extends JPanel {
         comboBox.setAlignmentX(250);
         comboBox.setAlignmentY(0);
         //Find Renderer in History.java
-        comboBox.setRenderer(new droneDynamicsCellRenderer());
+        comboBox.setRenderer(new droneCellRenderer());
         for (Drones drone : dataStorage.getDronesList()) {
             comboBox.addItem(drone);
         }
@@ -150,10 +149,16 @@ public class dashboard extends JPanel {
         dashboard.setVisible(true);
         dashboard.validate();
     }
+
+    @Override
+    public void refreshData(DataStorage newDataStorage) {
+        this.dataStorage = newDataStorage;
+    }
+
     public void reloadPanel(Object value) {
         if (value != null) {
             currentDroneId = ((Drones) value).getId();//Integer.parseInt(valueStr.replace("DroneId: ", ""));
-            createDashboard();
+            initialize();
         }
     }
 
@@ -283,3 +288,18 @@ public class dashboard extends JPanel {
         }
     }
 }
+class droneCellRenderer extends DefaultListCellRenderer {
+    public Component getListCellRendererComponent(
+            JList list,
+            Object value,
+            int index,
+            boolean isSelected,
+            boolean cellHasFocus) {
+        if (value instanceof Drones) {
+            value = "Drone " + ((Drones) value).getId();
+        }
+        super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+        return this;
+    }
+}
+

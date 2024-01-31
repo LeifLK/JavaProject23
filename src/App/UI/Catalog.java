@@ -12,7 +12,7 @@ import App.Services.DataStorage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class Catalog extends JPanel {
+public class Catalog extends JPanel implements UIPanel {
     public JPanel getJPanel() {
         return this;
     }
@@ -24,7 +24,7 @@ public class Catalog extends JPanel {
             attribute.refresh(currentDroneType);
         }
     }
-    public void initCatalog() {
+    public void initialize() {
         //Clear and Reset Panel
         this.removeAll();
         this.setLayout(new GridBagLayout());
@@ -66,14 +66,20 @@ public class Catalog extends JPanel {
         this.validate();
     }
 
-    public void previousPage() {
+    @Override
+    public void refreshData(DataStorage newDataStorage) {
+        this.dataStorage = newDataStorage;
+        maxAmountOfDrones = dataStorage.getDroneTypeList().size();
+    }
+
+    private void previousPage() {
         if (index > 0) {
             index--;
             refreshAttributes(dataStorage.getDroneTypeList().get(index));
         }
     }
 
-    public void nextPage() {
+    private void nextPage() {
         if (index < maxAmountOfDrones - 1) {
             index++;
             refreshAttributes(dataStorage.getDroneTypeList().get(index));
@@ -88,7 +94,7 @@ public class Catalog extends JPanel {
     public Catalog() {
         dataStorage = App.Main.getDataStorage();
         maxAmountOfDrones = dataStorage.getDroneTypeList().size();
-        initCatalog();
+        initialize();
     }
 }
 
