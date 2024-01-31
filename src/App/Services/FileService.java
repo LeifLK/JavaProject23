@@ -34,6 +34,11 @@ public class FileService {
         }
         return new ArrayList<>();
     }
+    public boolean fileExists(String filePath)
+    {
+        File file = new File(filePath);
+        return file.exists();
+    }
 
     /**
      * Saves a list of objects to a file. The objects in the list should be serializable.

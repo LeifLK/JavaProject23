@@ -2,12 +2,17 @@ package App;
 
 import App.Services.DataStorage;
 import App.UI.LandingPage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.net.MalformedURLException;
-import java.util.concurrent.TimeUnit;
-
 public class Main {
-    private static DataStorage dataStorage = new DataStorage();
+    private static final Logger LOGGER = LogManager.getLogger(Main.class);
+    private static  DataStorage dataStorage;
+
+    public static void setDataStorage(DataStorage newDataStorage) {
+        dataStorage = newDataStorage;
+    }
 
     public static DataStorage getDataStorage() {
         return dataStorage;
@@ -15,19 +20,20 @@ public class Main {
 
     public static void main(String[] args) {
 
-
         // api request test logger !!!!!!!!!!!!!!!!
         //ApiService apiService = new ApiService();
         //String s = apiService.ApiRequest("https://dronesim.facets-labs.com/api/dronedynamicsbla/?format=json&limit=5000");
         //String p = apiService.getAllPages("https://dronesim.facets-labs.com/api/dronedynamicsbla/?format=json&limit=5000")
         //dataStorage = new DataStorage();
         //Time Test
+        /*
         long startTime = System.nanoTime();
-        dataStorage = DataStorage.loadNewDataStorage(true);
+
+        //dataStorage = DataStorage.loadNewDataStorage(true);
         long endTime = System.nanoTime();
         long totalTime = endTime - startTime;
         totalTime = TimeUnit.SECONDS.convert(totalTime, TimeUnit.MICROSECONDS);
-        System.out.println(totalTime + " microseconds");
+        System.out.println(totalTime + " microseconds");*/
 /*
             System.out.println(dataStorage.getDronesList().get(1).getDronetypeUrl());
             System.out.println(dataStorage.getDronesList().get(1).getDronetype().getManufacturer());
@@ -36,28 +42,52 @@ public class Main {
             System.out.println(dataStorage.getDroneTypeList().get(1).getManufacturer());
             System.out.println(dataStorage.getDroneTypeList().get(1).getTypename());
 */
+
+        dataStorage = new DataStorage();
+
         try {
             LandingPage landingPage = new LandingPage();
             landingPage.show();
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
-
-        DataStorage dataStorage2 = new DataStorage();
-        dataStorage2 = DataStorage.loadNewDataStorage(false);
-        boolean areDataStoragesSimilar = dataStorage.compare(dataStorage2);
-        System.out.println("Are the two data storages similar? " + areDataStoragesSimilar);
-    }
-
-
-
-            /*JFrame myframe = new myframe();
-            myframe.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);*/
-
-
-        //dataStorage.setDroneDynamicsList(droneDynamicsList);
-
-        //dataStorage.printNextSubset(25,1,drone71DynamicsList);
-        //dataStorage.printNextSubset(25,2,drone71DynamicsList);
+        refreshData();
 
     }
+    public static void refreshData()
+    {
+        DataRefreshThread dataRefreshThread = new DataRefreshThread(newDataStorage -> {
+            if (!newDataStorage.isEmpty() && !dataStorage.isEmpty()) {
+                if (!newDataStorage.isEqualTo(dataStorage))
+                {
+                    dataStorage = newDataStorage;
+                    LOGGER.info("dataStorage has been updated");
+                    dataStorage.saveDataStorage();
+                    LOGGER.info("new dataStorage has been saved");
+                }
+            }
+            if (newDataStorage.isEmpty())
+            {
+                LOGGER.warn("new DataStorage could not be fetched from API");
+            }
+        });
+        dataRefreshThread.start();
+    }
+}
+
+class DataRefreshThread extends Thread {
+    private final Callback callback;
+
+    public DataRefreshThread(Callback callback) {
+        this.callback = callback;
+    }
+
+    public void run() {
+        DataStorage newDataStorage = DataStorage.createNewDataStorageFromAPI();
+        callback.onDataStorageReady(newDataStorage);
+    }
+
+    public interface Callback {
+        void onDataStorageReady(DataStorage newDataStorage);
+    }
+}
