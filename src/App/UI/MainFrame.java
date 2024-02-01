@@ -35,8 +35,7 @@ public class MainFrame extends JFrame implements ActionListener {
 
  /**
  * This is our constructor to create our Main Frame.
- * Here we create our buttons aswell as our Main Panels and the panels used as cards for the card Layout.
- * After all we add them to the Main Frame called program.
+ * Here we create our buttons as well as our Main Panels and the panels used as cards for the card Layout.
  * At the end we also add our Logo to the Main Frame
  * @author André
  */
@@ -110,11 +109,9 @@ public class MainFrame extends JFrame implements ActionListener {
         rightPanel.add("History", history);
 
         // JFrame
-        //program = new JFrame();
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setSize(800, 800);
         this.setTitle("Drone Manager");
-        //rightPanel.add(label);
         buttonPanelLeft.add(overviewButton);
         buttonPanelLeft.add(dashboardButton);
         buttonPanelLeft.add(catalogButton);
