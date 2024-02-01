@@ -24,7 +24,7 @@ public class mainFrame extends JFrame implements ActionListener {
     private final JButton dashboardButton;
     private final JButton catalogButton;
     private final JButton historyButton;
-    JFrame program;
+    //JFrame program;
     final JPanel rightPanel;
     final JPanel buttonPanelLeft;
     final CardLayout cardLayout;
@@ -115,28 +115,28 @@ public class mainFrame extends JFrame implements ActionListener {
         rightPanel.add("History", history);
 
         // JFrame
-        program = new JFrame();
-        program.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        program.setSize(800, 800);
-        program.setTitle("Drone Manager");
+        //program = new JFrame();
+        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        this.setSize(800, 800);
+        this.setTitle("Drone Manager");
         //rightPanel.add(label);
         buttonPanelLeft.add(overviewButton);
         buttonPanelLeft.add(dashboardButton);
         buttonPanelLeft.add(catalogButton);
         buttonPanelLeft.add(historyButton);
         buttonPanelLeft.add(refreshButton);
-        program.add(rightPanel);
-        program.add(buttonPanelLeft);
-        program.setResizable(false);
-        program.setLayout(null);
-        program.setVisible(true);
+        this.add(rightPanel);
+        this.add(buttonPanelLeft);
+        this.setResizable(false);
+        this.setLayout(null);
+        this.setVisible(true);
 
 
         try {
             //Logo
             ImageIcon logo = new ImageIcon(new URL("https://i.imgur.com/4LylQgE.png")); // set logo of our frame
-            program.setIconImage(logo.getImage());
-            program.getContentPane().setBackground(Color.BLACK);
+            this.setIconImage(logo.getImage());
+            this.getContentPane().setBackground(Color.BLACK);
         }
         catch (MalformedURLException e)
         {
