@@ -16,8 +16,6 @@ public class LandingPage {
     private JLabel descriptionLabel;
     private JButton startAppButton;
 
-    public API apiService;
-
     public LandingPage() throws MalformedURLException {
         initialize();
     }
