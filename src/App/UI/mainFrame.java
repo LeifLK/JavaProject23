@@ -110,7 +110,7 @@ public class mainFrame extends JFrame implements ActionListener {
         history.setMainFrame(this);
 
         rightPanel.add("Overview", overview.getJPanel());
-        rightPanel.add("Catalog", catalog.getJPanel());
+        rightPanel.add("Catalog", catalog);
         rightPanel.add("Dashboard", dashboard.getJPanel());
         rightPanel.add("History", history);
 
