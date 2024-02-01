@@ -12,6 +12,7 @@ public class LandingPage {
     private JLabel titleLabel;
     private JLabel descriptionLabel;
     private JButton startAppButton;
+    private ImageIcon backgroundIcon;
 
     public LandingPage() throws MalformedURLException {
         initialize();
@@ -80,5 +81,4 @@ public class LandingPage {
     public void show() {
         frame.setVisible(true);
     }
-
 }
