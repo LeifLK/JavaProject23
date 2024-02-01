@@ -44,11 +44,11 @@ public class Main {
             System.out.println(dataStorage.getDroneTypeList().get(1).getManufacturer());
             System.out.println(dataStorage.getDroneTypeList().get(1).getTypename());
 */
-
-        dataStorage = new DataStorage();
-
         LandingPage landingPage = new LandingPage();
         landingPage.show();
+        dataStorage = new DataStorage();
+
+        landingPage.dataLoaded();
 
         Timer timer = new Timer();
         timer.schedule( new TimerTask() {

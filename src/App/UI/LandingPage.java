@@ -28,14 +28,20 @@ public class LandingPage {
         setupBackground();
         setupTitleAndDescription();
         setupStartAppButton();
-        frame.setLocationRelativeTo(null);
+        //frame.setLocationRelativeTo(null);
         if (backgroundIcon != null)
         {
             frame.setSize(backgroundIcon.getIconWidth(), backgroundIcon.getIconHeight());
-        }else
+        }else {
             frame.setSize(new Dimension(200, 200));
+        }
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
+    public void dataLoaded()
+    {
+        startAppButton.setEnabled(true);
+    }
     private void setupBackground() {
         try {
             backgroundIcon = new ImageIcon(new URL("https://i.imgur.com/QGkGoMH.png"));
@@ -79,7 +85,7 @@ public class LandingPage {
         startAppButton = new JButton("Start Application");
         startAppButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
         startAppButton.addActionListener(e -> startApplication());
-
+        startAppButton.setEnabled(false);
         frame.add(startAppButton, gbc);
     }
 
