@@ -48,41 +48,52 @@ public class Main {
         landingPage.show();
         dataStorage = new DataStorage();
 
+        enableLandingPage(landingPage);
 
-        Timer timer = new Timer();
-        timer.schedule( new TimerTask() {
+        Timer refreshTimer = new Timer();
+        refreshTimer.schedule( new TimerTask() {
             public void run() {
-                if  (landingPage != null) {
-                    if (!dataStorage.isEmpty()) {
-                        landingPage.dataLoaded();
-                    }
-                }
                 refreshData();
-                LOGGER.info("DataStorage tries to refresh");
+                enableLandingPage(landingPage);
             }
         }, 0, 60*1000);
     }
+
+    private static void enableLandingPage(LandingPage landingPage)
+    {
+        if  (landingPage != null) {
+            if (!dataStorage.isEmpty()) {
+                landingPage.dataLoaded();
+            }
+        }
+    }
     public static void refreshData()
     {
+        LOGGER.info("DataStorage tries to refresh");
         DataRefreshThread dataRefreshThread = new DataRefreshThread(newDataStorage -> {
             if (newDataStorage.isEmpty())
             {
                 LOGGER.warn("new DataStorage could not be fetched, refreshing of Data not possible");
                 return;
             }
-            if (dataStorage.isEmpty() || !newDataStorage.isEqualTo(dataStorage))
+            if (dataStorage.isEmpty())
             {
-                if (dataStorage.isEmpty())
-                    LOGGER.warn("current DataStorage is empty, will be replaced");
-                else
-                    LOGGER.warn("new DataStorage differentiates from current dataStorage");
-
+                LOGGER.info("current DataStorage is empty, will be replaced");
                 dataStorage = newDataStorage;
-                LOGGER.warn("new DataStorage is implemented");
+                LOGGER.info("new DataStorage is implemented");
                 dataStorage.saveDataStorage();
-                LOGGER.warn("new DataStorage has been saved to file");
-                return;
+                LOGGER.info("new DataStorage has been saved to file");
             }
+            if (!newDataStorage.isEqualTo(dataStorage))
+            {
+                LOGGER.info("new DataStorage differentiates from current dataStorage");
+                dataStorage = newDataStorage;
+                LOGGER.info("new DataStorage is implemented");
+                dataStorage.saveDataStorage();
+                LOGGER.info("new DataStorage has been saved to file");
+            }
+            else
+                LOGGER.info("new DataStorage equals DataStorage on file");
         });
         dataRefreshThread.start();
     }
