@@ -394,7 +394,7 @@ class Position extends JPanel {
         droneInfoValues.add(String.valueOf(droneDynamic.getSpeed()));
         droneInfoValues.add(String.valueOf(droneDynamic.getAlignRoll()));
         droneInfoValues.add(String.valueOf(droneDynamic.getAlignPitch()));
-        droneInfoValues.add(String.valueOf(droneDynamic.getAlign_yaw()));
+        droneInfoValues.add(String.valueOf(droneDynamic.getAlignYaw()));
         droneInfoValues.add(String.valueOf(droneDynamic.getLongitude()));
         droneInfoValues.add(String.valueOf(droneDynamic.getLatitude()));
         droneInfoValues.add(String.valueOf(droneDynamic.getBatteryStatus()));

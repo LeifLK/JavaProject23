@@ -72,7 +72,6 @@ public class Main {
                     dataStorage = newDataStorage;
                     LOGGER.info("dataStorage has been updated");
                     dataStorage.saveDataStorage();
-                    System.out.println("New  Data storage has elements = " + dataStorage.getDronesList().size());
                     LOGGER.info("new dataStorage has been saved");
                 }
             }
