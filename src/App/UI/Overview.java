@@ -8,8 +8,6 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 //The Overview class represents a panel displaying an overview of drones.
 

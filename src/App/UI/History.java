@@ -16,10 +16,8 @@ import App.Services.DataStorage;
 /**
  * The History consists of a comboBox, described as the DroneSelector, on in the top left corner and a timestamp in the top right corner.
  * Near the bottom you see a little info label a slider and a text-field (to input the tick) for the current time.
- *
  * The middle gets a custom DroneDrawingPanel which in short, shows the Drones relative to its latitude and longitude.
  * It is called DroneDrawingPanel because in the first version drew the drones as graphics on the panel, which are now replaced by buttons, as they are more clickable.
- *
  * @author Lennart Ochs
  *
  */
@@ -78,7 +76,6 @@ public class History extends JPanel implements UIPanel {
     }
     /**
      * @param mainFrame the mainFrame found in MainFrame.java
-     *
      *  This Class needs the Mainframe of the application for forwarding the User to the Dashboard of a specific Drone.
      *  This happens by clicking on the corresponding Popupmenu Item of a drone.
      */
@@ -220,7 +217,6 @@ public class History extends JPanel implements UIPanel {
 /**
  * A new CellRenderer for a ComboBox representing Drones.
  * It shows the drones as Drone ID in the Text of the ComboBox, but holds the actual drones as its values.
- *
  * Used in History and Dashboard
  * https://stackoverflow.com/questions/27049473/implementing-listcellrenderer
  * @author martinzed314 (copied by Lennart Ochs)
@@ -251,11 +247,9 @@ class droneCellRenderer extends DefaultListCellRenderer {
 class DrawingPanel extends JPanel {
     private final List<Position> dronePositions = new ArrayList<>();
     /**
-     *
      * @param dronesToDraw A list of DroneDynamics, the position (Latitude & Longitude) of these droneDynamics are modified and represented by positions in a Grid bagLayout.
      * @param mainPanel the HistoryPanel, get passed on to the positions for redirecting to the dashboard
      * @param droneToHighlight a single Drone to Mark in Map. Null is a viable option, if no drone is to be marked.
-     *
      * It uses addDroneDynamic to create the Position-Objects as needed.
      * Afterward it goes through the Positions to configure these Positions and adds them to this Panel.
      * (if droneToHighlight != null it marks the corresponding Position red.
@@ -327,9 +321,7 @@ class DrawingPanel extends JPanel {
  * It consists of a Button which opens either:
  * 1. The Popupmenu for showing the droneDynamics of the current Time (if the Position has a single Drone)
  * 2. The Popupmenu for showing all Drones located on this Position, which in turn redirects to Popup 1.
- *
  * It overrides the equals and hashCode Method for usage of the contains method in the List of Position in the DrawnDronePanel.
- *
  * @author Lennart Ochs
  */
 class Position extends JPanel {
@@ -446,7 +438,6 @@ class Position extends JPanel {
     }
     /**
      * Shows Popups 1 or 2 as described.
-     *
      * (Repetition)
      *  1. The Popupmenu for showing the droneDynamics of the current Time (if the Position has a single Drone)
      *  2. The Popupmenu for showing all Drones located on this Position, which in turn redirects to Popup 1.

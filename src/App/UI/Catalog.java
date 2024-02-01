@@ -141,7 +141,6 @@ public class Catalog extends JPanel implements UIPanel {
             droneTypeToRepresent = droneType;
             attributeGetter = DroneType.class.getMethod(getMethodIdentifier);
             JLabel attributeIdentifierLabel = new JLabel(attributeIdentifier);
-            Font f = attributeIdentifierLabel.getFont();
             attributeIdentifierLabel.setFont(new Font("Dialog.bold", Font.PLAIN, 18));
             attributeValueLabel = new JLabel(String.valueOf(value));
             attributeValueLabel.setFont(new Font("Dialog", Font.PLAIN, 18));
@@ -158,9 +157,7 @@ public class Catalog extends JPanel implements UIPanel {
     }
     /**
      * Attributes used in Catalog
-     *
      * @param newDroneType The new DroneType from which the values get shown.
-     *
      * We keep the Attribute Identifier and GetMethod, we just refresh the value on the attributeValueLabel with a new call to the GetMethod on the new DroneType.
      * If the invoking fails an exception will be Logged.
      */
