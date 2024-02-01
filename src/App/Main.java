@@ -48,32 +48,40 @@ public class Main {
         landingPage.show();
         dataStorage = new DataStorage();
 
-        landingPage.dataLoaded();
 
         Timer timer = new Timer();
         timer.schedule( new TimerTask() {
             public void run() {
+                if  (landingPage != null) {
+                    if (!dataStorage.isEmpty()) {
+                        landingPage.dataLoaded();
+                    }
+                }
                 refreshData();
-                //TODO: Fix logging message
-                LOGGER.info("dataStorage has tried to refresh");
+                LOGGER.info("DataStorage tries to refresh");
             }
-        }, 10000, 60*500); // 0, 60*1000);
+        }, 0, 60*1000);
     }
     public static void refreshData()
     {
         DataRefreshThread dataRefreshThread = new DataRefreshThread(newDataStorage -> {
-            if (!newDataStorage.isEmpty() && !dataStorage.isEmpty()) {
-                if (!newDataStorage.isEqualTo(dataStorage))
-                {
-                    dataStorage = newDataStorage;
-                    LOGGER.info("dataStorage has been updated");
-                    dataStorage.saveDataStorage();
-                    LOGGER.info("new dataStorage has been saved");
-                }
-            }
             if (newDataStorage.isEmpty())
             {
-                LOGGER.warn("new DataStorage could not be fetched from API");
+                LOGGER.warn("new DataStorage could not be fetched, refreshing of Data not possible");
+                return;
+            }
+            if (dataStorage.isEmpty() || !newDataStorage.isEqualTo(dataStorage))
+            {
+                if (dataStorage.isEmpty())
+                    LOGGER.warn("current DataStorage is empty, will be replaced");
+                else
+                    LOGGER.warn("new DataStorage differentiates from current dataStorage");
+
+                dataStorage = newDataStorage;
+                LOGGER.warn("new DataStorage is implemented");
+                dataStorage.saveDataStorage();
+                LOGGER.warn("new DataStorage has been saved to file");
+                return;
             }
         });
         dataRefreshThread.start();

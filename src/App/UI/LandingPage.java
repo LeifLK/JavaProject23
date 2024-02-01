@@ -24,7 +24,7 @@ public class LandingPage {
 
     private void initialize() {
         frame = new JFrame();
-        frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setupBackground();
         setupTitleAndDescription();
         setupStartAppButton();
