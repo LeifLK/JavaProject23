@@ -12,10 +12,6 @@ public class Main {
     private static final Logger LOGGER = LogManager.getLogger(Main.class);
     private static DataStorage dataStorage;
 
-    public static void setDataStorage(DataStorage newDataStorage) {
-        dataStorage = newDataStorage;
-    }
-
     public static DataStorage getDataStorage() {
         return dataStorage;
     }
