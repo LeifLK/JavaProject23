@@ -30,7 +30,6 @@ public class Overview extends JPanel implements UIPanel{
     public void initialize() {
         overview.removeAll();
         dataStorage = Main.getDataStorage();
-        System.out.println("HAs X ELEMENTS" + dataStorage.getDronesList().size());
         String[] columns = {"ID", "Manufacturer", "Typename", "Serialnumber", "Created", "Status", "Last Seen"};
         droneTableModel = new DefaultTableModel(columns, 0);
         droneTable = new JTable(droneTableModel);
@@ -38,7 +37,6 @@ public class Overview extends JPanel implements UIPanel{
         for (Drones currentDrone : dataStorage.getDronesList()) {
             populateTableRow(currentDrone);
         }
-        System.out.println("HAs X ELEMENTS AT SECOND TIME" + dataStorage.getDronesList().size());
         addComponentsToPanel();
     }
 
@@ -46,7 +44,6 @@ public class Overview extends JPanel implements UIPanel{
     public void refreshData() {
         dataStorage = Main.getDataStorage();
         updateDroneTable();
-        this.validate();
     }
 
     private void addComponentsToPanel() {
@@ -84,11 +81,9 @@ public class Overview extends JPanel implements UIPanel{
         for (int i = droneTableModel.getRowCount()-1; i >= 0 ; i--) {
             droneTableModel.removeRow(i);
         }
-        //initialize();
         for (Drones currentDrone : dataStorage.getDronesList()) {
             populateTableRow(currentDrone);
         }
-        System.out.println(dataStorage.getDronesList().size());
     }
 
     private void populateTableRow(Drones currentDrone) {

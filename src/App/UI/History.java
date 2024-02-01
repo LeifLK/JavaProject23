@@ -137,7 +137,6 @@ public class History extends JPanel implements UIPanel {
         return drawnDronePanel;
     }
     private void initDroneSelector() {
-        System.out.println("INitted ;Drone Comboxbox history");
         comboBoxPanel = new JPanel();
         comboBox = new JComboBox<>();
         comboBox.insertItemAt("None", 0);
@@ -232,7 +231,7 @@ class droneDynamicsCellRenderer extends DefaultListCellRenderer {
 }
 
 class DrawingPanel extends JPanel {
-    private List<Position> dronePositions = new ArrayList<>();
+    private final List<Position> dronePositions = new ArrayList<>();
 
     DrawingPanel(List<DroneDynamics> dronesToDraw, History mainPanel, Drones droneToHighlight) {
         this.removeAll();

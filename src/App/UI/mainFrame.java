@@ -60,9 +60,10 @@ public class mainFrame extends JFrame implements ActionListener {
         historyButton.setBackground(Color.CYAN);
         historyButton.setFocusable(false);
         historyButton.addActionListener(this);
+
         JButton refreshButton = new JButton();
         refreshButton.setBounds(10, 10, 50, 50);
-        refreshButton.setText("History");
+        refreshButton.setText("Refresh UI");
         refreshButton.setForeground(Color.BLACK);
         refreshButton.setBackground(Color.CYAN);
         refreshButton.setFocusable(false);
@@ -150,6 +151,7 @@ public class mainFrame extends JFrame implements ActionListener {
         catalog.refreshData();
         dashboard.refreshData();
         history.refreshData();
+        rightPanel.validate();
     }
     public void showDashboard(Drones drone) {
         cardLayout.show(rightPanel, "Dashboard");

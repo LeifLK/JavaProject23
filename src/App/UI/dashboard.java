@@ -160,13 +160,12 @@ public class dashboard extends JPanel implements UIPanel{
     @Override
     public void refreshData() {
         this.dataStorage = Main.getDataStorage();
-        //this.refreshComboBox();
+
         Object before = comboBox.getSelectedItem();
         comboBox.removeAllItems();
         for (Drones d : dataStorage.getDronesList()) {
             comboBox.addItem(d);
         }
-        //comboBox.addActionListener(e -> reloadPanel(comboBox.getSelectedItem()));
         comboBox.setSelectedItem(before);
     }
 

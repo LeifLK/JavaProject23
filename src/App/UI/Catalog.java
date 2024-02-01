@@ -72,7 +72,6 @@ public class Catalog extends JPanel implements UIPanel {
     public void refreshData() {
         this.dataStorage = Main.getDataStorage();
         maxAmountOfDrones = dataStorage.getDroneTypeList().size();
-        this.initialize();
     }
 
     private void previousPage() {
