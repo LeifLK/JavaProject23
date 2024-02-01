@@ -17,7 +17,17 @@ import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
-
+ /**
+ * The Dashboard class represents a graphical user interface panel that displays information
+ * and charts related to drone dynamics. It includes features such as speed statistics,
+ * battery status, and a dynamic line chart.
+ * <p>
+ * This class extends JPanel and implements the UIPanel interface, providing methods to
+ * initialize and refresh the dashboard, as well as reload the panel with updated information
+ * based on user interactions.
+ *
+ * @author André
+ */
 public class Dashboard extends JPanel implements UIPanel {
 
     private final JPanel dashboard = new JPanel();
@@ -31,12 +41,17 @@ public class Dashboard extends JPanel implements UIPanel {
     private final JComboBox<Object> comboBox = new JComboBox<>();
     private DataStorage dataStorage;
     int currentDroneId = Main.getDataStorage().getDronesList().getFirst().getId();
-
+ /**
+ * Retrieves the JPanel component representing the dashboard.
+ * This method validates the layout of the dashboard panel before returning it.
+ */
     public JPanel getJPanel() {
         dashboard.validate();
         return dashboard;
     }
-
+     /**
+     * Constructs a new Dashboard instance and initializes it by calling the {@code initialize()} method.
+     */
     public Dashboard() {
         initialize();
     }
@@ -54,7 +69,10 @@ public class Dashboard extends JPanel implements UIPanel {
         container.revalidate();
         container.repaint();
     }
-
+     /**
+     * Initializes the dashboard, setting up its components, including labels, panels, combo box, and charts.
+     * This method is called during the construction of the Dashboard instance.
+     */
     public void initialize() {
 
         deleteAllChildren(dashboard);
@@ -150,7 +168,10 @@ public class Dashboard extends JPanel implements UIPanel {
         dashboard.setBackground(Color.DARK_GRAY);
         dashboard.setForeground(Color.BLUE);
     }
-
+     /**
+     * Refreshes the data displayed on the dashboard by updating the DataStorage reference
+     * and repopulating the drone selection combo box.
+     */
     @Override
     public void refreshData() {
         this.dataStorage = Main.getDataStorage();
@@ -162,7 +183,9 @@ public class Dashboard extends JPanel implements UIPanel {
         }
         comboBox.setSelectedItem(before);
     }
-
+     /**
+     * Reloads the dashboard panel with updated information based on the selected drone from the combo box.
+     */
     public void reloadPanel(Object value) {
         if (value != null) {
             if (value instanceof Drones) {
@@ -172,7 +195,9 @@ public class Dashboard extends JPanel implements UIPanel {
             }
         }
     }
-
+     /**
+     * Creates and returns a JLabel with the specified text and position.
+     */
     public static JLabel createLabel(String text, int x, int y) {
         JLabel label = new JLabel(text);
         label.setBounds(x, y, 200, 50);
