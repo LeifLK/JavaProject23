@@ -8,7 +8,6 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
-import java.util.concurrent.TimeUnit;
 
 //The Overview class represents a panel displaying an overview of drones.
 
@@ -17,7 +16,7 @@ public class Overview extends JPanel implements UIPanel{
     private JTable droneTable;
     private DefaultTableModel droneTableModel;
     private DataStorage dataStorage;
-    private JPanel overview = new JPanel();
+    private final JPanel overview = new JPanel();
 
     public JPanel getJPanel() {
         overview.validate();

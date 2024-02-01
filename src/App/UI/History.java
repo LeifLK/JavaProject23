@@ -23,7 +23,7 @@ public class History extends JPanel implements UIPanel {
     private JSlider timeSlider;
     private JComboBox<Object> comboBox;
     private DataStorage dataStorage;
-    private JPanel topPanel;
+
     void setComboxBoxToEmpty() {
         comboBox.setSelectedIndex(0);
         this.validate();
@@ -50,7 +50,7 @@ public class History extends JPanel implements UIPanel {
         createTopPanel();
         JPanel timeSliderPanel = createTimeSliderPanel(maxDroneDynamics, maxDroneDynamics);
 
-        drawnDronePanel = getNewDrawingPanel(maxDroneDynamics, null);
+        drawnDronePanel = getNewDrawingPanel(maxDroneDynamics);
         this.add(drawnDronePanel, BorderLayout.CENTER);
         this.add(timeSliderPanel, BorderLayout.SOUTH);
         this.validate();
@@ -77,7 +77,7 @@ public class History extends JPanel implements UIPanel {
     }
 
     private void createTopPanel() {
-        topPanel = new JPanel();
+        JPanel topPanel = new JPanel();
         topPanel.setLayout(new BorderLayout());
         initDroneSelector();
         topPanel.add(comboBoxPanel, BorderLayout.WEST);
@@ -123,14 +123,14 @@ public class History extends JPanel implements UIPanel {
         timeSliderPanel.add(timeInput, gbConstraints);
         return timeSliderPanel;
     }
-    private DrawingPanel getNewDrawingPanel(int valueInTicks, Drones droneToMark) {
+    private DrawingPanel getNewDrawingPanel(int valueInTicks) {
         List<DroneDynamics> dronesToDraw = new ArrayList<>();
 
         for (List<DroneDynamics> droneDynamic : droneDynamicsPerDrone) {
             dronesToDraw.add(droneDynamic.get(valueInTicks));
         }
 
-        drawnDronePanel = new DrawingPanel(dronesToDraw, this, droneToMark);
+        drawnDronePanel = new DrawingPanel(dronesToDraw, this, null);
         //this.add(drawnDronePanel, BorderLayout.CENTER);
 
         drawnDronePanel.setMaximumSize(new Dimension(400, 400));
@@ -169,9 +169,8 @@ public class History extends JPanel implements UIPanel {
         this.remove(drawnDronePanel);
         if (!(drone instanceof Drones)) {
             List<DroneDynamics> dronesToDraw = new ArrayList<>();
-            int valueInTicks = timeSlider.getValue();
             for (List<DroneDynamics> droneDynamic : droneDynamicsPerDrone) {
-                dronesToDraw.add(droneDynamic.get(valueInTicks));
+                dronesToDraw.add(droneDynamic.get(timeInTicks));
             }
             drawnDronePanel = new DrawingPanel(dronesToDraw, this, null);
             this.add(drawnDronePanel);
@@ -257,7 +256,7 @@ class DrawingPanel extends JPanel {
         }
         this.validate();
     }
-    public void refresh(List<DroneDynamics> dronesToDraw, History mainPanel, Drones droneToHighlight) {
+ /*   public void refresh(List<DroneDynamics> dronesToDraw, History mainPanel, Drones droneToHighlight) {
         this.removeAll();
         dronePositions = new ArrayList<>();
         this.setLayout(new GridBagLayout());
@@ -278,7 +277,7 @@ class DrawingPanel extends JPanel {
             this.add(position, gbConstraints);
         }
     }
-
+*/
     private int modifyLatitude(double latitude, int coordinate_factor) {
         return (int) (((latitude * coordinate_factor) % 650) + 50) / 10;
     }

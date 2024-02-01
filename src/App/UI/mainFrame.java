@@ -1,6 +1,5 @@
 package App.UI;
 
-import App.Main;
 import App.Model.Drones;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,9 +10,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
 
 public class mainFrame extends JFrame implements ActionListener {
 
@@ -64,6 +60,13 @@ public class mainFrame extends JFrame implements ActionListener {
         historyButton.setBackground(Color.CYAN);
         historyButton.setFocusable(false);
         historyButton.addActionListener(this);
+        JButton refreshButton = new JButton();
+        refreshButton.setBounds(10, 10, 50, 50);
+        refreshButton.setText("History");
+        refreshButton.setForeground(Color.BLACK);
+        refreshButton.setBackground(Color.CYAN);
+        refreshButton.setFocusable(false);
+        refreshButton.addActionListener(e -> refreshPanels());
 
         // JPanel
         rightPanel = new JPanel();
@@ -107,7 +110,7 @@ public class mainFrame extends JFrame implements ActionListener {
         buttonPanelLeft.add(dashboardButton);
         buttonPanelLeft.add(catalogButton);
         buttonPanelLeft.add(historyButton);
-
+        buttonPanelLeft.add(refreshButton);
         program.add(rightPanel);
         program.add(buttonPanelLeft);
         program.setResizable(false);
@@ -125,14 +128,6 @@ public class mainFrame extends JFrame implements ActionListener {
         {
             LOGGER.warn("ImageIcon URL is malformed");
         }
-        java.util.Timer timer = new Timer();
-        timer.schedule( new TimerTask() {
-            public void run() {
-                refreshPanels();
-                //TODO: Fix to logging
-                System.out.println("refreshing Panels");
-            }
-        }, 25*1000, 60*500);//30*1000, 60*1000);
     }
 
     @Override
@@ -151,7 +146,6 @@ public class mainFrame extends JFrame implements ActionListener {
     }
     public void refreshPanels()
     {
-        //TODO: just create a button for exactly this method. no backend!
         overview.refreshData();
         catalog.refreshData();
         dashboard.refreshData();
