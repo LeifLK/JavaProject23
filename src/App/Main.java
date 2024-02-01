@@ -5,7 +5,6 @@ import App.UI.LandingPage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.net.MalformedURLException;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -50,6 +49,7 @@ public class Main {
 
         LandingPage landingPage = new LandingPage();
         landingPage.show();
+
         Timer timer = new Timer();
         timer.schedule( new TimerTask() {
             public void run() {
