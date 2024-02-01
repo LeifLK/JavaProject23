@@ -47,7 +47,6 @@ public class mainFrame extends JFrame implements ActionListener {
         overviewButton.setBounds(10, 10, 50, 50);
         overviewButton.setText("Overview");
         overviewButton.setForeground(Color.BLACK);
-        overviewButton.setBackground(Color.CYAN);
         overviewButton.setFocusable(false);
         overviewButton.addActionListener(this);
 
@@ -55,14 +54,12 @@ public class mainFrame extends JFrame implements ActionListener {
         dashboardButton.setBounds(10, 10, 70, 30);
         dashboardButton.setText("Dashboard");
         dashboardButton.setForeground(Color.BLACK);
-        dashboardButton.setBackground(Color.CYAN);
         dashboardButton.setFocusable(false);
         dashboardButton.addActionListener(this);
 
         catalogButton = new JButton();
         catalogButton.setText("Catalog");
         catalogButton.setForeground(Color.BLACK);
-        catalogButton.setBackground(Color.CYAN);
         catalogButton.setFocusable(false);
         catalogButton.addActionListener(this);
 
@@ -70,7 +67,6 @@ public class mainFrame extends JFrame implements ActionListener {
         historyButton.setBounds(10, 10, 50, 50);
         historyButton.setText("History");
         historyButton.setForeground(Color.BLACK);
-        historyButton.setBackground(Color.CYAN);
         historyButton.setFocusable(false);
         historyButton.addActionListener(this);
 
@@ -78,7 +74,6 @@ public class mainFrame extends JFrame implements ActionListener {
         refreshButton.setBounds(10, 10, 50, 50);
         refreshButton.setText("Refresh UI");
         refreshButton.setForeground(Color.BLACK);
-        refreshButton.setBackground(Color.CYAN);
         refreshButton.setFocusable(false);
         refreshButton.addActionListener(e -> refreshPanels());
 

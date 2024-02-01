@@ -8,6 +8,8 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 //The Overview class represents a panel displaying an overview of drones.
 
@@ -29,6 +31,7 @@ public class Overview extends JPanel implements UIPanel{
 
     public void initialize() {
         overview.removeAll();
+
         dataStorage = Main.getDataStorage();
         String[] columns = {"ID", "Manufacturer", "Typename", "Serialnumber", "Created", "Status", "Last Seen"};
         droneTableModel = new DefaultTableModel(columns, 0);
@@ -47,14 +50,8 @@ public class Overview extends JPanel implements UIPanel{
     }
 
     private void addComponentsToPanel() {
-        JButton showDronesButton = new JButton("Show Drones");
-        showDronesButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
-        showDronesButton.addActionListener(e -> updateDroneTable());
-
         JPanel centerPanel = new JPanel(new BorderLayout());
         centerPanel.add(new JScrollPane(droneTable), BorderLayout.CENTER);
-        centerPanel.add(showDronesButton, BorderLayout.SOUTH);
-
         overview.add(centerPanel, BorderLayout.CENTER);
     }
 

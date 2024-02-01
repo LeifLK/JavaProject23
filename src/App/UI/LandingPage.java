@@ -28,7 +28,16 @@ public class LandingPage {
         setupBackground();
         setupTitleAndDescription();
         setupStartAppButton();
-        //frame.setLocationRelativeTo(null);
+        frame.setLocationRelativeTo(null);
+        try {
+            //Logo
+            ImageIcon logo = new ImageIcon(new URL("https://i.imgur.com/4LylQgE.png")); // set logo of our frame
+            frame.setIconImage(logo.getImage());
+        }
+        catch (MalformedURLException e)
+        {
+            LOGGER.warn("ImageIcon URL is malformed");
+        }
         if (backgroundIcon != null)
         {
             frame.setSize(backgroundIcon.getIconWidth(), backgroundIcon.getIconHeight());
@@ -74,7 +83,7 @@ public class LandingPage {
         descriptionLabel.setForeground(Color.WHITE);
         descriptionLabel.setHorizontalAlignment(SwingConstants.CENTER);
         gbc.gridy = 2;
-        gbc.gridx = 0;
+        gbc.gridx = 1;
         gbc.gridwidth = 2;
         frame.add(descriptionLabel, gbc);
     }
@@ -82,7 +91,8 @@ public class LandingPage {
     private void setupStartAppButton() {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridy = 6;
-
+        gbc.gridx = 1;
+        gbc.gridwidth = 2;
         startAppButton = new JButton("Loading Data");
         startAppButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
         startAppButton.addActionListener(e -> startApplication());

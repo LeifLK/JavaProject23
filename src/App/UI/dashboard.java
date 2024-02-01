@@ -103,7 +103,6 @@ public class dashboard extends JPanel implements UIPanel {
         line_chart.setBackground(Color.LIGHT_GRAY);
 
         //JComboBox
-        comboBox.setBackground(Color.CYAN);
         comboBox.setSize(90, 30);
         comboBox.setAlignmentX(250);
         comboBox.setAlignmentY(0);
@@ -115,11 +114,6 @@ public class dashboard extends JPanel implements UIPanel {
             }
             comboBox.addActionListener(e -> reloadPanel(comboBox.getSelectedItem()));
         }
-
-        //Find Renderer in History.java
-        //refreshComboBox();
-        //comboBox.setSelectedIndex(currentDroneId - lowestDroneId);
-
 
         //JFreeChart
         JFreeChart barChart = createBarChart(currentDroneId);

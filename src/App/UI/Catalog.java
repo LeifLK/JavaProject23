@@ -83,7 +83,6 @@ public class Catalog extends JPanel implements UIPanel {
         panel.setLayout(new BorderLayout());
         panel.add(backwardsButton, BorderLayout.WEST);
         backwardsButton.addActionListener(e -> previousPage());
-
         JButton forwardButton = new JButton("Forward");
         panel.add(forwardButton, BorderLayout.CENTER);
         forwardButton.addActionListener(e -> nextPage());
@@ -138,10 +137,14 @@ public class Catalog extends JPanel implements UIPanel {
         this.setLayout(new BorderLayout());
         try {
             Object value = DroneType.class.getMethod(getMethodIdentifier).invoke(droneType);
+
             droneTypeToRepresent = droneType;
             attributeGetter = DroneType.class.getMethod(getMethodIdentifier);
             JLabel attributeIdentifierLabel = new JLabel(attributeIdentifier);
+            Font f = attributeIdentifierLabel.getFont();
+            attributeIdentifierLabel.setFont(new Font("Dialog.bold", Font.PLAIN, 18));
             attributeValueLabel = new JLabel(String.valueOf(value));
+            attributeValueLabel.setFont(new Font("Dialog", Font.PLAIN, 18));
             this.add(attributeIdentifierLabel, BorderLayout.WEST);
             this.add(attributeValueLabel, BorderLayout.EAST);
             this.validate();
