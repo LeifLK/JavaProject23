@@ -48,12 +48,8 @@ public class Main {
 
         dataStorage = new DataStorage();
 
-        try {
-            LandingPage landingPage = new LandingPage();
-            landingPage.show();
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
-        }
+        LandingPage landingPage = new LandingPage();
+        landingPage.show();
         Timer timer = new Timer();
         timer.schedule( new TimerTask() {
             public void run() {

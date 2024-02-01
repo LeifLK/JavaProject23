@@ -1,14 +1,16 @@
 package App.UI;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.net.MalformedURLException;
 import java.net.URL;
 
 public class LandingPage {
 
+    private static final Logger LOGGER = LogManager.getLogger(LandingPage.class);
     private JFrame frame;
     private JLabel backgroundLabel;
     private JLabel titleLabel;
@@ -16,26 +18,34 @@ public class LandingPage {
     private JButton startAppButton;
     private ImageIcon backgroundIcon;
 
-    public LandingPage() throws MalformedURLException {
+    public LandingPage() {
         initialize();
     }
 
-    private void initialize() throws MalformedURLException {
+    private void initialize() {
         frame = new JFrame();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+        frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         setupBackground();
         setupTitleAndDescription();
         setupStartAppButton();
-
         frame.setLocationRelativeTo(null);
-        frame.setSize(backgroundIcon.getIconWidth(), backgroundIcon.getIconHeight());
+        if (backgroundIcon != null)
+        {
+            frame.setSize(backgroundIcon.getIconWidth(), backgroundIcon.getIconHeight());
+        }else
+            frame.setSize(new Dimension(200, 200));
     }
 
-    private void setupBackground() throws MalformedURLException {
-        ImageIcon backgroundIcon = new ImageIcon(new URL("https://i.imgur.com/QGkGoMH.png"));
-        backgroundLabel = new JLabel(backgroundIcon);
-        frame.setContentPane(backgroundLabel);
+    private void setupBackground() {
+        try {
+            backgroundIcon = new ImageIcon(new URL("https://i.imgur.com/QGkGoMH.png"));
+            backgroundLabel = new JLabel(backgroundIcon);
+            frame.setContentPane(backgroundLabel);
+        }
+        catch (MalformedURLException e)
+        {
+            LOGGER.warn("Landing page could not load background Image from  URL");
+        }
         frame.setLayout(new GridBagLayout());
     }
 
@@ -75,9 +85,9 @@ public class LandingPage {
 
     private void startApplication() {
         frame.dispose();
-        mainFrame myFrame = new mainFrame();
-        myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        myFrame.setVisible(true);
+        mainFrame mainFrame = new mainFrame();
+        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mainFrame.setVisible(true);
     }
 
     public void show() {
