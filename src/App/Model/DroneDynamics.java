@@ -33,7 +33,7 @@ public class DroneDynamics implements Comparable<DroneDynamics>, Serializable {
     @JsonProperty("align_pitch")
     private String alignPitch;
     @JsonProperty("align_yaw")
-    private String align_yaw;
+    private String alignYaw;
     @JsonProperty("longitude")
     private String longitude;
     @JsonProperty("latitude")
@@ -102,8 +102,8 @@ public class DroneDynamics implements Comparable<DroneDynamics>, Serializable {
      *
      * @return The yaw alignment as a string.
      */
-    public String getAlign_yaw() {
-        return align_yaw;
+    public String getAlignYaw() {
+        return alignYaw;
     }
 
     /**
@@ -185,6 +185,13 @@ public class DroneDynamics implements Comparable<DroneDynamics>, Serializable {
         return thisDateTime.compareTo(otherDateTime);
     }
 
+    /**
+     * Checks if this DroneDynamics instance is equal to another object.
+     * If all fields are equal, the two objects are considered equal.
+     *
+     * @param obj the reference object with which to compare.
+     * @return true if this object is the same as the obj argument; false otherwise.
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -197,16 +204,22 @@ public class DroneDynamics implements Comparable<DroneDynamics>, Serializable {
                 Objects.equals(timeStamp, other.timeStamp) &&
                 Objects.equals(alignRoll, other.alignRoll) &&
                 Objects.equals(alignPitch, other.alignPitch) &&
-                Objects.equals(align_yaw, other.align_yaw) &&
+                Objects.equals(alignYaw, other.alignYaw) &&
                 Objects.equals(longitude, other.longitude) &&
                 Objects.equals(latitude, other.latitude) &&
                 Objects.equals(lastSeen, other.lastSeen) &&
                 Objects.equals(status, other.status);
     }
 
+    /**
+     * Generates a hash code for this DroneDynamics instance.
+     * The hash code is generated based on the hash codes of the individual fields of the class.
+     *
+     * @return a hash code value for this object.
+     */
     @Override
     public int hashCode() {
-        return Objects.hash(droneUrl, Drones, timeStamp, speed, alignRoll, alignPitch, align_yaw, longitude, latitude, batteryStatus, lastSeen, status);
+        return Objects.hash(droneUrl, Drones, timeStamp, speed, alignRoll, alignPitch, alignYaw, longitude, latitude, batteryStatus, lastSeen, status);
     }
 }
 

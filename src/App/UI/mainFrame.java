@@ -10,6 +10,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.MalformedURLException;
 import java.net.URL;
+/**
+ * The {@code mainFrame} creates our Main Frame where we have two main Panels.
+ * The Left Panel is used to contain the Buttons and the right Panel is used as a card Layout to display the panel according to the button that is used.
+ * Each Button has a card in the card Layout adressed to it.
+ * @author André
+ */
 
 public class mainFrame extends JFrame implements ActionListener {
 
@@ -27,6 +33,13 @@ public class mainFrame extends JFrame implements ActionListener {
     final Catalog catalog;
     final History history;
 
+ /**
+ * This is our constructor to create our Main Frame.
+ * Here we create our buttons aswell as our Main Panels and and the panels used as cards for the card Layout.
+ * After all we add them to the Main Frame called program.
+ * At the end we also add our Logo to the Main Frame
+ * @author André
+ */
     public mainFrame() {
 
         //JButton
@@ -130,13 +143,15 @@ public class mainFrame extends JFrame implements ActionListener {
             LOGGER.warn("ImageIcon URL is malformed");
         }
     }
-
+ /**
+ * Here we have our actionPerfomed Method to display the expected card according to which Button was pressed.
+ * @author André
+ */
     @Override
     public void actionPerformed(ActionEvent e) {
 
         if (e.getSource() == overviewButton) {
             cardLayout.show(rightPanel, "Overview");
-            overview.refreshData();
         } else if (e.getSource() == dashboardButton) {
             cardLayout.show(rightPanel, "Dashboard");
         } else if (e.getSource() == catalogButton) {
@@ -153,6 +168,11 @@ public class mainFrame extends JFrame implements ActionListener {
         history.refreshData();
         rightPanel.validate();
     }
+ /**
+ * This method reloads our dashboard panel.
+ *It takes drone as a parameter and reloads the panel with it
+ * @author André
+ */
     public void showDashboard(Drones drone) {
         cardLayout.show(rightPanel, "Dashboard");
         dashboard.reloadPanel(drone);

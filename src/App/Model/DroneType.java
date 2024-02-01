@@ -110,6 +110,13 @@ public class DroneType implements Serializable {
         return maxCarriage;
     }
 
+    /**
+     * Compares this DroneType instance with another to determine equality.
+     * Two instances are considered equal if all their respective fields match.
+     *
+     * @param obj the reference object with which to compare.
+     * @return true if this object is the same as the obj argument; false otherwise.
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -125,6 +132,12 @@ public class DroneType implements Serializable {
                 Objects.equals(typename, other.typename);
     }
 
+    /**
+     * Generates a hash code for this DroneType instance.
+     * The hash code is generated based on the hash codes of the individual fields of the class.
+     *
+     * @return a hash code value for this object.
+     */
     @Override
     public int hashCode() {
         return Objects.hash(id, manufacturer, typename, weight, maxSpeed, batteryCapacity, controlRange, maxCarriage);

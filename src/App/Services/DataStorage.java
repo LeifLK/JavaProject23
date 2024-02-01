@@ -7,8 +7,6 @@ import App.Model.Drones;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -22,7 +20,7 @@ import java.util.Objects;
  *
  * @author Amin
  */
-public class DataStorage implements Runnable {
+public class DataStorage {
     private static final Logger LOGGER = LogManager.getLogger(DataStorage.class);
     private static final String DRONES_FILE_PATH = "dronesList.ser";
     private static final String DRONE_TYPES_FILE_PATH = "droneTypesList.ser";
@@ -36,7 +34,11 @@ public class DataStorage implements Runnable {
 
     /**
      * Constructs a new instance of DataStorage.
-     * Initializes lists to store drones, drone types, and drone dynamics.
+     * This constructor initializes lists to store drones, drone types, and drone dynamics.
+     * It attempts to load the data from local files if they exist, otherwise, it fetches the data from the API.
+     * If any of the lists (drones, drone types, or drone dynamics) remain empty after attempting to load from both the file and the API,
+     * it throws a DataStorageNotAbleToPopulate exception.
+     * If new data is fetched from the API, it saves this data locally for future use.
      */
     public DataStorage() {
         this.fileService = new FileService();
@@ -68,21 +70,43 @@ public class DataStorage implements Runnable {
                 throw new DataStorageNotAbleToPopulate("DataStorage not fully loaded, neither from File nor API");
             if (toSave)
                 saveDataStorage();
-        }
-        catch (DataStorageNotAbleToPopulate error)
-        {
-            LOGGER.warn("DataStorage is Empty");
+            LOGGER.info("New data saved to files successfully.");
+        } catch (DataStorageNotAbleToPopulate error) {
+            LOGGER.warn("DataStorage is incomplete", error);
         }
     }
 
+    /**
+     * Saves the current state of the DataStorage to .ser files.
+     * This includes saving the lists of drones, drone types, and drone dynamics.
+     * The data is saved to predefined file paths.
+     */
     public void saveDataStorage() {
-        fileService.saveListToFile(DRONES_FILE_PATH, dronesList);
-        fileService.saveListToFile(DRONE_TYPES_FILE_PATH, droneTypeList);
-        fileService.saveListToFile(DRONE_DYNAMICS_FILE_PATH, droneDynamicsList);
+        try {
+            fileService.saveListToFile(DRONES_FILE_PATH, dronesList);
+            LOGGER.info("Drone list saved successfully to " + DRONES_FILE_PATH);
+
+            fileService.saveListToFile(DRONE_TYPES_FILE_PATH, droneTypeList);
+            LOGGER.info("Drone type list saved successfully to " + DRONE_TYPES_FILE_PATH);
+
+            fileService.saveListToFile(DRONE_DYNAMICS_FILE_PATH, droneDynamicsList);
+            LOGGER.info("Drone dynamics list saved successfully to " + DRONE_DYNAMICS_FILE_PATH);
+        } catch (Exception e) {
+            LOGGER.error("Failed to save data storage: ", e);
+        }
     }
-    //To Remove?
+
+    /**
+     * Checks if any of the lists (drones, drone types, or drone dynamics) in the DataStorage are empty.
+     *
+     * @return true if any of the lists is empty, false otherwise.
+     */
     public boolean isEmpty() {
-        return ((dronesList.isEmpty() || droneTypeList.isEmpty() || droneDynamicsList.isEmpty()));
+        boolean isEmpty = dronesList.isEmpty() || droneTypeList.isEmpty() || droneDynamicsList.isEmpty();
+        if (isEmpty) {
+            LOGGER.warn("One or more lists in DataStorage are empty.");
+        }
+        return isEmpty;
     }
 
     /**
@@ -101,22 +125,23 @@ public class DataStorage implements Runnable {
         newDataStorage.populateDroneListFromAPI();
         newDataStorage.populateDroneTypeListFromAPI();
         newDataStorage.populateDroneDynamicsListFromAPI();
-/*
-        if (saveToFile) {
-            LOGGER.info("New DataStorage instance loaded with fresh data and saved to files.");
-        } else {
-            LOGGER.info("New DataStorage instance loaded with fresh data, not saved to files.");
-        }*/
         return newDataStorage;
     }
 
 
     /**
-     * Populates the drone list by fetching data from the API or loading it from a local file.
-     * The method first checks if the drone list is already populated and returns early if it is.
-     * If the drone list is not populated, it attempts to load the list from a local file.
-     * If the local file does not exist or is empty, the method fetches drone data from the API,
-     * parses the JSON data, populates the drone list, and saves the populated list to the local file for future use.
+     * Populates the drone list by fetching data from the API.
+     * This method makes an API request to fetch the drones data.
+     * If the data is successfully fetched, it parses the JSON response and
+     * populates the drone list with the parsed data.
+     * <p>
+     * The method also fetches the associated drone type data for each drone and sets it.
+     * <p>
+     * If no data is fetched from the API or if any error occurs during the parsing of the JSON data
+     * or fetching associated drone type data, appropriate log messages are generated to indicate the issue.
+     * <p>
+     * If the drone list is successfully fetched and parsed from the API and the drone types are set,
+     * the method logs the success message.
      */
     public void populateDroneListFromAPI() {
         dronesList = new ArrayList<>();
@@ -150,6 +175,12 @@ public class DataStorage implements Runnable {
         }
     }
 
+    /**
+     * Populates the drone list by loading data from a local file.
+     * The method first attempts to load the drone list from a file specified by {@code DRONES_FILE_PATH}.
+     * If the file is not found or is empty, it logs a message indicating that no local data was found.
+     * If the drone list is successfully loaded from the file, it logs the size of the loaded list.
+     */
     public void populateDroneListFromFile() {
         this.dronesList = fileService.loadListFromFile(DRONES_FILE_PATH);
 
@@ -175,18 +206,10 @@ public class DataStorage implements Runnable {
     }
 
     /**
-     * Populates the drone dynamics list by fetching data from the API or loading it from a local file.
-     * <p>
-     * If the local file is empty or does not exist, the method fetches drone dynamics data from the API.
-     * It then parses the JSON response, associates each DroneDynamics instance with its corresponding Drones instance,
-     * populates the drone dynamics list with the parsed and associated data, and saves the list to the local file for future use.
-     * If the drone dynamics list is successfully fetched and parsed, the method logs the size of the populated list.
-     * <p>
-     * If the local file already contains drone dynamics data, the method logs that it has loaded the data from the local cache
-     * and returns early, preventing unnecessary API calls.
-     * <p>
-     * The method also handles potential parsing errors, logging any issues encountered during the parsing of individual drone dynamics JSON objects.
-     * It also manages the association of DroneDynamics instances with their corresponding Drones instances based on URLs and IDs.
+     * Populates the drone dynamics list by loading data from a local file.
+     * The method attempts to load the drone dynamics list from a file specified by {@code DRONE_DYNAMICS_FILE_PATH}.
+     * If the file is not found or is empty, it logs a message indicating that no local drone dynamics data was found.
+     * If the drone dynamics list is successfully loaded from the file, it logs the size of the loaded list.
      */
     public void populateDroneDynamicsListFromFile() {
         this.droneDynamicsList = fileService.loadListFromFile(DRONE_DYNAMICS_FILE_PATH);
@@ -198,6 +221,19 @@ public class DataStorage implements Runnable {
         }
     }
 
+    /**
+     * Populates the drone dynamics list by fetching data from the API.
+     * This method makes an API request to fetch the drone dynamics data.
+     * If the data is successfully fetched, it parses the JSON response and
+     * populates the drone dynamics list with the parsed data. Each drone dynamics
+     * object is also associated with its corresponding drone object.
+     * <p>
+     * If no data is fetched from the API or if any error occurs during the parsing of the JSON data,
+     * appropriate log messages are generated to indicate the issue.
+     * <p>
+     * If the drone dynamics list is successfully fetched and parsed from the API,
+     * the method logs the success message.
+     */
     public void populateDroneDynamicsListFromAPI() {
         droneDynamicsList = new ArrayList<>();
         LOGGER.info("Fetching drone dynamics data from API...");
@@ -227,18 +263,13 @@ public class DataStorage implements Runnable {
     }
 
     /**
-     * Populates the drone type list by fetching data from the API or loading it from a local file.
-     * <p>
-     * If the local file is empty or does not exist, the method fetches drone type data from the API.
-     * It then parses the JSON response, populates the drone type list with the parsed data, and saves the list to the local file for future use.
-     * If the drone type list is successfully fetched and parsed, the method logs the size of the populated list.
-     * <p>
-     * If the local file already contains drone type data, the method logs that it has loaded the data from the local cache
-     * and returns early, preventing unnecessary API calls.
-     * <p>
-     * The method also handles potential parsing errors, logging any issues encountered during the parsing of individual drone type JSON objects.
+     * Populates the drone type list by loading data from a local file.
+     * This method attempts to load the drone type list from a specified file path.
+     * If the file is found and the data is successfully loaded, it populates the drone type list
+     * and logs the size of the loaded list.
+     * If the file is not found, or if it's empty, a log message is generated to indicate
+     * that no local drone type data was found.
      */
-
     public void populateDroneTypeListFromFile() {
         this.droneTypeList = fileService.loadListFromFile(DRONE_TYPES_FILE_PATH);
 
@@ -249,6 +280,18 @@ public class DataStorage implements Runnable {
         }
     }
 
+    /**
+     * Populates the drone type list by fetching data from the API.
+     * This method makes an API request to fetch the drone types data.
+     * If the data is successfully fetched, it parses the JSON response and
+     * populates the drone type list with the parsed data.
+     * <p>
+     * If no data is fetched from the API or if any error occurs during the parsing of the JSON data,
+     * appropriate log messages are generated to indicate the issue.
+     * <p>
+     * If the drone type list is successfully fetched and parsed from the API,
+     * the method logs the success message.
+     */
     public void populateDroneTypeListFromAPI() {
         droneTypeList = new ArrayList<>();
         LOGGER.info("Fetching drone type data from API...");
@@ -300,6 +343,15 @@ public class DataStorage implements Runnable {
         return list1.get(list1.size() - 1).equals(list2.get(list2.size() - 1));
     }
 
+    /**
+     * Compares this DataStorage instance with another object to determine if they are equal.
+     * This method checks if the provided object is an instance of DataStorage and then compares
+     * the drone list, drone type list, and drone dynamics list of both DataStorage instances.
+     *
+     * @param obj The object to compare this DataStorage instance with.
+     * @return true if the provided object is a DataStorage instance and if the drone list,
+     * drone type list, and drone dynamics list of both instances are equal. Otherwise, false.
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -310,53 +362,17 @@ public class DataStorage implements Runnable {
                 droneDynamicsList.equals(other.droneDynamicsList);
     }
 
+    /**
+     * Generates a hash code for this DataStorage instance.
+     * This method uses the hash codes of the drone list, drone type list, and drone dynamics list
+     * to generate a single hash code for the DataStorage instance by combining them in a consistent manner.
+     *
+     * @return An integer hash code value for this object, derived from the hash codes of the drone list,
+     * drone type list, and drone dynamics list.
+     */
     @Override
     public int hashCode() {
         return Objects.hash(dronesList, droneTypeList, droneDynamicsList);
-    }
-
-    /**
-     * Prints a subset of drone dynamics from a list, based on the specified page size and page number.
-     * Formats the timestamp and displays relevant information for each drone dynamics object.
-     *
-     * @param pageSize the number of items to display per page
-     * @param page     the current page number
-     * @param list     the list of drone dynamics
-     */
-    public void printNextSubset(int pageSize, int page, List list) {
-        int startIndex = (page - 1) * pageSize;
-        int endIndex = Math.min(startIndex + pageSize, list.size());
-
-        if (startIndex < endIndex) {
-            List<DroneDynamics> subset = list.subList(startIndex, endIndex);
-
-            DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSXXX");
-            DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("MMM. d, yyyy, h:mm a");
-            for (DroneDynamics droneDynamics : subset) {
-                String formattedTimestamp = formatTimestamp(droneDynamics.getTimeStamp(), inputFormatter, outputFormatter);
-
-                // Print or process each droneDynamics object
-                System.out.println("TimeStamp: " + formattedTimestamp);
-                System.out.println("DroneID: " + droneDynamics.getDrone().getId());
-                System.out.println("Manufacturer: " + droneDynamics.getDrone().getDronetype().getManufacturer());
-                System.out.println("---------------------");
-            }
-        } else {
-            System.out.println("No more items to print.");
-        }
-    }
-
-    /**
-     * Formats a timestamp string from one format to another using the specified formatters.
-     *
-     * @param timestamp       the timestamp string to format
-     * @param inputFormatter  the formatter of the input timestamp string
-     * @param outputFormatter the formatter of the output timestamp string
-     * @return the formatted timestamp string
-     */
-    public String formatTimestamp(String timestamp, DateTimeFormatter inputFormatter, DateTimeFormatter outputFormatter) {
-        ZonedDateTime zonedDateTime = ZonedDateTime.parse(timestamp, inputFormatter);
-        return zonedDateTime.format(outputFormatter);
     }
 
     /**
@@ -377,49 +393,15 @@ public class DataStorage implements Runnable {
         return result;
     }
 
-    /**
-     * Retrieves the list of {@code Drones}.
-     * This list contains all drones that have been fetched from the API.
-     *
-     * @return the list of {@code Drones}.
-     */
     public List<Drones> getDronesList() {
         return dronesList;
     }
 
-    /**
-     * Retrieves the list of {@code DroneType}.
-     * This list contains all drone types that have been fetched from the API.
-     *
-     * @return the list of {@code DroneType}.
-     */
     public List<DroneType> getDroneTypeList() {
         return droneTypeList;
     }
 
-    /**
-     * Retrieves the list of {@code DroneDynamics}.
-     * This list contains all drone dynamics that have been fetched from the API.
-     *
-     * @return the list of {@code DroneDynamics}.
-     */
     public List<DroneDynamics> getDroneDynamicsList() {
         return droneDynamicsList;
-    }
-
-    /**
-     * Sets the list of {@code DroneDynamics}.
-     * This method allows replacing the current list of drone dynamics with a new one.
-     *
-     * @param droneDynamicsList the new list of {@code DroneDynamics} to be set.
-     */
-    public void setDroneDynamicsList(List<DroneDynamics> droneDynamicsList) {
-        this.droneDynamicsList = droneDynamicsList;
-    }
-
-    @Override
-    public void run() {
-        //createNewDataStorageFromAPI();
-        System.out.println("Datastorage Thread runs");
     }
 }
