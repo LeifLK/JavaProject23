@@ -29,11 +29,9 @@ public class Dashboard extends JPanel implements UIPanel {
     private final JPanel pie_chart = new JPanel();
     private final JPanel line_chart = new JPanel();
     private final JLabel title = new JLabel("Dashboard");
-    private JComboBox comboBox = new JComboBox<>();
+    private final JComboBox<Object> comboBox = new JComboBox<>();
     private DataStorage dataStorage;
     int currentDroneId = Main.getDataStorage().getDronesList().getFirst().getId();
-    private int lowestDroneId = 71;
-    private ActionListener actionListener;
 
     public JPanel getJPanel() {
         dashboard.validate();
@@ -70,6 +68,7 @@ public class Dashboard extends JPanel implements UIPanel {
         title.setFont(new Font(null, Font.PLAIN, 25));
 
 
+        int lowestDroneId = 71;
         JLabel manufacturer = createLabel("Manufacturer: " + dataStorage.getDronesList().get(currentDroneId - lowestDroneId).getDronetype().getManufacturer(), 0, 0);
         JLabel typename = createLabel("Typename: " + dataStorage.getDronesList().get(currentDroneId - lowestDroneId).getDronetype().getTypename(), 0, 15);
         JLabel serialnumber = createLabel("Serialnumber: " + dataStorage.getDronesList().get(currentDroneId - lowestDroneId).getSerialnumber(), 0, 30);
