@@ -19,8 +19,7 @@ import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
 
-//TODO: Rename dashboard and mainframe to use capitalized classnames
-public class dashboard extends JPanel implements UIPanel {
+public class Dashboard extends JPanel implements UIPanel {
 
     private final JPanel dashboard = new JPanel();
     private final JPanel titleComboBox = new JPanel();
@@ -41,7 +40,7 @@ public class dashboard extends JPanel implements UIPanel {
         return dashboard;
     }
 
-    public dashboard() {
+    public Dashboard() {
         initialize();
     }
 
