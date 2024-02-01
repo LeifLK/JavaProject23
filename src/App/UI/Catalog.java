@@ -16,9 +16,7 @@ import org.apache.logging.log4j.Logger;
 /**
  * The Catalog is used to display all DroneTypes. It holds and shows the Attributes(see Attribute Class below)
  * of a DroneType. These Attributes get changed to those of another DroneType by clicking on the buttons included in this Panel.
- *
  * The Catalog implements UIPanel to refresh the DataStorage and show potentially added DroneTypes.
- *
  * @author Lennart Ochs
  */
 
@@ -118,28 +116,22 @@ public class Catalog extends JPanel implements UIPanel {
 
 /**
  * Attributes used in Catalog
- *
  * It uses a BorderLayout to show the Identifier of the Name to the left and its value on the right side.
  * Most complexity comes from dynamic calls to the DroneType. (See the Constructor for further information)
- *
  * @author Lennart Ochs
  */
  class Attribute extends JPanel {
     private static final Logger LOGGER = LogManager.getLogger(Catalog.class);
-    private JLabel attributeIdentifierLabel;
     private Method attributeGetter;
     private JLabel attributeValueLabel;
     private DroneType droneTypeToRepresent;
     /**
      * Attributes used in Catalog
-     *
      * @param attributeIdentifier Is used to show the users what value is shown in this Attribute.
      * @param droneType The actual DroneType from which the values get shown.
      * @param getMethodIdentifier The name of the Method used to get the Value from the DroneType.
      *                            It is to be read as GetMethod-Identifier, not as get-MethodIdentifier.
-     *
      * We get the value from invoking the droneType parameter, on the method described in the getMethodIdentifier, in the DroneType class.
-     *
      * If the invoking fails an exception will be Logged.
      */
     Attribute(String attributeIdentifier, DroneType droneType, String getMethodIdentifier) {
@@ -148,7 +140,7 @@ public class Catalog extends JPanel implements UIPanel {
             Object value = DroneType.class.getMethod(getMethodIdentifier).invoke(droneType);
             droneTypeToRepresent = droneType;
             attributeGetter = DroneType.class.getMethod(getMethodIdentifier);
-            attributeIdentifierLabel = new JLabel(attributeIdentifier);
+            JLabel attributeIdentifierLabel = new JLabel(attributeIdentifier);
             attributeValueLabel = new JLabel(String.valueOf(value));
             this.add(attributeIdentifierLabel, BorderLayout.WEST);
             this.add(attributeValueLabel, BorderLayout.EAST);

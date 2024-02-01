@@ -20,7 +20,7 @@ import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
 
 //TODO: Rename dashboard and mainframe to use capitalized classnames
-public class dashboard extends JPanel implements UIPanel{
+public class dashboard extends JPanel implements UIPanel {
 
     private final JPanel dashboard = new JPanel();
     private final JPanel titleComboBox = new JPanel();
@@ -40,9 +40,11 @@ public class dashboard extends JPanel implements UIPanel{
         dashboard.validate();
         return dashboard;
     }
+
     public dashboard() {
         initialize();
     }
+
     private static void deleteAllChildren(Container container) {
         Component[] components = container.getComponents();
         for (Component component : components) {
@@ -56,6 +58,7 @@ public class dashboard extends JPanel implements UIPanel{
         container.revalidate();
         container.repaint();
     }
+
     public void initialize() {
 
         deleteAllChildren(dashboard);
@@ -118,7 +121,6 @@ public class dashboard extends JPanel implements UIPanel{
         //comboBox.setSelectedIndex(currentDroneId - lowestDroneId);
 
 
-
         //JFreeChart
         JFreeChart barChart = createBarChart(currentDroneId);
         ChartPanel barPanel = new ChartPanel(barChart);
@@ -157,6 +159,7 @@ public class dashboard extends JPanel implements UIPanel{
         dashboard.setBackground(Color.DARK_GRAY);
         dashboard.setForeground(Color.BLUE);
     }
+
     @Override
     public void refreshData() {
         this.dataStorage = Main.getDataStorage();
@@ -169,19 +172,16 @@ public class dashboard extends JPanel implements UIPanel{
         comboBox.setSelectedItem(before);
     }
 
-    public void reloadPanel(Object value)
-    {
+    public void reloadPanel(Object value) {
         if (value != null) {
-            currentDroneId = ((Drones)comboBox.getSelectedItem()).getId();
-            initialize();
+            if (value instanceof Drones) {
+                comboBox.setSelectedItem(value);
+                currentDroneId = ((Drones) value).getId();
+                initialize();
+            }
         }
     }
-    /*public void reloadPanelFromHistory(Object value) {
-        if (value != null) {
-            comboBox.setSelectedItem(value);
-        }
-    }
-*/
+
     public static JLabel createLabel(String text, int x, int y) {
         JLabel label = new JLabel(text);
         label.setBounds(x, y, 200, 50);
@@ -287,6 +287,7 @@ public class dashboard extends JPanel implements UIPanel{
         }
         return dataset;
     }
+
     private double computeAverageSpeed(int DroneId) {
 
         DataStorage dataStorage = Main.getDataStorage();
@@ -306,20 +307,6 @@ public class dashboard extends JPanel implements UIPanel{
         } else {
             return 0;
         }
-    }
-}
-class droneCellRenderer extends DefaultListCellRenderer {
-    public Component getListCellRendererComponent(
-            JList list,
-            Object value,
-            int index,
-            boolean isSelected,
-            boolean cellHasFocus) {
-        if (value instanceof Drones) {
-            value = "Drone " + ((Drones) value).getId();
-        }
-        super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-        return this;
     }
 }
 
