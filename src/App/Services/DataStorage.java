@@ -405,3 +405,8 @@ public class DataStorage {
         return droneDynamicsList;
     }
 }
+class DataStorageNotAbleToPopulate extends Exception {
+    public DataStorageNotAbleToPopulate(String errorMessage) {
+        super(errorMessage);
+    }
+}
