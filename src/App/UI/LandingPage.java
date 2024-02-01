@@ -41,6 +41,7 @@ public class LandingPage {
     public void dataLoaded()
     {
         startAppButton.setEnabled(true);
+        startAppButton.setText("Start Application");
     }
     private void setupBackground() {
         try {
@@ -82,7 +83,7 @@ public class LandingPage {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridy = 6;
 
-        startAppButton = new JButton("Start Application");
+        startAppButton = new JButton("Loading Data");
         startAppButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
         startAppButton.addActionListener(e -> startApplication());
         startAppButton.setEnabled(false);
