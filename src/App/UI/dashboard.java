@@ -2,6 +2,7 @@ package App.UI;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.util.List;
 import javax.swing.JLabel;
 
@@ -18,6 +19,7 @@ import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
 
+//TODO: Rename dashboard and mainframe to use capitalized classnames
 public class dashboard extends JPanel implements UIPanel{
 
     private final JPanel dashboard = new JPanel();
@@ -28,9 +30,11 @@ public class dashboard extends JPanel implements UIPanel{
     private final JPanel pie_chart = new JPanel();
     private final JPanel line_chart = new JPanel();
     private final JLabel title = new JLabel("Dashboard");
-    private JComboBox comboBox;
+    private JComboBox comboBox = new JComboBox<>();
     private DataStorage dataStorage;
     int currentDroneId = Main.getDataStorage().getDronesList().getFirst().getId();
+    private int lowestDroneId = 71;
+    private ActionListener actionListener;
 
     public JPanel getJPanel() {
         dashboard.validate();
@@ -63,7 +67,7 @@ public class dashboard extends JPanel implements UIPanel{
         title.setVerticalAlignment(JLabel.TOP);
         title.setFont(new Font(null, Font.PLAIN, 25));
 
-        int lowestDroneId = 71;
+
         JLabel manufacturer = createLabel("Manufacturer: " + dataStorage.getDronesList().get(currentDroneId - lowestDroneId).getDronetype().getManufacturer(), 0, 0);
         JLabel typename = createLabel("Typename: " + dataStorage.getDronesList().get(currentDroneId - lowestDroneId).getDronetype().getTypename(), 0, 15);
         JLabel serialnumber = createLabel("Serialnumber: " + dataStorage.getDronesList().get(currentDroneId - lowestDroneId).getSerialnumber(), 0, 30);
@@ -96,18 +100,24 @@ public class dashboard extends JPanel implements UIPanel{
         line_chart.setBackground(Color.LIGHT_GRAY);
 
         //JComboBox
-        comboBox = new JComboBox<>();
         comboBox.setBackground(Color.CYAN);
         comboBox.setSize(90, 30);
         comboBox.setAlignmentX(250);
         comboBox.setAlignmentY(0);
-        //Find Renderer in History.java
-        comboBox.setRenderer(new droneCellRenderer());
-        for (Drones drone : dataStorage.getDronesList()) {
-            comboBox.addItem(drone);
+        if (comboBox.getItemCount() == 0) {
+            comboBox.setRenderer(new droneCellRenderer());
+
+            for (Drones d : dataStorage.getDronesList()) {
+                comboBox.addItem(d);
+            }
+            comboBox.addActionListener(e -> reloadPanel(comboBox.getSelectedItem()));
         }
-        comboBox.setSelectedIndex(currentDroneId - lowestDroneId);
-        comboBox.addActionListener(e -> reloadPanel(comboBox.getSelectedItem()));
+
+        //Find Renderer in History.java
+        //refreshComboBox();
+        //comboBox.setSelectedIndex(currentDroneId - lowestDroneId);
+
+
 
         //JFreeChart
         JFreeChart barChart = createBarChart(currentDroneId);
@@ -146,22 +156,33 @@ public class dashboard extends JPanel implements UIPanel{
         dashboard.setLayout(new GridLayout(2, 2, 10, 10));
         dashboard.setBackground(Color.DARK_GRAY);
         dashboard.setForeground(Color.BLUE);
-        dashboard.setVisible(true);
-        dashboard.validate();
     }
-
     @Override
-    public void refreshData(DataStorage newDataStorage) {
-        this.dataStorage = newDataStorage;
+    public void refreshData() {
+        this.dataStorage = Main.getDataStorage();
+        //this.refreshComboBox();
+        Object before = comboBox.getSelectedItem();
+        comboBox.removeAllItems();
+        for (Drones d : dataStorage.getDronesList()) {
+            comboBox.addItem(d);
+        }
+        //comboBox.addActionListener(e -> reloadPanel(comboBox.getSelectedItem()));
+        comboBox.setSelectedItem(before);
     }
 
-    public void reloadPanel(Object value) {
+    public void reloadPanel(Object value)
+    {
         if (value != null) {
-            currentDroneId = ((Drones) value).getId();//Integer.parseInt(valueStr.replace("DroneId: ", ""));
+            currentDroneId = ((Drones)comboBox.getSelectedItem()).getId();
             initialize();
         }
     }
-
+    /*public void reloadPanelFromHistory(Object value) {
+        if (value != null) {
+            comboBox.setSelectedItem(value);
+        }
+    }
+*/
     public static JLabel createLabel(String text, int x, int y) {
         JLabel label = new JLabel(text);
         label.setBounds(x, y, 200, 50);

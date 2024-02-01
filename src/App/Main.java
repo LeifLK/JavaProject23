@@ -6,9 +6,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.net.MalformedURLException;
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class Main {
     private static final Logger LOGGER = LogManager.getLogger(Main.class);
-    private static  DataStorage dataStorage;
+    private static DataStorage dataStorage;
 
     public static void setDataStorage(DataStorage newDataStorage) {
         dataStorage = newDataStorage;
@@ -51,8 +54,14 @@ public class Main {
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
-        refreshData();
-
+        Timer timer = new Timer();
+        timer.schedule( new TimerTask() {
+            public void run() {
+                refreshData();
+                //TODO: Fix logging message
+                LOGGER.info("dataStorage has tried to refresh");
+            }
+        }, 10000, 60*500); // 0, 60*1000);
     }
     public static void refreshData()
     {
@@ -63,6 +72,7 @@ public class Main {
                     dataStorage = newDataStorage;
                     LOGGER.info("dataStorage has been updated");
                     dataStorage.saveDataStorage();
+                    System.out.println("New  Data storage has elements = " + dataStorage.getDronesList().size());
                     LOGGER.info("new dataStorage has been saved");
                 }
             }

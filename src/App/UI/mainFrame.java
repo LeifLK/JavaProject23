@@ -1,5 +1,6 @@
 package App.UI;
 
+import App.Main;
 import App.Model.Drones;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -10,6 +11,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 public class mainFrame extends JFrame implements ActionListener {
 
@@ -18,12 +22,14 @@ public class mainFrame extends JFrame implements ActionListener {
     private final JButton dashboardButton;
     private final JButton catalogButton;
     private final JButton historyButton;
-
     JFrame program;
     final JPanel rightPanel;
     final JPanel buttonPanelLeft;
     final CardLayout cardLayout;
+    final Overview overview;
     final dashboard dashboard;
+    final Catalog catalog;
+    final History history;
 
     public mainFrame() {
 
@@ -59,7 +65,6 @@ public class mainFrame extends JFrame implements ActionListener {
         historyButton.setFocusable(false);
         historyButton.addActionListener(this);
 
-
         // JPanel
         rightPanel = new JPanel();
         rightPanel.setBackground(Color.DARK_GRAY);
@@ -81,10 +86,10 @@ public class mainFrame extends JFrame implements ActionListener {
         catalogPanel.setBackground(Color.DARK_GRAY);
         catalogPanel.setForeground(Color.WHITE);
 
-        Overview overview = new Overview();
+        overview = new Overview();
         dashboard = new dashboard();
-        Catalog catalog = new Catalog();
-        History history = new History();
+        catalog = new Catalog();
+        history = new History();
         history.setMainFrame(this);
 
         rightPanel.add("Overview", overview.getJPanel());
@@ -102,6 +107,7 @@ public class mainFrame extends JFrame implements ActionListener {
         buttonPanelLeft.add(dashboardButton);
         buttonPanelLeft.add(catalogButton);
         buttonPanelLeft.add(historyButton);
+
         program.add(rightPanel);
         program.add(buttonPanelLeft);
         program.setResizable(false);
@@ -119,6 +125,14 @@ public class mainFrame extends JFrame implements ActionListener {
         {
             LOGGER.warn("ImageIcon URL is malformed");
         }
+        java.util.Timer timer = new Timer();
+        timer.schedule( new TimerTask() {
+            public void run() {
+                refreshPanels();
+                //TODO: Fix to logging
+                System.out.println("refreshing Panels");
+            }
+        }, 25*1000, 60*500);//30*1000, 60*1000);
     }
 
     @Override
@@ -126,6 +140,7 @@ public class mainFrame extends JFrame implements ActionListener {
 
         if (e.getSource() == overviewButton) {
             cardLayout.show(rightPanel, "Overview");
+            overview.refreshData();
         } else if (e.getSource() == dashboardButton) {
             cardLayout.show(rightPanel, "Dashboard");
         } else if (e.getSource() == catalogButton) {
@@ -134,7 +149,14 @@ public class mainFrame extends JFrame implements ActionListener {
             cardLayout.show(rightPanel, "History");
         }
     }
-
+    public void refreshPanels()
+    {
+        //TODO: just create a button for exactly this method. no backend!
+        overview.refreshData();
+        catalog.refreshData();
+        dashboard.refreshData();
+        history.refreshData();
+    }
     public void showDashboard(Drones drone) {
         cardLayout.show(rightPanel, "Dashboard");
         dashboard.reloadPanel(drone);

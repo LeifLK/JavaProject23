@@ -7,50 +7,65 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
+import App.Main;
 import App.Model.DroneDynamics;
 import App.Model.Drones;
 import App.Services.DataStorage;
 
 public class History extends JPanel implements UIPanel {
-    private final List<List<DroneDynamics>> droneDynamicsPerDrone = new ArrayList<>();
-
-    private final JPanel timeSliderPanel = new JPanel();
+    private List<List<DroneDynamics>> droneDynamicsPerDrone = new ArrayList<>();
+    //private final JPanel timeSliderPanel = new JPanel();
     private final JLabel timeLabel = new JLabel();
     private final JFormattedTextField timeInput = new JFormattedTextField();
-    private final JPanel comboBoxPanel = new JPanel();
+    private JPanel comboBoxPanel = new JPanel();
     private mainFrame mainmainFrame;
-    private JPanel drawnDronePanel;
+    private DrawingPanel drawnDronePanel;
     private JSlider timeSlider;
     private JComboBox<Object> comboBox;
     private DataStorage dataStorage;
+    private JPanel topPanel;
     void setComboxBoxToEmpty() {
         comboBox.setSelectedIndex(0);
         this.validate();
     }
     public History() {
-        initialize();
+        this.initialize();
     }
 
     public void initialize()
     {
+        this.removeAll();
+        /*if (timeSliderPanel != null)
+            timeSliderPanel.removeAll();
+        if (topPanel != null)
+            topPanel.removeAll();*/
         this.setLayout(new BorderLayout());
         dataStorage = App.Main.getDataStorage();
         List<Drones> drones = dataStorage.getDronesList();
         for (Drones drone : drones) {
             droneDynamicsPerDrone.add(dataStorage.getDynamicsForDrone(drone.getId()));
         }
-        int maxDroneDynamics = droneDynamicsPerDrone.getLast().size() - 1;
 
-        this.add(createTopPanel(), BorderLayout.NORTH);
-        initTimeSliderPanel(maxDroneDynamics, maxDroneDynamics);
-        initDroneDrawingPanel(maxDroneDynamics, null);
+        int maxDroneDynamics = droneDynamicsPerDrone.getLast().size() - 1;
+        createTopPanel();
+        JPanel timeSliderPanel = createTimeSliderPanel(maxDroneDynamics, maxDroneDynamics);
+
+        drawnDronePanel = getNewDrawingPanel(maxDroneDynamics, null);
+        this.add(drawnDronePanel, BorderLayout.CENTER);
         this.add(timeSliderPanel, BorderLayout.SOUTH);
         this.validate();
     }
 
     @Override
-    public void refreshData(DataStorage newDataStorage) {
-        this.dataStorage = newDataStorage;
+    public void refreshData() {
+        this.dataStorage = Main.getDataStorage();
+        droneDynamicsPerDrone = new ArrayList<>();
+        List<Drones> drones = dataStorage.getDronesList();
+        for (Drones drone : drones) {
+            droneDynamicsPerDrone.add(dataStorage.getDynamicsForDrone(drone.getId()));
+        }
+        refreshDrawingPanel(timeSlider.getValue(), comboBox.getSelectedItem());
+        refreshDroneSelector();
     }
 
     public void setMainFrame(mainFrame mainFrame) {
@@ -61,18 +76,19 @@ public class History extends JPanel implements UIPanel {
         return mainmainFrame;
     }
 
-    private JPanel createTopPanel() {
-        JPanel topPanel = new JPanel();
+    private void createTopPanel() {
+        topPanel = new JPanel();
         topPanel.setLayout(new BorderLayout());
         initDroneSelector();
         topPanel.add(comboBoxPanel, BorderLayout.WEST);
         refreshTimeLabel(0);
         topPanel.add(timeLabel, BorderLayout.EAST);
-        return topPanel;
+        this.add(topPanel, BorderLayout.NORTH);
     }
 
-    private void initTimeSliderPanel(int max, int currentTick) {
+    private JPanel createTimeSliderPanel(int max, int currentTick) {
 
+        JPanel timeSliderPanel = new JPanel();
         timeSliderPanel.setLayout(new GridBagLayout());
         //timeSliderPanel.setBorder(BorderFactory.createEmptyBorder());
         GridBagConstraints gbConstraints = new GridBagConstraints();
@@ -105,21 +121,39 @@ public class History extends JPanel implements UIPanel {
         timeSliderPanel.setPreferredSize(new Dimension(400, 120));
         timeSliderPanel.setMaximumSize(new Dimension(550, 120));
         timeSliderPanel.add(timeInput, gbConstraints);
+        return timeSliderPanel;
     }
-    private void initDroneDrawingPanel(int valueInTicks, Drones droneToMark) {
+    private DrawingPanel getNewDrawingPanel(int valueInTicks, Drones droneToMark) {
         List<DroneDynamics> dronesToDraw = new ArrayList<>();
 
         for (List<DroneDynamics> droneDynamic : droneDynamicsPerDrone) {
             dronesToDraw.add(droneDynamic.get(valueInTicks));
         }
+
         drawnDronePanel = new DrawingPanel(dronesToDraw, this, droneToMark);
-        this.add(drawnDronePanel, BorderLayout.CENTER);
+        //this.add(drawnDronePanel, BorderLayout.CENTER);
 
         drawnDronePanel.setMaximumSize(new Dimension(400, 400));
-        this.validate();
+        return drawnDronePanel;
     }
     private void initDroneSelector() {
+        System.out.println("INitted ;Drone Comboxbox history");
+        comboBoxPanel = new JPanel();
         comboBox = new JComboBox<>();
+        comboBox.insertItemAt("None", 0);
+        for (List<DroneDynamics> droneDynamics : droneDynamicsPerDrone) {
+            comboBox.addItem(droneDynamics.getFirst().getDrone());
+        }
+        comboBox.setSelectedIndex(0);
+        comboBox.addActionListener(e -> {
+                    refreshDrawingPanel(timeSlider.getValue(), comboBox.getSelectedItem());
+                    refreshTimeLabel(timeSlider.getValue());
+                });
+        comboBox.setRenderer(new droneDynamicsCellRenderer());
+        comboBoxPanel.add(comboBox);
+    }
+    private void refreshDroneSelector() {
+        comboBox.removeAllItems();
         comboBox.insertItemAt("None", 0);
         for (List<DroneDynamics> droneDynamics : droneDynamicsPerDrone) {
             comboBox.addItem(droneDynamics.getFirst().getDrone());
@@ -130,18 +164,28 @@ public class History extends JPanel implements UIPanel {
             refreshTimeLabel(timeSlider.getValue());
         });
         comboBox.setRenderer(new droneDynamicsCellRenderer());
-        comboBoxPanel.add(comboBox);
     }
     private void refreshDrawingPanel(int timeInTicks, Object drone) {
         this.remove(drawnDronePanel);
         if (!(drone instanceof Drones)) {
-            initDroneDrawingPanel(timeInTicks, null);
+            List<DroneDynamics> dronesToDraw = new ArrayList<>();
+            int valueInTicks = timeSlider.getValue();
+            for (List<DroneDynamics> droneDynamic : droneDynamicsPerDrone) {
+                dronesToDraw.add(droneDynamic.get(valueInTicks));
+            }
+            drawnDronePanel = new DrawingPanel(dronesToDraw, this, null);
+            this.add(drawnDronePanel);
         }
         else
         {
-            initDroneDrawingPanel(timeInTicks, (Drones) drone);
+            List<DroneDynamics> dronesToDraw = new ArrayList<>();
+            int valueInTicks = timeSlider.getValue();
+            for (List<DroneDynamics> droneDynamic : droneDynamicsPerDrone) {
+                dronesToDraw.add(droneDynamic.get(valueInTicks));
+            }
+            drawnDronePanel = new DrawingPanel(dronesToDraw, this, (Drones) drone);
+            this.add(drawnDronePanel);
         }
-
         this.validate();
     }
     private void refreshTimeLabel(int timeInTicks) {
@@ -189,7 +233,7 @@ class droneDynamicsCellRenderer extends DefaultListCellRenderer {
 }
 
 class DrawingPanel extends JPanel {
-    private final List<Position> dronePositions = new ArrayList<>();
+    private List<Position> dronePositions = new ArrayList<>();
 
     DrawingPanel(List<DroneDynamics> dronesToDraw, History mainPanel, Drones droneToHighlight) {
         this.removeAll();
@@ -212,6 +256,27 @@ class DrawingPanel extends JPanel {
             this.add(position, gbConstraints);
         }
         this.validate();
+    }
+    public void refresh(List<DroneDynamics> dronesToDraw, History mainPanel, Drones droneToHighlight) {
+        this.removeAll();
+        dronePositions = new ArrayList<>();
+        this.setLayout(new GridBagLayout());
+        for (DroneDynamics droneDynamic : dronesToDraw) {
+            addDroneDynamic(droneDynamic);
+        }
+        System.out.println("Drone Positions = " + dronePositions.size());
+        for (Position position : dronePositions) {
+            GridBagConstraints gbConstraints = new GridBagConstraints();
+
+            gbConstraints.gridx = position.getYCoordinate();
+            gbConstraints.gridy = position.getXCoordinate();
+            if (droneToHighlight != null)
+                if (position.dronesAtPosition.contains(droneToHighlight))
+                    position.setBackground(Color.red);
+            position.addButton();
+            position.setHistory(mainPanel);
+            this.add(position, gbConstraints);
+        }
     }
 
     private int modifyLatitude(double latitude, int coordinate_factor) {

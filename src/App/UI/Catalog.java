@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.lang.reflect.Method;
 
+import App.Main;
 import App.Model.DroneType;
 import App.Services.DataStorage;
 import org.apache.logging.log4j.LogManager;
@@ -27,6 +28,7 @@ public class Catalog extends JPanel implements UIPanel {
     public void initialize() {
         //Clear and Reset Panel
         this.removeAll();
+        attributeList = new ArrayList<>();
         this.setLayout(new GridBagLayout());
 
         GridBagConstraints gbConstraints = new GridBagConstraints();
@@ -67,9 +69,10 @@ public class Catalog extends JPanel implements UIPanel {
     }
 
     @Override
-    public void refreshData(DataStorage newDataStorage) {
-        this.dataStorage = newDataStorage;
+    public void refreshData() {
+        this.dataStorage = Main.getDataStorage();
         maxAmountOfDrones = dataStorage.getDroneTypeList().size();
+        this.initialize();
     }
 
     private void previousPage() {
