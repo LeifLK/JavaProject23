@@ -8,6 +8,12 @@ import java.awt.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+/**
+ * The LandingPage class represents the first welcome page displayed when the application is launched.
+ * It includes a background image, a title, description, and a button to start the main application.
+ * @author Ahmad Hamd Al Ali
+ */
+
 public class LandingPage {
 
     private static final Logger LOGGER = LogManager.getLogger(LandingPage.class);
@@ -18,9 +24,16 @@ public class LandingPage {
     private JButton startAppButton;
     private ImageIcon backgroundIcon;
 
+    /**
+     * Constructs a new LandingPage instance and initializes the user interface components.
+     */
     public LandingPage() {
         initialize();
     }
+
+    /**
+     * Initializes the user interface components, including the frame, background, title, description, and start button.
+     */
 
     private void initialize() {
         frame = new JFrame();
@@ -47,11 +60,21 @@ public class LandingPage {
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
+    /**
+     * Enables the start application button and updates its text to "Start Application"
+     * when data is successfully loaded.
+     */
+
     public void dataLoaded()
     {
         startAppButton.setEnabled(true);
         startAppButton.setText("Start Application");
     }
+
+    /**
+     * Sets up the background image for the landing page.
+     */
+
     private void setupBackground() {
         try {
             backgroundIcon = new ImageIcon(new URL("https://i.imgur.com/QGkGoMH.png"));
@@ -64,6 +87,10 @@ public class LandingPage {
         }
         frame.setLayout(new GridBagLayout());
     }
+
+    /**
+     * Sets up the title and description labels on the landing page.
+     */
 
     private void setupTitleAndDescription() {
         GridBagConstraints gbc = new GridBagConstraints();
@@ -88,6 +115,10 @@ public class LandingPage {
         frame.add(descriptionLabel, gbc);
     }
 
+    /**
+     * Sets up the start application button on the landing page.
+     */
+
     private void setupStartAppButton() {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridy = 6;
@@ -100,12 +131,20 @@ public class LandingPage {
         frame.add(startAppButton, gbc);
     }
 
+    /**
+     * Disposes of the landing page frame and starts the main application.
+     */
+
     private void startApplication() {
         frame.dispose();
-        MainFrame mainFrame = new MainFrame();
+        mainFrame mainFrame = new mainFrame();
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setVisible(true);
     }
+
+    /**
+     * Displays the landing page frame.
+     */
 
     public void show() {
         frame.setVisible(true);
