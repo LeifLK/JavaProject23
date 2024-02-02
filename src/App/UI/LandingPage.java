@@ -6,7 +6,8 @@ import org.apache.logging.log4j.Logger;
 import javax.swing.*;
 import java.awt.*;
 import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
+
 
 /**
  * The LandingPage class represents the first welcome page displayed when the application is launched.
@@ -18,16 +19,13 @@ public class LandingPage {
 
     private static final Logger LOGGER = LogManager.getLogger(LandingPage.class);
     private JFrame frame;
-    private JLabel backgroundLabel;
-    private JLabel titleLabel;
-    private JLabel descriptionLabel;
     private JButton startAppButton;
     private ImageIcon backgroundIcon;
 
     /**
      * Constructs a new LandingPage instance and initializes the user interface components.
      */
-    
+
     public LandingPage() {
         initialize();
     }
@@ -44,18 +42,14 @@ public class LandingPage {
         setupStartAppButton();
         frame.setLocationRelativeTo(null);
         try {
-            //Logo
-            ImageIcon logo = new ImageIcon(new URL("https://i.imgur.com/4LylQgE.png")); // set logo of our frame
+            ImageIcon logo = new ImageIcon(URI.create("https://i.imgur.com/4LylQgE.png").toURL());
             frame.setIconImage(logo.getImage());
-        }
-        catch (MalformedURLException e)
-        {
+        } catch (MalformedURLException e) {
             LOGGER.warn("ImageIcon URL is malformed");
         }
-        if (backgroundIcon != null)
-        {
+        if (backgroundIcon != null) {
             frame.setSize(backgroundIcon.getIconWidth(), backgroundIcon.getIconHeight());
-        }else {
+        } else {
             frame.setSize(new Dimension(200, 200));
         }
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -78,12 +72,10 @@ public class LandingPage {
 
     private void setupBackground() {
         try {
-            backgroundIcon = new ImageIcon(new URL("https://i.imgur.com/QGkGoMH.png"));
-            backgroundLabel = new JLabel(backgroundIcon);
+            backgroundIcon = new ImageIcon(URI.create("https://i.imgur.com/QGkGoMH.png").toURL());
+            JLabel backgroundLabel = new JLabel(backgroundIcon);
             frame.setContentPane(backgroundLabel);
-        }
-        catch (MalformedURLException e)
-        {
+        } catch (MalformedURLException e) {
             LOGGER.warn("Landing page could not load background Image from  URL");
         }
         frame.setLayout(new GridBagLayout());
@@ -97,7 +89,7 @@ public class LandingPage {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
 
-        titleLabel = new JLabel("Drone Simulator");
+        JLabel titleLabel = new JLabel("Drone Simulator");
         titleLabel.setFont(new Font("Tahoma", Font.BOLD, 50));
         titleLabel.setForeground(Color.WHITE);
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -106,7 +98,7 @@ public class LandingPage {
         gbc.gridwidth = 2;
         frame.add(titleLabel, gbc);
 
-        descriptionLabel = new JLabel("Welcome to the Drone Simulator application.");
+        JLabel descriptionLabel = new JLabel("Welcome to the Drone Simulator application.");
         descriptionLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
         descriptionLabel.setForeground(Color.WHITE);
         descriptionLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -138,7 +130,7 @@ public class LandingPage {
 
     private void startApplication() {
         frame.dispose();
-        mainFrame mainFrame = new mainFrame();
+        MainFrame mainFrame = new MainFrame();
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setVisible(true);
     }

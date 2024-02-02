@@ -339,7 +339,6 @@ public class DataStorage {
         if (list1.isEmpty() && list2.isEmpty()) {
             return true;
         }
-        // Comparing the last elements
         return list1.get(list1.size() - 1).equals(list2.get(list2.size() - 1));
     }
 

@@ -39,7 +39,7 @@ public class Dashboard extends JPanel implements UIPanel {
     private final JPanel pie_chart = new JPanel();
     private final JPanel line_chart = new JPanel();
     private final JLabel title = new JLabel("Dashboard");
-    private final JComboBox<Object> comboBox = new JComboBox<>();
+    private JComboBox<Object> comboBox = new JComboBox<>();
     private DataStorage dataStorage;
     int currentDroneId = Main.getDataStorage().getDronesList().getFirst().getId();
  /**
@@ -74,123 +74,126 @@ public class Dashboard extends JPanel implements UIPanel {
      * Initializes the dashboard, setting up its components, including labels, panels, combo box, and charts.
      * This method is called during the construction of the Dashboard instance.
      */
-    public void initialize() {
+     public void initialize() {
 
-        deleteAllChildren(dashboard);
-        dataStorage = Main.getDataStorage();
+         deleteAllChildren(dashboard);
+         dataStorage = Main.getDataStorage();
 
-        title.setBounds(0, 0, 300, 50);
-        title.setHorizontalAlignment(JLabel.CENTER);
-        title.setVerticalAlignment(JLabel.TOP);
-        title.setFont(new Font(null, Font.PLAIN, 25));
+         //JLabels
+         title.setBounds(0, 0, 300, 50);
+         title.setHorizontalAlignment(JLabel.CENTER);
+         title.setVerticalAlignment(JLabel.TOP);
+         title.setFont(new Font(null, Font.PLAIN, 25));
 
+         int lowestDroneId = 71;
+         JLabel manufacturer = createLabel("Manufacturer: " + dataStorage.getDronesList().get(currentDroneId - lowestDroneId).getDronetype().getManufacturer(), 0, 0);
+         JLabel typename = createLabel("Typename: " + dataStorage.getDronesList().get(currentDroneId - lowestDroneId).getDronetype().getTypename(), 0, 15);
+         JLabel serialnumber = createLabel("Serialnumber: " + dataStorage.getDronesList().get(currentDroneId - lowestDroneId).getSerialnumber(), 0, 30);
+         JLabel carriageWeight = createLabel("Carriage Weight:  " + dataStorage.getDronesList().get(currentDroneId - lowestDroneId).getCarriageWeight(), 0, 45);
+         JLabel carriageType = createLabel("Carriage Type: " + dataStorage.getDronesList().get(currentDroneId - lowestDroneId).getCarriageType(), 0, 60);
+         JLabel createdDate = createLabel("Created: " + dataStorage.getDronesList().get(currentDroneId - lowestDroneId).getCreated(), 0, 75);
+         JLabel averageSpeedLabel = createLabel("AverageSpeed in km/h: " + computeAverageSpeed(currentDroneId), 0, 90);
 
-        int lowestDroneId = 71;
-        JLabel manufacturer = createLabel("Manufacturer: " + dataStorage.getDronesList().get(currentDroneId - lowestDroneId).getDronetype().getManufacturer(), 0, 0);
-        JLabel typename = createLabel("Typename: " + dataStorage.getDronesList().get(currentDroneId - lowestDroneId).getDronetype().getTypename(), 0, 15);
-        JLabel serialnumber = createLabel("Serialnumber: " + dataStorage.getDronesList().get(currentDroneId - lowestDroneId).getSerialnumber(), 0, 30);
-        JLabel carriageWeight = createLabel("Carriage Weight:  " + dataStorage.getDronesList().get(currentDroneId - lowestDroneId).getCarriageWeight(), 0, 45);
-        JLabel carriageType = createLabel("Carriage Type: " + dataStorage.getDronesList().get(currentDroneId - lowestDroneId).getCarriageType(), 0, 60);
-        JLabel createdDate = createLabel("Created: " + dataStorage.getDronesList().get(currentDroneId - lowestDroneId).getCreated(), 0, 75);
-        JLabel averageSpeedLabel = createLabel("AverageSpeed in km/h: " + computeAverageSpeed(currentDroneId), 0, 90);
+         //JPanels
+         titleComboBox.setBounds(0, 0, 345, 80);
+         titleComboBox.setLayout(new BorderLayout());
+         titleComboBox.setBackground(Color.LIGHT_GRAY);
 
-        titleComboBox.setBounds(0, 0, 345, 80);
-        titleComboBox.setLayout(new BorderLayout());
-        titleComboBox.setBackground(Color.LIGHT_GRAY);
+         droneInfo.setBounds(0, 80, 345, 310);
+         droneInfo.setLayout(new GridLayout(7, 1));
+         droneInfo.setBackground(Color.LIGHT_GRAY);
 
-        droneInfo.setBounds(0, 80, 345, 310);
-        droneInfo.setLayout(new GridLayout(7, 1));
-        droneInfo.setBackground(Color.LIGHT_GRAY);
+         info.setBounds(0, 0, 345, 390);
+         info.setLayout(null);
+         info.setBackground(Color.LIGHT_GRAY);
 
-        info.setBounds(0, 0, 345, 390);
-        info.setLayout(null);
-        info.setBackground(Color.LIGHT_GRAY);
+         bar_chart.setBounds(0, 0, 100, 100);
+         bar_chart.setBackground(Color.LIGHT_GRAY);
 
-        bar_chart.setBounds(0, 0, 100, 100);
-        bar_chart.setBackground(Color.LIGHT_GRAY);
+         pie_chart.setBounds(0, 0, 100, 100);
+         pie_chart.setBackground(Color.LIGHT_GRAY);
 
+         line_chart.setBounds(0, 0, 100, 100);
+         line_chart.setBackground(Color.LIGHT_GRAY);
 
-        pie_chart.setBounds(0, 0, 100, 100);
-        pie_chart.setBackground(Color.LIGHT_GRAY);
+         comboBox = new JComboBox<>();
+         comboBox.setSize(90, 30);
+         comboBox.setAlignmentX(250);
+         comboBox.setAlignmentY(0);
+         comboBox.setRenderer(new droneCellRenderer());
+         for (Drones drone : dataStorage.getDronesList()) {
+             comboBox.addItem(drone);
+         }
+         comboBox.setSelectedIndex(currentDroneId - lowestDroneId);
+         comboBox.addActionListener(e -> reloadPanel(comboBox.getSelectedItem()));
 
-        line_chart.setBounds(0, 0, 100, 100);
-        line_chart.setBackground(Color.LIGHT_GRAY);
+         JFreeChart barChart = createBarChart(currentDroneId);
+         ChartPanel barPanel = new ChartPanel(barChart);
+         barPanel.setPreferredSize(new Dimension(325, 385));
 
-        comboBox.setSize(90, 30);
-        comboBox.setAlignmentX(250);
-        comboBox.setAlignmentY(0);
-        if (comboBox.getItemCount() == 0) {
-            comboBox.setRenderer(new droneCellRenderer());
+         JFreeChart pieChart = createPieChart(currentDroneId);
+         ChartPanel piePanel = new ChartPanel(pieChart);
+         piePanel.setPreferredSize(new Dimension(340, 345));
 
-            for (Drones d : dataStorage.getDronesList()) {
-                comboBox.addItem(d);
-            }
-            comboBox.addActionListener(e -> reloadPanel(comboBox.getSelectedItem()));
-        }
+         JFreeChart lineChart = createLineChart(currentDroneId);
+         ChartPanel linePanel = new ChartPanel(lineChart);
+         linePanel.setPreferredSize(new Dimension(315, 350));
 
-        JFreeChart barChart = createBarChart(currentDroneId);
-        ChartPanel barPanel = new ChartPanel(barChart);
-        barPanel.setPreferredSize(new Dimension(325, 385));
+         dashboard.setSize(700, 800);
+         titleComboBox.add(comboBox).setLocation(250, 10);
+         titleComboBox.add(title, BorderLayout.CENTER);
+         titleComboBox.setLayout(new BorderLayout());
+         info.add(titleComboBox);
+         droneInfo.add(manufacturer);
+         droneInfo.add(typename);
+         droneInfo.add(serialnumber);
+         droneInfo.add(carriageWeight);
+         droneInfo.add(carriageType);
+         droneInfo.add(createdDate);
+         droneInfo.add(averageSpeedLabel);
+         info.add(droneInfo);
+         dashboard.add(info);
+         bar_chart.add(barPanel);
+         dashboard.add(bar_chart);
+         pie_chart.add(piePanel);
+         dashboard.add(pie_chart);
+         line_chart.add(linePanel);
+         dashboard.add(line_chart);
+         dashboard.setLayout(new GridLayout(2, 2, 10, 10));
+         dashboard.setBackground(Color.DARK_GRAY);
+         dashboard.setForeground(Color.BLUE);
+         dashboard.setVisible(true);
+         dashboard.validate();
+     }
 
-        JFreeChart pieChart = createPieChart(currentDroneId);
-        ChartPanel piePanel = new ChartPanel(pieChart);
-        piePanel.setPreferredSize(new Dimension(340, 345));
-
-        JFreeChart lineChart = createLineChart(currentDroneId);
-        ChartPanel linePanel = new ChartPanel(lineChart);
-        linePanel.setPreferredSize(new Dimension(315, 350));
-
-        dashboard.setSize(700, 800);
-        titleComboBox.add(comboBox).setLocation(250, 10);
-        titleComboBox.add(title, BorderLayout.CENTER);
-        titleComboBox.setLayout(new BorderLayout());
-        info.add(titleComboBox);
-        droneInfo.add(manufacturer);
-        droneInfo.add(typename);
-        droneInfo.add(serialnumber);
-        droneInfo.add(carriageWeight);
-        droneInfo.add(carriageType);
-        droneInfo.add(createdDate);
-        droneInfo.add(averageSpeedLabel);
-        info.add(droneInfo);
-        dashboard.add(info);
-        bar_chart.add(barPanel);
-        dashboard.add(bar_chart);
-        pie_chart.add(piePanel);
-        dashboard.add(pie_chart);
-        line_chart.add(linePanel);
-        dashboard.add(line_chart);
-        dashboard.setLayout(new GridLayout(2, 2, 10, 10));
-        dashboard.setBackground(Color.DARK_GRAY);
-        dashboard.setForeground(Color.BLUE);
-    }
      /**
      * Refreshes the data displayed on the dashboard by updating the DataStorage reference
      * and repopulating the drone selection combo box.
      */
-    @Override
-    public void refreshData() {
-        this.dataStorage = Main.getDataStorage();
+     @Override
+     public void refreshData() {
+         this.dataStorage = Main.getDataStorage();
 
-        Object before = comboBox.getSelectedItem();
-        comboBox.removeAllItems();
-        for (Drones d : dataStorage.getDronesList()) {
-            comboBox.addItem(d);
-        }
-        comboBox.setSelectedItem(before);
-    }
+         Object before = comboBox.getSelectedItem();
+         comboBox.removeAllItems();
+         for (Drones d : dataStorage.getDronesList()) {
+             comboBox.addItem(d);
+         }
+         comboBox.setSelectedItem(before);
+     }
      /**
-     * Reloads the dashboard panel with updated information based on the selected drone from the combo box.
-     */
-    public void reloadPanel(Object value) {
-        if (value != null) {
-            if (value instanceof Drones) {
-                comboBox.setSelectedItem(value);
-                currentDroneId = ((Drones) value).getId();
-                initialize();
-            }
-        }
-    }
+      * Reloads the dashboard panel with updated information based on the selected drone from the combo box.
+      */
+     public void reloadPanel(Object value) {
+         if (value != null) {
+             if (true) {
+                 comboBox.setSelectedItem(value);
+                 currentDroneId = ((Drones) value).getId();
+                 initialize();
+             }
+         }
+     }
+
      /**
      * Creates and returns a JLabel with the specified text and position.
      */
