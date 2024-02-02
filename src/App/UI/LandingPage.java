@@ -102,7 +102,7 @@ public class LandingPage {
 
     private void startApplication() {
         frame.dispose();
-        mainFrame mainFrame = new mainFrame();
+        MainFrame mainFrame = new MainFrame();
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setVisible(true);
     }

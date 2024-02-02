@@ -34,8 +34,14 @@ public class FileService {
         }
         return new ArrayList<>();
     }
-    public boolean fileExists(String filePath)
-    {
+
+    /**
+     * Checks if a file exists at the specified file path.
+     *
+     * @param filePath The path of the file to be checked.
+     * @return true if the file exists, false otherwise.
+     */
+    public boolean fileExists(String filePath) {
         File file = new File(filePath);
         return file.exists();
     }
