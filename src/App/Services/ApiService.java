@@ -21,7 +21,7 @@ public class ApiService {
     private static final Logger LOGGER = LogManager.getLogger(ApiService.class);
     private String cachedDroneDynamics = null;
     private static final String BASE_URL = "https://dronesim.facets-labs.com/api/";
-    private static final String TOKEN = "Token " + System.getenv("API_TOKEN");
+    private static final String TOKEN = "Token 96abe845d26eafd5c6d920a152a52a5185b4bc24";
 
     /**
      * Retrieves drone dynamics data. If the data has not been previously fetched and cached, it fetches the data from the API.
