@@ -18,8 +18,8 @@ import java.util.List;
  * Near the bottom you see a little info label a slider and a text-field (to input the tick) for the current time.
  * The middle gets a custom DroneDrawingPanel which in short, shows the Drones relative to its latitude and longitude.
  * It is called DroneDrawingPanel because in the first version drew the drones as graphics on the panel, which are now replaced by buttons, as they are more clickable.
- * @author Lennart Ochs
  *
+ * @author Lennart Ochs
  */
 public class History extends JPanel implements UIPanel {
     private final JLabel timeLabel = new JLabel();
@@ -59,6 +59,7 @@ public class History extends JPanel implements UIPanel {
         this.add(timeSliderPanel, BorderLayout.SOUTH);
         this.validate();
     }
+
     /**
      * Refreshes the DataStorage and sets the Information represented new.
      * Specifically the Data on the DrawingPanel and the DroneSelector.
@@ -74,14 +75,16 @@ public class History extends JPanel implements UIPanel {
         refreshDrawingPanel(timeSlider.getValue(), comboBox.getSelectedItem());
         refreshDroneSelector();
     }
+
     /**
      * @param mainFrame the mainFrame found in MainFrame.java
-     *  This Class needs the Mainframe of the application for forwarding the User to the Dashboard of a specific Drone.
-     *  This happens by clicking on the corresponding Popupmenu Item of a drone.
+     *                  This Class needs the Mainframe of the application for forwarding the User to the Dashboard of a specific Drone.
+     *                  This happens by clicking on the corresponding Popupmenu Item of a drone.
      */
     public void setMainFrame(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
     }
+
     public MainFrame getMainFrame() {
         return mainFrame;
     }
@@ -93,6 +96,7 @@ public class History extends JPanel implements UIPanel {
         }
         return null;
     }
+
     private void createTopPanel() {
         JPanel topPanel = new JPanel();
         topPanel.setLayout(new BorderLayout());
@@ -102,12 +106,14 @@ public class History extends JPanel implements UIPanel {
         topPanel.add(timeLabel, BorderLayout.EAST);
         this.add(topPanel, BorderLayout.NORTH);
     }
+
     private void initDroneSelector() {
         comboBoxPanel = new JPanel();
         comboBox = new JComboBox<>();
         refreshDroneSelector();
         comboBoxPanel.add(comboBox);
     }
+
     private void refreshDroneSelector() {
         comboBox.removeAllItems();
         comboBox.insertItemAt("None", 0);
@@ -121,6 +127,7 @@ public class History extends JPanel implements UIPanel {
         });
         comboBox.setRenderer(new droneCellRenderer());
     }
+
     private JPanel createTimeSliderPanel(int max, int currentTick) {
 
         JPanel timeSliderPanel = new JPanel();
@@ -172,6 +179,7 @@ public class History extends JPanel implements UIPanel {
         drawnDronePanel.setMaximumSize(new Dimension(400, 400));
         return drawnDronePanel;
     }
+
     private void refreshDrawingPanel(int timeInTicks, Object drone) {
         this.remove(drawnDronePanel);
         List<DroneDynamics> dronesToDraw = new ArrayList<>();
@@ -180,9 +188,7 @@ public class History extends JPanel implements UIPanel {
                 dronesToDraw.add(droneDynamic.get(timeInTicks));
             }
             drawnDronePanel = new DrawingPanel(dronesToDraw, this, null);
-        }
-        else
-        {
+        } else {
             int valueInTicks = timeSlider.getValue();
             for (List<DroneDynamics> droneDynamic : droneDynamicsPerDrone) {
                 dronesToDraw.add(droneDynamic.get(valueInTicks));
@@ -197,10 +203,12 @@ public class History extends JPanel implements UIPanel {
         timeLabel.setText(droneDynamicsPerDrone.get(0).get(timeInTicks).getTimeStamp());
         this.validate();
     }
+
     private void setTimeSliderValue(int value) {
         if (value < timeSlider.getMaximum())
             timeSlider.setValue(value);
     }
+
     private void reactToTimeSliderChange() {
         int value = timeSlider.getValue();
         if (comboBox.getSelectedIndex() == 0) {
@@ -214,13 +222,14 @@ public class History extends JPanel implements UIPanel {
     }
 
 }
+
 /**
  * A new CellRenderer for a ComboBox representing Drones.
  * It shows the drones as Drone ID in the Text of the ComboBox, but holds the actual drones as its values.
  * Used in History and Dashboard
- * https://stackoverflow.com/questions/27049473/implementing-listcellrenderer
- * @author martinzed314 (copied by Lennart Ochs)
+ * <a href="https://stackoverflow.com/questions/27049473/implementing-listcellrenderer">Link to source</a>
  *
+ * @author martinzed314 (copied by Lennart Ochs)
  */
 class droneCellRenderer extends DefaultListCellRenderer {
     public Component getListCellRendererComponent(
@@ -246,13 +255,14 @@ class droneCellRenderer extends DefaultListCellRenderer {
 
 class DrawingPanel extends JPanel {
     private final List<Position> dronePositions = new ArrayList<>();
+
     /**
-     * @param dronesToDraw A list of DroneDynamics, the position (Latitude & Longitude) of these droneDynamics are modified and represented by positions in a Grid bagLayout.
-     * @param mainPanel the HistoryPanel, get passed on to the positions for redirecting to the dashboard
+     * @param dronesToDraw     A list of DroneDynamics, the position (Latitude & Longitude) of these droneDynamics are modified and represented by positions in a Grid bagLayout.
+     * @param mainPanel        the HistoryPanel, get passed on to the positions for redirecting to the dashboard
      * @param droneToHighlight a single Drone to Mark in Map. Null is a viable option, if no drone is to be marked.
-     * It uses addDroneDynamic to create the Position-Objects as needed.
-     * Afterward it goes through the Positions to configure these Positions and adds them to this Panel.
-     * (if droneToHighlight != null it marks the corresponding Position red.
+     *                         It uses addDroneDynamic to create the Position-Objects as needed.
+     *                         Afterward it goes through the Positions to configure these Positions and adds them to this Panel.
+     *                         (if droneToHighlight != null it marks the corresponding Position red.
      */
     DrawingPanel(List<DroneDynamics> dronesToDraw, History mainPanel, Drones droneToHighlight) {
         this.removeAll();
@@ -279,16 +289,19 @@ class DrawingPanel extends JPanel {
 
     /**
      * Uses magic numbers to fit the DroneDynamics Latitude value to a screen coordinate
-     * @param latitude the Latitude to modify
+     *
+     * @param latitude          the Latitude to modify
      * @param coordinate_factor = 1000000000 in every call, as the coordinates Latitude & Longitude are too similar between the Drones as to differentiate them otherwise.
      * @return an int fitting to a GridBagLayout position
      */
     private int modifyLatitude(double latitude, int coordinate_factor) {
         return (int) (((latitude * coordinate_factor) % 650) + 50) / 10;
     }
+
     /**
      * Uses magic numbers to fit the DroneDynamics Longitude value to a screen coordinate
-     * @param longitude the Longitude to modify
+     *
+     * @param longitude         the Longitude to modify
      * @param coordinate_factor = 1000000000 in every call, as the coordinates Latitude & Longitude are too similar between the Drones as to differentiate them otherwise.
      * @return an int fitting to a GridBagLayout position
      */
@@ -297,9 +310,8 @@ class DrawingPanel extends JPanel {
     }
 
     /**
-     * @param droneDynamic
-     * Creates a Position from droneDynamic by modifying Latitude and Longitude.
-     * If the position is equal to an already existing Position it adds the DroneDynamics to said Position instead.
+     * @param droneDynamic Creates a Position from droneDynamic by modifying Latitude and Longitude.
+     *                     If the position is equal to an already existing Position it adds the DroneDynamics to said Position instead.
      */
     private void addDroneDynamic(DroneDynamics droneDynamic) {
         int coordinate_factor = 1000000000;
@@ -316,12 +328,14 @@ class DrawingPanel extends JPanel {
         }
     }
 }
+
 /**
  * This Class represents the Position of one or more drones.
  * It consists of a Button which opens either:
  * 1. The Popupmenu for showing the droneDynamics of the current Time (if the Position has a single Drone)
  * 2. The Popupmenu for showing all Drones located on this Position, which in turn redirects to Popup 1.
  * It overrides the equals and hashCode Method for usage of the contains method in the List of Position in the DrawnDronePanel.
+ *
  * @author Lennart Ochs
  */
 class Position extends JPanel {
@@ -351,15 +365,18 @@ class Position extends JPanel {
         Position other = (Position) o;
         return (x.intValue() == other.x.intValue() && y.intValue() == other.y.intValue());
     }
+
     @Override
     public int hashCode() {
         String xHash = String.valueOf(x.hashCode());
         String yHash = String.valueOf(y.hashCode());
         return Integer.parseInt(xHash + yHash);
     }
+
     void setHistory(History history) {
         this.history = history;
     }
+
     void addDrone(Drones drone) {
         dronesAtPosition.add(drone);
     }
@@ -375,6 +392,7 @@ class Position extends JPanel {
 
     /**
      * Please follow the comments in the implementation
+     *
      * @param droneDynamic the droneDynamic for which to show Data
      * @return a PopupMenu filled with all Data from droneDynamics, connects the Last Item of the Popupmenu to history to show the Dashboard of the selected Drone.
      */
@@ -389,8 +407,8 @@ class Position extends JPanel {
         droneInfoIdentifiers.add("Align Yaw: ");
         droneInfoIdentifiers.add("Longitude: ");
         droneInfoIdentifiers.add("Latitude: ");
-        droneInfoIdentifiers.add("Battery_status: ");
-        droneInfoIdentifiers.add("Last_seen: ");
+        droneInfoIdentifiers.add("BatteryStatus: ");
+        droneInfoIdentifiers.add("LastSeen: ");
         droneInfoIdentifiers.add("Status: ");
         List<String> droneInfoValues = new ArrayList<>();
         droneInfoValues.add(String.valueOf(droneDynamic.getDroneUrl()));
@@ -426,6 +444,7 @@ class Position extends JPanel {
 
     /**
      * Shows a specifc Popup as generated by droneDynamicToPopupMenu
+     *
      * @param drone which drone was clicked at
      */
     private void showPopupForDrone(Drones drone) {
@@ -436,11 +455,12 @@ class Position extends JPanel {
             popupMenu.show(this, 0, 0);
         }
     }
+
     /**
      * Shows Popups 1 or 2 as described.
      * (Repetition)
-     *  1. The Popupmenu for showing the droneDynamics of the current Time (if the Position has a single Drone)
-     *  2. The Popupmenu for showing all Drones located on this Position, which in turn redirects to Popup 1.
+     * 1. The Popupmenu for showing the droneDynamics of the current Time (if the Position has a single Drone)
+     * 2. The Popupmenu for showing all Drones located on this Position, which in turn redirects to Popup 1.
      */
     private void positionClicked() {
         if (dronesAtPosition.size() > 1) {
@@ -457,6 +477,7 @@ class Position extends JPanel {
             showPopupForDrone(dronesAtPosition.getFirst());
         }
     }
+
     private void setTooltips(JButton button) {
         if (dronesAtPosition.size() == 1) {
             button.setToolTipText("Show here located Drone's dynamics (ID: " + dronesAtPosition.getFirst().getId() + ")");

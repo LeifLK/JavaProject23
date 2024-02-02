@@ -30,6 +30,7 @@ public class FileService {
                 return (List<T>) ois.readObject();
             } catch (IOException | ClassNotFoundException e) {
                 LOGGER.error("Error reading from file: {}", filePath, e);
+                LOGGER.error("Please delete {}", filePath);
             }
         }
         return new ArrayList<>();

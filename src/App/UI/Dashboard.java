@@ -1,15 +1,12 @@
 package App.UI;
 
-import javax.swing.*;
-import java.awt.*;
-import java.util.List;
-import javax.swing.JLabel;
-
 import App.Main;
 import App.Model.DroneDynamics;
 import App.Model.Drones;
 import App.Services.DataStorage;
-import org.jfree.chart.*;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.renderer.category.BarRenderer;
@@ -17,6 +14,10 @@ import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.List;
  /**
  * The Dashboard class represents a graphical user interface panel that displays information
  * and charts related to drone dynamics. It includes features such as speed statistics,
@@ -78,7 +79,6 @@ public class Dashboard extends JPanel implements UIPanel {
         deleteAllChildren(dashboard);
         dataStorage = Main.getDataStorage();
 
-        //JLabels
         title.setBounds(0, 0, 300, 50);
         title.setHorizontalAlignment(JLabel.CENTER);
         title.setVerticalAlignment(JLabel.TOP);
@@ -94,7 +94,6 @@ public class Dashboard extends JPanel implements UIPanel {
         JLabel createdDate = createLabel("Created: " + dataStorage.getDronesList().get(currentDroneId - lowestDroneId).getCreated(), 0, 75);
         JLabel averageSpeedLabel = createLabel("AverageSpeed in km/h: " + computeAverageSpeed(currentDroneId), 0, 90);
 
-        //JPanels
         titleComboBox.setBounds(0, 0, 345, 80);
         titleComboBox.setLayout(new BorderLayout());
         titleComboBox.setBackground(Color.LIGHT_GRAY);
@@ -117,7 +116,6 @@ public class Dashboard extends JPanel implements UIPanel {
         line_chart.setBounds(0, 0, 100, 100);
         line_chart.setBackground(Color.LIGHT_GRAY);
 
-        //JComboBox
         comboBox.setSize(90, 30);
         comboBox.setAlignmentX(250);
         comboBox.setAlignmentY(0);
@@ -130,7 +128,6 @@ public class Dashboard extends JPanel implements UIPanel {
             comboBox.addActionListener(e -> reloadPanel(comboBox.getSelectedItem()));
         }
 
-        //JFreeChart
         JFreeChart barChart = createBarChart(currentDroneId);
         ChartPanel barPanel = new ChartPanel(barChart);
         barPanel.setPreferredSize(new Dimension(325, 385));
@@ -143,7 +140,6 @@ public class Dashboard extends JPanel implements UIPanel {
         ChartPanel linePanel = new ChartPanel(lineChart);
         linePanel.setPreferredSize(new Dimension(315, 350));
 
-        // Dashboard
         dashboard.setSize(700, 800);
         titleComboBox.add(comboBox).setLocation(250, 10);
         titleComboBox.add(title, BorderLayout.CENTER);
