@@ -27,6 +27,7 @@ public class LandingPage {
     /**
      * Constructs a new LandingPage instance and initializes the user interface components.
      */
+    
     public LandingPage() {
         initialize();
     }
