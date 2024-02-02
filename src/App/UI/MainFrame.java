@@ -17,9 +17,9 @@ import java.net.URL;
  * @author André
  */
 
-public class mainFrame extends JFrame implements ActionListener {
+public class MainFrame extends JFrame implements ActionListener {
 
-    private static final Logger LOGGER = LogManager.getLogger(mainFrame.class);
+    private static final Logger LOGGER = LogManager.getLogger(MainFrame.class);
     private final JButton overviewButton;
     private final JButton dashboardButton;
     private final JButton catalogButton;
@@ -29,18 +29,17 @@ public class mainFrame extends JFrame implements ActionListener {
     final JPanel buttonPanelLeft;
     final CardLayout cardLayout;
     final Overview overview;
-    final dashboard dashboard;
+    final Dashboard dashboard;
     final Catalog catalog;
     final History history;
 
  /**
  * This is our constructor to create our Main Frame.
- * Here we create our buttons aswell as our Main Panels and and the panels used as cards for the card Layout.
- * After all we add them to the Main Frame called program.
+ * Here we create our buttons as well as our Main Panels and the panels used as cards for the card Layout.
  * At the end we also add our Logo to the Main Frame
  * @author André
  */
-    public mainFrame() {
+    public MainFrame() {
 
         //JButton
         overviewButton = new JButton();
@@ -99,7 +98,7 @@ public class mainFrame extends JFrame implements ActionListener {
         catalogPanel.setForeground(Color.WHITE);
 
         overview = new Overview();
-        dashboard = new dashboard();
+        dashboard = new Dashboard();
         catalog = new Catalog();
         history = new History();
         history.setMainFrame(this);
@@ -110,11 +109,9 @@ public class mainFrame extends JFrame implements ActionListener {
         rightPanel.add("History", history);
 
         // JFrame
-        //program = new JFrame();
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setSize(800, 800);
         this.setTitle("Drone Manager");
-        //rightPanel.add(label);
         buttonPanelLeft.add(overviewButton);
         buttonPanelLeft.add(dashboardButton);
         buttonPanelLeft.add(catalogButton);
