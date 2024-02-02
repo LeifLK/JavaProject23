@@ -9,7 +9,12 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
 
-//The Overview class represents a panel displaying an overview of drones.
+/**
+ * The Overview class represents a panel in the user interface that displays an overview of drones.
+ * It includes a table showing relevant information about each drone, such as ID,
+ * manufacturer, typename, serial number, creation date, status, and last seen.
+ * @author Ahmad Hamd Al Ali
+ */
 
 public class Overview extends JPanel implements UIPanel{
 
@@ -18,14 +23,28 @@ public class Overview extends JPanel implements UIPanel{
     private DataStorage dataStorage;
     private final JPanel overview = new JPanel();
 
+    /**
+     * Returns the JPanel containing the overview.
+     *
+     * @return The JPanel containing the overview.
+     */
+
     public JPanel getJPanel() {
         overview.validate();
         return overview;
     }
 
+    /**
+     * Constructs a new Overview instance and initializes the user interface components.
+     */
+
     public Overview() {
         this.initialize();
     }
+
+    /**
+     * Initializes the user interface components, including the drone table and its appearance.
+     */
 
     public void initialize() {
         overview.removeAll();
@@ -41,17 +60,30 @@ public class Overview extends JPanel implements UIPanel{
         addComponentsToPanel();
     }
 
+    /**
+     * Refreshes the data in the overview by updating the drone table.
+     */
+
     @Override
     public void refreshData() {
         dataStorage = Main.getDataStorage();
         updateDroneTable();
     }
 
+    /**
+     * Adds the drone table to the center of the panel.
+     */
+
     private void addComponentsToPanel() {
         JPanel centerPanel = new JPanel(new BorderLayout());
         centerPanel.add(new JScrollPane(droneTable), BorderLayout.CENTER);
         overview.add(centerPanel, BorderLayout.CENTER);
     }
+
+    /**
+     * Configures the appearance of the drone table, such as disabling editing,
+     * setting column widths, and disabling column reordering.
+     */
 
     private void configureTableAppearance() {
         droneTable.setEnabled(false);
@@ -60,6 +92,10 @@ public class Overview extends JPanel implements UIPanel{
         droneTable.setAutoResizeMode(0);
         setColumnWidths();
     }
+
+    /**
+     * Sets the preferred widths for each column in the drone table.
+     */
 
     private void setColumnWidths() {
         droneTable.getColumnModel().getColumn(0).setPreferredWidth(30);   // ID
@@ -71,6 +107,10 @@ public class Overview extends JPanel implements UIPanel{
         droneTable.getColumnModel().getColumn(6).setPreferredWidth(200);  // Last Seen
     }
 
+    /**
+     * Updates the drone table by removing existing rows and populating it with the latest drone data.
+     */
+
     private void updateDroneTable() {
         dataStorage = Main.getDataStorage();
         for (int i = droneTableModel.getRowCount()-1; i >= 0 ; i--) {
@@ -80,6 +120,10 @@ public class Overview extends JPanel implements UIPanel{
             populateTableRow(currentDrone);
         }
     }
+
+/**
+ * Populates a row in the drone table with information from the given drone.
+ */
 
     private void populateTableRow(Drones currentDrone) {
         int id = currentDrone.getId();
