@@ -1,16 +1,16 @@
 package App.UI;
 
 
-import javax.swing.*;
-import javax.swing.border.LineBorder;
-import java.awt.*;
-import java.util.*;
-import java.util.List;
-
 import App.Main;
 import App.Model.DroneDynamics;
 import App.Model.Drones;
 import App.Services.DataStorage;
+
+import javax.swing.*;
+import javax.swing.border.LineBorder;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -26,7 +26,7 @@ public class History extends JPanel implements UIPanel {
     private final JFormattedTextField timeInput = new JFormattedTextField();
     private List<List<DroneDynamics>> droneDynamicsPerDrone = new ArrayList<>();
     private JPanel comboBoxPanel = new JPanel();
-    private mainFrame mainFrame;
+    private MainFrame mainFrame;
     private DrawingPanel drawnDronePanel;
     private JSlider timeSlider;
     private JComboBox<Object> comboBox;
@@ -79,10 +79,10 @@ public class History extends JPanel implements UIPanel {
      *  This Class needs the Mainframe of the application for forwarding the User to the Dashboard of a specific Drone.
      *  This happens by clicking on the corresponding Popupmenu Item of a drone.
      */
-    public void setMainFrame(mainFrame mainFrame) {
+    public void setMainFrame(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
     }
-    public mainFrame getMainFrame() {
+    public MainFrame getMainFrame() {
         return mainFrame;
     }
 
