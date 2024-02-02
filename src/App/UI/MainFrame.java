@@ -154,7 +154,8 @@ public class MainFrame extends JFrame implements ActionListener {
     public void refreshPanels() {
         overview.refreshData();
         catalog.refreshData();
-        dashboard.refreshData();
+        //Had to be removed last minute because of visual bugs
+        //dashboard.refreshData();
         history.refreshData();
         rightPanel.validate();
     }
