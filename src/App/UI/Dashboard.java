@@ -186,7 +186,7 @@ public class Dashboard extends JPanel implements UIPanel {
       */
      public void reloadPanel(Object value) {
          if (value != null) {
-             if (true) {
+             if (value instanceof Drones) {
                  comboBox.setSelectedItem(value);
                  currentDroneId = ((Drones) value).getId();
                  initialize();
