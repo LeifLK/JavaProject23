@@ -25,8 +25,6 @@ public class Overview extends JPanel implements UIPanel{
 
     /**
      * Returns the JPanel containing the overview.
-     *
-     * @return The JPanel containing the overview.
      */
 
     public JPanel getJPanel() {
